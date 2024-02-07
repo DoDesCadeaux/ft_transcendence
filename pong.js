@@ -58,4 +58,29 @@ console.log("Paddles and ball drawn successfully");
 	requestAnimationFrame(gameLoop); //This line requests the browser to call a specified function --> This creates an animation loop by recursively calling gameLoop
 }
 
+document.addEventListener("keydown", function(event) {
+  switch(event.key) {
+    case "w":
+      if (paddleLeftY > 0) {
+        paddleLeftY -= 10;
+      }
+      break;
+    case "s":
+      if (paddleLeftY < canvas.height - paddleHeight) {
+        paddleLeftY += 10;
+      }
+      break;
+    case "ArrowUp":
+      if (paddleRightY > 0) {
+        paddleRightY -= 10;
+      }
+      break;
+    case "ArrowDown":
+      if (paddleRightY < canvas.height - paddleHeight) {
+        paddleRightY += 10;
+      }
+      break;
+  }
+});
+
 gameLoop();
