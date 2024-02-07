@@ -16,13 +16,61 @@ let ballInPlay = true;
 let scoreLeft = 0; // Score du joueur de gauche
 let scoreRight = 0; // Score du joueur de droite
 
+// Variables pour stocker les états des touches
+let keysPressed = {};
+
+// Ajoutez un événement pour gérer lorsque la touche est enfoncée
+document.addEventListener("keydown", function(event) {
+    keysPressed[event.key] = true;
+});
+
+// Ajoutez un événement pour gérer lorsque la touche est relâchée
+document.addEventListener("keyup", function(event) {
+    keysPressed[event.key] = false;
+});
+
+// Ajoutez un événement pour gérer lorsque la touche Espace est enfoncée
+document.addEventListener("keydown", function(event) {
+    if (event.key === " ") {
+        if (!ballInPlay) {
+            // Relancer la partie
+            ballInPlay = true;
+            scoreLeft = 0;
+            scoreRight = 0;
+            resetBall();
+        }
+    }
+});
+
 // Main loop
 function gameLoop() {
+    // Déplacer les barres des joueurs en fonction des touches enfoncées
+    if (keysPressed["w"]) {
+        if (paddleLeftY > 0) {
+            paddleLeftY -= 10;
+        }
+    }
+    if (keysPressed["s"]) {
+        if (paddleLeftY < canvas.height - paddleHeight) {
+            paddleLeftY += 10;
+        }
+    }
+    if (keysPressed["ArrowUp"]) {
+        if (paddleRightY > 0) {
+            paddleRightY -= 10;
+        }
+    }
+    if (keysPressed["ArrowDown"]) {
+        if (paddleRightY < canvas.height - paddleHeight) {
+            paddleRightY += 10;
+        }
+    }
+
     if (ballInPlay)
         move();
     draw();
 
-	setTimeout(gameLoop, 1000 / 120); // Appel de gameLoop() environ toutes les 16.67 ms (60 FPS)
+    setTimeout(gameLoop, 1000 / 120); // Appel de gameLoop() environ toutes les 8.33 ms (120 FPS)
 }
 
 // Rules for ball movement
@@ -78,8 +126,8 @@ function endGame() {
     ctx.fillStyle = "black";
     ctx.textAlign = "center";
     ctx.fillText("Score Final", canvas.width / 2, canvas.height / 2 - 30);
-    ctx.fillText(`Joueur 1: ${scoreLeft} points - Joueur 2: ${scoreRight} points`, canvas.width / 2, canvas.height / 2);
-    ctx.fillText("Appuyez sur ESPACE pour relancer une partie...", canvas.width / 2, canvas.height / 2 + 30);
+    ctx.fillText(`Joueur Gauche: ${scoreLeft} - Joueur Droite: ${scoreRight}`, canvas.width / 2, canvas.height / 2);
+    ctx.fillText("Appuyez sur ESPACE pour relancer la partie", canvas.width / 2, canvas.height / 2 + 30);
 }
 
 // Draw objects on canvas
@@ -108,43 +156,7 @@ function draw() {
     if (!ballInPlay) {
         endGame();
     }
-
-    //requestAnimationFrame(gameLoop); //This line requests the browser to call a specified function --> This creates an animation loop by recursively calling gameLoop
 }
 
-// Event listener pour détecter l'appui sur la barre d'espace
-document.addEventListener("keydown", function(event) {
-    if (event.key === " ") { // Barre d'espace
-        if (!ballInPlay) {
-            // Relancer la partie
-            ballInPlay = true;
-            scoreLeft = 0;
-            scoreRight = 0;
-            resetBall(); // Réinitialiser la position de la balle
-        }
-    }
-    switch (event.key) {
-        case "w":
-            if (paddleLeftY > 0) {
-                paddleLeftY -= 10;
-            }
-            break;
-        case "s":
-            if (paddleLeftY < canvas.height - paddleHeight) {
-                paddleLeftY += 10;
-            }
-            break;
-        case "ArrowUp":
-            if (paddleRightY > 0) {
-                paddleRightY -= 10;
-            }
-            break;
-        case "ArrowDown":
-            if (paddleRightY < canvas.height - paddleHeight) {
-                paddleRightY += 10;
-            }
-            break;
-    }
-});
-
+// Appelez la fonction gameLoop() pour démarrer le jeu
 gameLoop();
