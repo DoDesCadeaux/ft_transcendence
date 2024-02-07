@@ -21,6 +21,8 @@ function gameLoop() {
     if (ballInPlay)
         move();
     draw();
+
+	setTimeout(gameLoop, 1000 / 120); // Appel de gameLoop() environ toutes les 16.67 ms (60 FPS)
 }
 
 // Rules for ball movement
@@ -107,7 +109,7 @@ function draw() {
         endGame();
     }
 
-    requestAnimationFrame(gameLoop); //This line requests the browser to call a specified function --> This creates an animation loop by recursively calling gameLoop
+    //requestAnimationFrame(gameLoop); //This line requests the browser to call a specified function --> This creates an animation loop by recursively calling gameLoop
 }
 
 // Event listener pour détecter l'appui sur la barre d'espace
