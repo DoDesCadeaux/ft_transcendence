@@ -120,26 +120,31 @@ function draw() {
     // Clear canvas
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
+    // Background image
+    const bgImage = new Image();
+    bgImage.src = "./background.png";
+    ctx.drawImage(bgImage, 0, 0, canvas.width, canvas. height);
+
     // Draw paddles
-    ctx.fillStyle = "black";
+    ctx.fillStyle = "white";
     ctx.fillRect(0, paddleLeftY, paddleWidth, paddleHeight);
     ctx.fillRect(canvas.width - paddleWidth, paddleRightY, paddleWidth, paddleHeight);
 
     // Draw line
     ctx.moveTo(canvas.width / 2, canvas.height);
     ctx.lineTo(canvas.width / 2, 0);
-    ctx.strokeStyle = "black";
+    ctx.strokeStyle = "white";
     ctx.lineWidth = 5;
 
     // Draw ball
     ctx.beginPath();
     ctx.arc(ballX, ballY, ballSize, 0, Math.PI * 2);
-    ctx.fillStyle = "black";
+    ctx.fillStyle = "white";
     ctx.fill(); //This line fills the current path
 
     // Affichage du score
     ctx.font = "20px Arial";
-    ctx.fillStyle = "black";
+    ctx.fillStyle = "white";
     ctx.textAlign = "center";
     ctx.fillText(scoreLeft, canvas.width / 2 - 50, 30);
     ctx.fillText(scoreRight, canvas.width / 2 + 50, 30);
@@ -162,7 +167,7 @@ function endGame() {
     ballInPlay = false;
     // Afficher le score final et proposer de relancer la partie
     ctx.font = "30px Arial";
-    ctx.fillStyle = "black";
+    ctx.fillStyle = "white";
     ctx.textAlign = "center";
     ctx.fillText("Score Final", canvas.width / 2, canvas.height / 2 - 30);
     ctx.fillText(`${scoreLeft} - ${scoreRight}`, canvas.width / 2, canvas.height / 2);
@@ -172,7 +177,7 @@ function endGame() {
 // Ecran de démarage du jeu
 function startGame() {
      ctx.font = "30px Arial";
-     ctx.fillStyle = "black";
+     ctx.fillStyle = "white";
      ctx.textAlign = "center";
      ctx.fillText("Appuyez sur ESPACE pour lancer la partie", canvas.width / 2, canvas.height / 2 + 30);
 }
