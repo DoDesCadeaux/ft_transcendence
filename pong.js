@@ -12,9 +12,11 @@ let ballX = canvas.width / 2;
 let ballY = canvas.height / 2;
 let ballSpeedX = 5;
 let ballSpeedY = 5;
-let ballInPlay = true;
+let firstGame = true;
+let ballInPlay = false;
 let scoreLeft = 0; // Score du joueur de gauche
 let scoreRight = 0; // Score du joueur de droite
+pointsToScore = 2;
 
 // Variables pour stocker les états des touches
 let keysPressed = {};
@@ -32,8 +34,9 @@ document.addEventListener("keyup", function(event) {
 // Ajoutez un événement pour gérer lorsque la touche Espace est enfoncée
 document.addEventListener("keydown", function(event) {
     if (event.key === " ") {
-        if (!ballInPlay) {
+        if (!ballInPlay || firstGame) {
             // Relancer la partie
+            firstGame = false;
             ballInPlay = true;
             scoreLeft = 0;
             scoreRight = 0;
@@ -44,6 +47,8 @@ document.addEventListener("keydown", function(event) {
 
 // Main loop
 function gameLoop() {
+    if (firstGame == true)
+        startGame();
     // Déplacer les barres des joueurs en fonction des touches enfoncées
     if (keysPressed["w"]) {
         if (paddleLeftY > 0) {
@@ -90,23 +95,57 @@ function move() {
     if (ballX > canvas.width - paddleWidth - ballSize && ballY > paddleRightY && ballY < paddleRightY + paddleHeight)
         ballSpeedX = -ballSpeedX;
 
-    // Ball goes off screen to the left or right
-    if (ballX < 0) {
+    // Ball goes off-screen to the left or right
+    if (ballX < ballSize) {
         // La balle sort à gauche, donc le joueur de droite marque un point
         scoreRight++;
-        if (scoreRight >= 5) {
+        if (scoreRight >= pointsToScore) {
             endGame();
         } else {
             resetBall();
         }
-    } else if (ballX > canvas.width) {
+    } else if (ballX > canvas.width - ballSize) {
         // La balle sort à droite, donc le joueur de gauche marque un point
         scoreLeft++;
-        if (scoreLeft >= 5) {
+        if (scoreLeft >= pointsToScore) {
             endGame();
         } else {
             resetBall();
         }
+    }
+}
+
+// Draw objects on canvas
+function draw() {
+    // Clear canvas
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // Draw paddles
+    ctx.fillStyle = "black";
+    ctx.fillRect(0, paddleLeftY, paddleWidth, paddleHeight);
+    ctx.fillRect(canvas.width - paddleWidth, paddleRightY, paddleWidth, paddleHeight);
+
+    // Draw line
+    ctx.moveTo(canvas.width / 2, canvas.height);
+    ctx.lineTo(canvas.width / 2, 0);
+    ctx.strokeStyle = "black";
+    ctx.lineWidth = 5;
+
+    // Draw ball
+    ctx.beginPath();
+    ctx.arc(ballX, ballY, ballSize, 0, Math.PI * 2);
+    ctx.fillStyle = "black";
+    ctx.fill(); //This line fills the current path
+
+    // Affichage du score
+    ctx.font = "20px Arial";
+    ctx.fillStyle = "black";
+    ctx.textAlign = "center";
+    ctx.fillText(scoreLeft, canvas.width / 2 - 50, 30);
+    ctx.fillText(scoreRight, canvas.width / 2 + 50, 30);
+
+    if (!ballInPlay && !firstGame) {
+        endGame();
     }
 }
 
@@ -126,36 +165,16 @@ function endGame() {
     ctx.fillStyle = "black";
     ctx.textAlign = "center";
     ctx.fillText("Score Final", canvas.width / 2, canvas.height / 2 - 30);
-    ctx.fillText(`Joueur Gauche: ${scoreLeft} - Joueur Droite: ${scoreRight}`, canvas.width / 2, canvas.height / 2);
+    ctx.fillText(`${scoreLeft} - ${scoreRight}`, canvas.width / 2, canvas.height / 2);
     ctx.fillText("Appuyez sur ESPACE pour relancer la partie", canvas.width / 2, canvas.height / 2 + 30);
 }
 
-// Draw objects on canvas
-function draw() {
-    // Clear canvas
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-    // Draw paddles
-    ctx.fillStyle = "black";
-    ctx.fillRect(0, paddleLeftY, paddleWidth, paddleHeight);
-    ctx.fillRect(canvas.width - paddleWidth, paddleRightY, paddleWidth, paddleHeight);
-
-    // Draw ball
-    ctx.beginPath();
-    ctx.arc(ballX, ballY, ballSize, 0, Math.PI * 2);
-    ctx.fillStyle = "black";
-    ctx.fill(); //This line fills the current path
-
-    // Affichage du score
-    ctx.font = "20px Arial";
-    ctx.fillStyle = "black";
-    ctx.textAlign = "center";
-    ctx.fillText(scoreLeft, canvas.width / 2 - 50, 30);
-    ctx.fillText(scoreRight, canvas.width / 2 + 50, 30);
-
-    if (!ballInPlay) {
-        endGame();
-    }
+// Ecran de démarage du jeu
+function startGame() {
+     ctx.font = "30px Arial";
+     ctx.fillStyle = "black";
+     ctx.textAlign = "center";
+     ctx.fillText("Appuyez sur ESPACE pour lancer la partie", canvas.width / 2, canvas.height / 2 + 30);
 }
 
 // Appelez la fonction gameLoop() pour démarrer le jeu
