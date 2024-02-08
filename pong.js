@@ -3,6 +3,10 @@ const canvas = document.getElementById("pongCanvas");
 const ctx = canvas.getContext("2d");
 
 // Set up initial vars
+const pointsToScore = 4;
+const ballSpeed = 5;
+let firstGame = true;
+let ballInPlay = false;
 const paddleWidth = 10;
 const paddleHeight = 80;
 const ballSize = 10;
@@ -10,13 +14,10 @@ let paddleLeftY = canvas.height / 2 - paddleHeight / 2;
 let paddleRightY = canvas.height / 2 - paddleHeight / 2;
 let ballX = canvas.width / 2;
 let ballY = canvas.height / 2;
-let ballSpeedX = 5;
-let ballSpeedY = 5;
-let firstGame = true;
-let ballInPlay = false;
-let scoreLeft = 0; // Score du joueur de gauche
-let scoreRight = 0; // Score du joueur de droite
-pointsToScore = 2;
+let ballSpeedX = ballSpeed;
+let ballSpeedY = ballSpeed;
+let scoreLeft = 0;
+let scoreRight = 0;
 
 // Variables pour stocker les états des touches
 let keysPressed = {};
@@ -47,7 +48,7 @@ document.addEventListener("keydown", function(event) {
 
 // Main loop
 function gameLoop() {
-    if (firstGame == true)
+    if (firstGame === true)
         startGame();
     // Déplacer les barres des joueurs en fonction des touches enfoncées
     if (keysPressed["w"]) {
@@ -91,9 +92,15 @@ function move() {
     // Ball collision with paddles (Left & Right)
     if (ballX < paddleWidth + ballSize && ballY > paddleLeftY && ballY < paddleLeftY + paddleHeight)
         ballSpeedX = -ballSpeedX;
-
     if (ballX > canvas.width - paddleWidth - ballSize && ballY > paddleRightY && ballY < paddleRightY + paddleHeight)
         ballSpeedX = -ballSpeedX;
+
+    // Fonctionnalité du jeu : a chaque goal, la vitesse de la balle augmente de 5%
+    if (ballX <= ballSize || ballX >= canvas.width - ballSize) {
+        ballSpeedY *= 1.05;
+        ballSpeedX *= 1.05;
+        console.log("ballSpeedY = ",ballSpeedY,"ballSpeedX = ", ballSpeedX);
+    }
 
     // Ball goes off-screen to the left or right
     if (ballX < ballSize) {
@@ -159,19 +166,21 @@ function resetBall() {
     ballX = canvas.width / 2;
     ballY = canvas.height / 2;
     ballSpeedX = -ballSpeedX; // Inverser la direction de la balle
-    ballSpeedY = Math.random() > 0.5 ? -5 : 5; // Choisir une direction de balle aléatoire
+    // ballSpeedY = Math.random() > 0.5 ? -5 : 5; // Choisir une direction de balle aléatoire
 }
 
 // Terminer le jeu
 function endGame() {
     ballInPlay = false;
+    ballSpeedX = ballSpeed;
+    ballSpeedY = ballSpeed;
     // Afficher le score final et proposer de relancer la partie
     ctx.font = "30px Arial";
     ctx.fillStyle = "white";
     ctx.textAlign = "center";
     ctx.fillText("Score Final", canvas.width / 2, canvas.height / 2 - 30);
-    ctx.fillText(`${scoreLeft} - ${scoreRight}`, canvas.width / 2, canvas.height / 2);
-    ctx.fillText("Appuyez sur ESPACE pour relancer la partie", canvas.width / 2, canvas.height / 2 + 30);
+    ctx.fillText(`${scoreLeft} - ${scoreRight}`, canvas.width / 2 - 1, canvas.height / 2 + 10);
+    ctx.fillText("Appuyez sur 'espace' pour relancer une partie", canvas.width / 2, canvas.height / 2 + 45);
 }
 
 // Ecran de démarage du jeu
