@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg viewBox="93.6033 182.5202 231.9662 103.8" width="231.9662" height="103.8" xmlns="http://www.w3.org/2000/svg">
+  <g id="g3" transform="matrix(1, 0, 0, 1.0150419473648071, 20.131284713745117, -157.43898010253906)" style="mix-blend-mode: darken;">
+    <polygon points="73.472 408.305 124.172 408.305 124.172 433.705 149.472 433.705 149.472 387.805 98.872 387.805 149.472 337.105 124.172 337.105 73.472 387.805" id="polygon5" style="fill: rgb(247, 138, 80);"/>
+    <polygon points="160.372 362.505 185.672 337.105 160.372 337.105" id="polygon7" style="fill: rgb(247, 138, 80);"/>
+    <polygon points="185.672 362.505 160.372 387.805 160.372 413.105 185.672 413.105 185.672 387.805 211.072 362.505 211.072 337.105 185.672 337.105" id="polygon9" style="fill: rgb(247, 138, 80);"/>
+    <polygon points="211.072 387.805 185.672 413.105 211.072 413.105" id="polygon11" style="fill: rgb(247, 138, 80);"/>
+  </g>
+  <text style="fill: rgb(247, 138, 80); font-family: Arial, sans-serif; font-size: 24px; letter-spacing: 2.1px; white-space: pre; font-weight: 1000;" transform="matrix(1, 0, 0, 1, -17.55617332458496, 5.348165988922119)"><tspan x="248.61" y="199.172">  TRAN</tspan><tspan x="248.61" dy="1.6em">​</tspan><tspan>  SCEN</tspan><tspan x="248.61" dy="1.6em">​</tspan><tspan>DENCE</tspan></text>
+</svg>
