@@ -22,6 +22,8 @@ function loadScript(src) {
 const filesToLoad = [
   '../js/dashMatch.js',
   '../js/manageSPA.js',
+  '../js/pong.js',
+  '../js/game.js',
 ];
 
 // Charger tous les fichiers en parallèle

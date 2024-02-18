@@ -14,7 +14,7 @@
     <div class="top-banner">
         <img class="logo pointer" src="img/logo.svg" alt="logo 42Transcendence" onclick="openDash()">
         <div class="user">
-            <img class=photo src="img/pamartin.jpg" alt="user" >
+            <img class=photo src="img/pamartin.jpg" alt="user">
             <div class="name">Pamartin</div>
             <img class='banner-icon pointer' src="img/settings.svg" alt="" onclick="openProfile()">
             <img class='banner-icon pointer' src="img/exit.svg" alt="">
@@ -26,7 +26,7 @@
             <div class="dash">
                 <div class="card new-game">
                     <div class="card--title">Nouveau match</div>
-                    <div class="card--content new-game--content">
+                    <!--<div class="card--content new-game--content">
                         <div class="invitation-received">Invitation(s) recue(s)
                             <!-- <ul>
                                 <li class='pointer' onclick="">dduraku</li>
@@ -37,7 +37,7 @@
                                 <div class="previous pointer"><</div>
                                 <div class="next pointer">></div>
                             </div> -->
-                        </div>
+                    <!--</div>
                         <div class="invitation-sent">Invitation(s) envoyee(s)
                             <!-- <ul>
                                 <li class='pointer' onclick="">dduraku</li>
@@ -48,7 +48,7 @@
                                 <div class="previous pointer"><</div>
                                 <div class="next pointer">></div>
                             </div> -->
-                        </div>
+                    <!--</div>
                         <div class="invitation-send">Invite un ami
                             <div id="search">
                                 <div class="bar">
@@ -61,11 +61,11 @@
                                     <li>sdfsdf</li>
                                     <li>sdfsdf</li>
                                     <li>sdfsdf</li> -->
-                                </ul>
+                    <!--</ul>
                             </div>
                         </div>
-
-                    </div>
+                    </div> -->
+                    <img class="new-game--icon" src="img/playGame.svg" alt="" onclick="newGame()">
                 </div>
 
                 <div class="card stats">
@@ -175,6 +175,43 @@
 
                         <div id="update-profile" onclick="updateProfile()">Sauvegarder</div>
                     </form>
+                </div>
+            </div>
+            <div class="game displayNone">
+                <div class="game-content">
+                    <div class="pong displayNone">
+                        <div class="opponents">
+                            <img class="opponents-img" src="img/dduraku.png" alt="">
+                            <img class="opponents-img" src="img/tverdood.jpg" alt="">
+                        </div>
+                        <canvas id="pongCanvas" width="900" height="450"></canvas>
+                    </div>
+                    <div class="invit-game">
+                        <!-- vue avec la bar de recherche -->
+
+                        <div id="search">
+                            <div class="bar">
+                                <input type="text" id="search-input" placeholder="Rechercher...">
+                                <img class="pointer search" onclick="selectPlayer()" src="img/send.svg" alt="">
+                            </div>
+                            <ul class="autocomplete">
+                                <!-- <li>dfsdff</li>
+                                <li>sdfsdf</li>
+                                <li>sdfsdf</li>
+                                <li>sdfsdf</li>
+                                <li>sdfsdf</li> -->
+                            </ul>
+                        </div>
+                        <div class="waiting displayNone">
+                            <div class="waiting-msg"></div>
+                            <div class="wrap-ball">
+                                <div class="ball"></div>
+                                <div class="ball"></div>
+                                <div class="ball"></div>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
             </div>
 

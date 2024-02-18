@@ -11,8 +11,8 @@ const envoyes = ['dduraku', 'tangzer', 'truc', 'autre truc', 'dduraku', 'tangzer
 const propositions = ['robert', 'sebastien', 'pierre', 'paul', 'jaques'];
 
 
-printInvitation(invitationRecue, 'received', recus);
-printInvitation(invitationEnvoyee, 'sent', envoyes);
+// printInvitation(invitationRecue, 'received', recus);
+// printInvitation(invitationEnvoyee, 'sent', envoyes);
 
 
 function printInvitation(object, type, data) {
@@ -125,8 +125,6 @@ function select() {
     printInvitation(invitationEnvoyee, 'sent', envoyes);
 }
 
-
-// script.js
 
 function previewProfile() {
     const fileInput = document.getElementById('profilePicture');
