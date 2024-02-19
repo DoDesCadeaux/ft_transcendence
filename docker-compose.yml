@@ -9,10 +9,9 @@ services:
       POSTGRES_USER: dev
       POSTGRES_PASSWORD: "123"
   web:
-    build: .
-    command: python3 manage.py runserver 0.0.0.0:8000
+    build: ./transcendence
     volumes:
-      - .:/code
+      - ./transcendence:/transcendence
     ports:
       - "8000:8000"
     depends_on:
