@@ -6,3 +6,4 @@ objs
 .DS_Store
 *.DS_Store
 a.out.dSYM
+*.sqlite3
