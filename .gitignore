@@ -7,3 +7,6 @@ objs
 *.DS_Store
 a.out.dSYM
 *.sqlite3
+__pycache__/
+*.pyc
+package-lock.json
