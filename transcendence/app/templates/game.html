@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="game">
+    <div class="game-content">
+        <div class="pong displayNone">
+            <div class="opponents">
+                <img class="opponents-img" src="../static/img/dduraku.png" alt="">
+                <img class="opponents-img" src="../static/img/tverdood.jpg" alt="">
+            </div>
+            <canvas id="pongCanvas" width="900" height="450"></canvas>
+        </div>
+        <div class="invit-game">
+            <!-- vue avec la bar de recherche -->
+
+            <div id="search">
+                <div class="bar">
+                    <input type="text" id="search-input" placeholder="Rechercher...">
+                    <img class="pointer search" onclick="selectPlayer()" src="../static/img/send.svg" alt="">
+                </div>
+                <ul class="autocomplete">
+                    <!-- <li>dfsdff</li>
+                    <li>sdfsdf</li>
+                    <li>sdfsdf</li>
+                    <li>sdfsdf</li>
+                    <li>sdfsdf</li> -->
+                </ul>
+            </div>
+            <div class="waiting displayNone">
+                <div class="waiting-msg"></div>
+                <div class="wrap-ball">
+                    <div class="ball"></div>
+                    <div class="ball"></div>
+                    <div class="ball"></div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+{% endblock content %}

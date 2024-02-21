@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="profile">
+    <div class="profile-content">
+        <div class="preview">
+            <div class="preview-card">
+                <div class="preview-top">
+                    <img src="../static/img/pamartin.jpg" alt="" class="preview-img">
+                </div>
+                <div class="preview-bottom">
+                    <div class="preview-name">
+                        Prenom
+                        <span id="preview-name">Pamartin</span>
+                    </div>
+                    <div class="preview-username">
+                        Nom d'utilisateur
+                        <span id="preview-username">Pamartin</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <form action="" class="form-profile">
+            <div class="form-presentation">
+                Hello Pamartin, <br>Tu peux modifier ton nom d'utilisateur et ta photo de profil. Attention
+                ils seront visible par tous les utilisateurs, fait un choix judicieux et respectueux !
+            </div>
+
+            <div id="form-profile">
+                <label for="username">Nom d'utilisateur:</label>
+                <input type="text" id="username" name="username" oninput="previewProfile()" maxlength="20"
+                    value="Pamartin">
+
+                <label for="profilePicture">Photo de profil:</label>
+                <input type="file" id="profilePicture" name="profilePicture" accept="image/*"
+                    onchange="previewProfile()">
+            </div>
+
+            <div id="update-profile" onclick="updateProfile()">Sauvegarder</div>
+        </form>
+    </div>
+</div>
+
+{% endblock content %}
+

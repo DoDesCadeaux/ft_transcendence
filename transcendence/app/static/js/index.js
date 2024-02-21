@@ -16,14 +16,11 @@ function loadScript(src) {
 	});
   }
   
-  
-  
   // Liste des fichiers JavaScript à charger
   const filesToLoad = [
-	'../static/js/dashMatch.js',
-	'../static/js/manageSPA.js',
 	'../static/js/pong.js',
 	'../static/js/game.js',
+	'../static/js/profile.js',
   ];
   
   // Charger tous les fichiers en parallèle

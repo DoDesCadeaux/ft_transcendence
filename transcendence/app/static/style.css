@@ -47,10 +47,9 @@ body {
     align-items: center;
 
     .logo {
-        height: 85%;
+        height: 50px;
         object-fit: cover;
-        padding-left: 2%;
-
+        padding-left: 10px;
     }
 
     .user {
