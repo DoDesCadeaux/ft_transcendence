@@ -3,9 +3,9 @@ const canvas = document.getElementById("pongCanvas");
 const ctx = canvas.getContext("2d");
 
 // Set up initial vars
-const pointsToScore = 4;
+const pointsToScore = 2;
 const ballSpeed = 5;
-let firstGame = true;
+let round = 1; // Be careful, var used to display the coutdown & count rounnds --> round 1&2 = 1; round 2&3 = 2; ...
 let ballInPlay = false;
 const paddleWidth = 10;
 const paddleHeight = 80;
@@ -35,21 +35,19 @@ document.addEventListener("keyup", function (event) {
 // Ajoutez un événement pour gérer lorsque la touche Espace est enfoncée
 document.addEventListener("keydown", function (event) {
     if (event.key === " ") {
-        if (!ballInPlay || firstGame) {
+        if (!ballInPlay) {
             // Relancer la partie
-            firstGame = false;
-            ballInPlay = true;
-            scoreLeft = 0;
-            scoreRight = 0;
-            resetBall();
+			// round++;
+            resetGame();
         }
     }
 });
 
 // Main loop
 function gameLoop() {
-    if (firstGame === true)
-        startGame();
+    if ((round % 2) != 0) {
+		countdown(3);
+	}
     // Déplacer les barres des joueurs en fonction des touches enfoncées
     if (keysPressed["w"]) {
         if (paddleLeftY > 0) {
@@ -75,7 +73,6 @@ function gameLoop() {
     if (ballInPlay) {
         move();
         draw();
-
     }
 
     setTimeout(gameLoop, 1000 / 120); // Appel de gameLoop() environ toutes les 8.33 ms (120 FPS)
@@ -108,7 +105,7 @@ function move() {
     if (ballX < ballSize) {
         // La balle sort à gauche, donc le joueur de droite marque un point
         scoreRight++;
-        if (scoreRight >= pointsToScore) {
+        if (scoreRight == pointsToScore) {
             endGame();
         } else {
             resetBall();
@@ -116,7 +113,7 @@ function move() {
     } else if (ballX > canvas.width - ballSize) {
         // La balle sort à droite, donc le joueur de gauche marque un point
         scoreLeft++;
-        if (scoreLeft >= pointsToScore) {
+        if (scoreLeft == pointsToScore) {
             endGame();
         } else {
             resetBall();
@@ -158,9 +155,68 @@ function draw() {
     ctx.fillText(scoreLeft, canvas.width / 2 - 50, 30);
     ctx.fillText(scoreRight, canvas.width / 2 + 50, 30);
 
-    if (!ballInPlay && !firstGame) {
+    if (!ballInPlay) {
         endGame();
     }
+}
+
+// Terminer le jeu
+function endGame() {
+    ballInPlay = false;
+    ballSpeedX = ballSpeed;
+    ballSpeedY = ballSpeed;
+	paddleLeftY = canvas.height / 2 - paddleHeight / 2;
+	paddleRightY = canvas.height / 2 - paddleHeight / 2;
+
+	// Afficher le score final et proposer de relancer la partie
+    var winner = scoreLeft > scoreRight ? "Dduraku" : "Tverdood"
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+	ctx.font = "30px Roboto";
+    ctx.fillStyle = "#f78a50";
+    ctx.textAlign = "center";
+    ctx.fillText(`${winner} a gagne`, canvas.width / 2, canvas.height / 2 - 30);
+    ctx.fillText(`${scoreLeft} - ${scoreRight}`, canvas.width / 2 - 1, canvas.height / 2 + 10);
+    ctx.fillText("Appuyez sur 'espace' pour relancer une partie", canvas.width / 2, canvas.height / 2 + 45);
+}
+  
+function countdown(seconds) {
+	ctx.font = "30px Roboto";
+    ctx.fillStyle = "white";
+    ctx.textAlign = "center";
+    ctx.fillText("La partie commence dans", canvas.width / 2, canvas.height / 2);
+
+	let interval = setInterval(function () {
+		// Display the remaining time
+		ctx.clearRect(0, 0, canvas.width, canvas.height);
+		ctx.font = "30px Roboto";
+    	ctx.fillStyle = "white";
+    	ctx.textAlign = "center";
+    	ctx.fillText(seconds + ' secondes', canvas.width / 2, canvas.height / 2 + 30);
+
+		seconds--;
+
+		// Check if the countdown is finished
+		if (seconds < 0) {
+			clearInterval(interval);
+
+			ctx.clearRect(0, 0, canvas.width, canvas.height);
+			ctx.font = "30px Roboto";
+    		ctx.fillStyle = "white";
+    		ctx.textAlign = "center";
+			ctx.fillText('Compte à rebours terminé', canvas.width / 2, canvas.height / 2);
+
+			resetGame();
+		}
+	}, 1000);
+	round++;
+  }
+
+function resetGame() {
+	// round++;
+    ballInPlay = true;
+    scoreLeft = 0;
+    scoreRight = 0;
+    resetBall();
 }
 
 // Réinitialiser la position de la balle
@@ -171,53 +227,6 @@ function resetBall() {
     // ballSpeedY = Math.random() > 0.5 ? -5 : 5; // Choisir une direction de balle aléatoire
 }
 
-// Terminer le jeu
-function endGame() {
-    ballInPlay = false;
-    ballSpeedX = ballSpeed;
-    ballSpeedY = ballSpeed;
-    var winner = scoreLeft > scoreRight ? "Dduraku" : "Teverddod"
-    // Afficher le score final et proposer de relancer la partie
-    ctx.font = "30px Roboto";
-    ctx.fillStyle = "#f78a50";
-    ctx.textAlign = "center";
-    ctx.fillText(`${winner} a gagne`, canvas.width / 2, canvas.height / 2 - 30);
-    ctx.fillText(`${scoreLeft} - ${scoreRight}`, canvas.width / 2 - 1, canvas.height / 2 + 10);
-    ctx.fillText("Appuyez sur 'espace' pour relancer une partie", canvas.width / 2, canvas.height / 2 + 45);
-}
-
-// Ecran de démarage du jeu
-function startGame() {
-    ctx.font = "30px Roboto";
-    ctx.fillStyle = "white";
-    ctx.textAlign = "center";
-    ctx.fillText("La partie commence dans", canvas.width / 2, canvas.height / 2 + 30);
-  
-    // Compte à rebours
-    countdown(3);
-    
-  }
-  
-  function countdown(seconds) {
-    if (seconds > 0) {
-      ctx.clearRect(0, 0, canvas.width, canvas.height); // Efface le texte précédent
-      ctx.fillText(seconds, canvas.width / 2, canvas.height / 2 + 30);
-      
-      setTimeout(function () {
-        countdown(seconds - 1); // Appelle récursive pour le prochain nombre
-      }, 1000); // Attendez 1 seconde entre chaque chiffre
-    } else {
-      // La partie peut commencer ici
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      firstGame = false;
-            ballInPlay = true;
-            scoreLeft = 0;
-            scoreRight = 0;
-            resetBall();
-      // Reste du code de démarrage de la partie
-    }
-  }
-  
   // Appel pour démarrer le compte à rebours
 //   startGame();
   
