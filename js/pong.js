@@ -3,21 +3,25 @@ const canvas = document.getElementById("pongCanvas");
 const ctx = canvas.getContext("2d");
 
 // Set up initial vars
-const pointsToScore = 2;
-const ballSpeed = 5;
-let round = 1; // Be careful, var used to display the coutdown & count rounnds --> round 1&2 = 1; round 2&3 = 2; ...
-let ballInPlay = false;
 const paddleWidth = 10;
 const paddleHeight = 80;
-const ballSize = 10;
 let paddleLeftY = canvas.height / 2 - paddleHeight / 2;
 let paddleRightY = canvas.height / 2 - paddleHeight / 2;
-let ballX = canvas.width / 2;
-let ballY = canvas.height / 2;
+const ballSize = 10;
+const ballSpeed = 5;
 let ballSpeedX = ballSpeed;
 let ballSpeedY = ballSpeed;
+let ballX = canvas.width / 2;
+let ballY = canvas.height / 2;
+let round = 1; // Be careful, var used to display the countdown & count rounds --> round 1&2 = 1; round 2&3 = 2; ...
+let ballInPlay = false;
+const pointsToScore = 2;
 let scoreLeft = 0;
 let scoreRight = 0;
+let victoriesR = 0;
+let victoriesL = 0;
+let totalScoreR = 0;
+let totalScoreL = 0;
 
 // Variables pour stocker les états des touches
 let keysPressed = {};
@@ -37,7 +41,6 @@ document.addEventListener("keydown", function (event) {
     if (event.key === " ") {
         if (!ballInPlay) {
             // Relancer la partie
-			// round++;
             resetGame();
         }
     }
@@ -89,23 +92,28 @@ function move() {
         ballSpeedY = -ballSpeedY;
 
     // Ball collision with paddles (Left & Right)
-    if (ballX < paddleWidth + ballSize && ballY > paddleLeftY && ballY < paddleLeftY + paddleHeight)
+    if (ballX < paddleWidth + ballSize && ballY > paddleLeftY && ballY < paddleLeftY + paddleHeight) {
+        ballX = paddleWidth + ballSize;
         ballSpeedX = -ballSpeedX;
-    if (ballX > canvas.width - paddleWidth - ballSize && ballY > paddleRightY && ballY < paddleRightY + paddleHeight)
+    }
+    if (ballX > canvas.width - paddleWidth - ballSize && ballY > paddleRightY && ballY < paddleRightY + paddleHeight) {
+        ballX = canvas.width - paddleWidth - ballSize;
         ballSpeedX = -ballSpeedX;
+    }
 
     // Fonctionnalité du jeu : a chaque goal, la vitesse de la balle augmente de 5%
     if (ballX <= ballSize || ballX >= canvas.width - ballSize) {
         ballSpeedY *= 1.05;
         ballSpeedX *= 1.05;
-        console.log("ballSpeedY = ", ballSpeedY, "ballSpeedX = ", ballSpeedX);
     }
 
     // Ball goes off-screen to the left or right
     if (ballX < ballSize) {
         // La balle sort à gauche, donc le joueur de droite marque un point
         scoreRight++;
+        totalScoreR++;
         if (scoreRight == pointsToScore) {
+            victoriesR++;
             endGame();
         } else {
             resetBall();
@@ -113,7 +121,9 @@ function move() {
     } else if (ballX > canvas.width - ballSize) {
         // La balle sort à droite, donc le joueur de gauche marque un point
         scoreLeft++;
+        totalScoreL++;
         if (scoreLeft == pointsToScore) {
+            victoriesL++;
             endGame();
         } else {
             resetBall();
@@ -187,7 +197,7 @@ function countdown(seconds) {
 
 	let interval = setInterval(function () {
 		// Display the remaining time
-		ctx.clearRect(0, 0, canvas.width, canvas.height);
+		ctx.clearRect(canvas.width / 2 - 50, canvas.height / 2 + 30, 100, 30);
 		ctx.font = "30px Roboto";
     	ctx.fillStyle = "white";
     	ctx.textAlign = "center";
@@ -209,10 +219,9 @@ function countdown(seconds) {
 		}
 	}, 1000);
 	round++;
-  }
+}
 
 function resetGame() {
-	// round++;
     ballInPlay = true;
     scoreLeft = 0;
     scoreRight = 0;
@@ -226,10 +235,3 @@ function resetBall() {
     ballSpeedX = -ballSpeedX; // Inverser la direction de la balle
     // ballSpeedY = Math.random() > 0.5 ? -5 : 5; // Choisir une direction de balle aléatoire
 }
-
-  // Appel pour démarrer le compte à rebours
-//   startGame();
-  
-
-// Appelez la fonction gameLoop() pour démarrer le jeu
-// gameLoop();
