@@ -5,15 +5,23 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
     environment:
-      POSTGRES_DB: transcendence_db
-      POSTGRES_USER: dev
-      POSTGRES_PASSWORD: "123"
+      POSTGRES_DB: ${DB_NAME} 
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASS}
   web:
     build: ./transcendence
     volumes:
       - ./transcendence:/transcendence
     ports:
       - "8000:8000"
+    environment:
+      - DEBUG=${DEBUG}
+      - SECRET_KEY={SECRET_KEY}
+      - DB_NAME=${DB_NAME}
+      - DB_USER=${DB_USER}
+      - DB_PASS=${DB_PASS}
+      - DB_HOST=db
+      - DB_PORT=${DB_PORT}
     depends_on:
       - db
 volumes:

@@ -10,3 +10,4 @@ a.out.dSYM
 __pycache__/
 *.pyc
 package-lock.json
+.env
