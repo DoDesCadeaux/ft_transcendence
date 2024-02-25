@@ -8,6 +8,9 @@ class User(models.Model):
     play_time = models.DurationField()
     state = models.CharField(max_length=50)  # Par exemple: online, offline, in-game
 
+    def __str__(self):
+        return f"{self.name} - {self.username}"
+
 class Tournament(models.Model):
     name = models.CharField(max_length=100)
     winner = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
