@@ -15,6 +15,9 @@ class Tournament(models.Model):
     name = models.CharField(max_length=100)
     winner = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
 
+    def __str__(self):
+        return f"{self.name}"
+
 class Match(models.Model):
     tournament = models.ForeignKey(Tournament, on_delete=models.CASCADE, related_name="matches")
     player1 = models.ForeignKey(User, on_delete=models.CASCADE, related_name='matches_as_player1')
@@ -23,4 +26,7 @@ class Match(models.Model):
     player2_score = models.IntegerField()
     match_duration = models.DurationField()
     winner = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='matches_won')
+
+    def __str__(self):
+        return f"{self.player1} VS {self.player2}"
 
