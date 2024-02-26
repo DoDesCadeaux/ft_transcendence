@@ -6,14 +6,21 @@ from app.models import User
 import requests, json
 import os
 
+from app.API.user import *
+
 # Create your views here.
 
 def index(request):
+    CLIENT_ID = settings.CLIENT_ID
+    REDIRECT_URI = settings.REDIRECT_URI
+    auth_url = f"https://api.intra.42.fr/oauth/authorize?client_id={CLIENT_ID}&redirect_uri={REDIRECT_URI}&response_type=code"
+    return redirect(auth_url)
+    
     return render(request, "dashboard.html")
 
 
 def profile(request):
-    utilisateur = get_object_or_404(User, username="dduraku")
+    utilisateur = get_object_or_404(User, username="pamartin")
     return render(request, "profile.html", {'utilisateur': utilisateur})
 
 def game(request):
@@ -57,12 +64,17 @@ def connexion(request):
                 id42 = user_info.get('id')
                 # Vous pouvez passer ces informations à votre modèle et les afficher dans votre template
                 # Retourner une réponse avec les informations de l'utilisateur
-                cookie = request.COOKIES.get('token', None)
+                # cookie = request.COOKIES.get('token', None)
                 # response = HttpResponse(f"{user_info}")
                 response = HttpResponse(f"Nom de l'utilisateur : {user_name}<br><img src='{user_photo_url}'><br> id : {id42}")
-                if cookie is None:
-                    response.set_cookie(key='token', value=access_token)
-                return response
+                # if cookie is None:
+                #     response.set_cookie(key='token', value=access_token)
+                if get_user_by_id42(id42) is None:
+                    create_new_user(user_name, id42)
+                else:
+                    update_status(id42, 'online')
+                return render(request, "dashboard.html")
+
             else:
                 return HttpResponse("Failed to retrieve user information", status=user_info_response.status_code)
         else:
