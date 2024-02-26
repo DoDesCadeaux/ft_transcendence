@@ -1,0 +1,10 @@
+Docker :
+
+npm install -g truffle
+npm install web3
+npm truffle-contract
+npm install ganache
+
+install MetaMask ??
+
+//You would typically use a library like Web3.js or Ethers.js to listen for events emitted by the smart contract and handle them in your frontend application.//
