@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 from pathlib import Path
 import os
+from dotenv import load_dotenv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -20,7 +21,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
-SECRET_KEY = os.environ.get('SECRET_KEY', 'quaq%@(90hu(p1!syo*co8&871ngw(ee)(*^5fq!(g_f%g2%r')
+# Construire le chemin absolu jusqu'au fichier .env
+dotenv_path = os.path.join(os.path.dirname(__file__), '..', '..', '.env')
+
+# Charger les variables d'environnement depuis le fichier .env spécifié
+load_dotenv(dotenv_path=dotenv_path)
+
+SECRET_KEY = os.environ.get('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('DEBUG', '0') == '1'
@@ -77,11 +84,11 @@ WSGI_APPLICATION = 'transcendence.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.environ.get('DB_NAME', 'transcendence_db'),
-        'USER': os.environ.get('DB_USER', 'dev'),
-        'PASSWORD': os.environ.get('DB_PASS', '123'),
-        'PORTS': os.environ.get('DB_PORTS', '5432'),
-        'HOST': os.environ.get('DB_HOST', 'localhost'),
+        'NAME': os.environ.get('DB_NAME'),
+        'USER': os.environ.get('DB_USER'),
+        'PASSWORD': os.environ.get('DB_PASS'),
+        'PORTS': os.environ.get('DB_PORTS'),
+        'HOST': os.environ.get('DB_HOST'),
     }
 }
 
@@ -126,3 +133,8 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+REDIRECT_URI = os.getenv("REDIRECT_URI")
+CLIENT_ID = os.getenv("CLIENT_ID")
+CLIENT_SECRET = os.getenv("CLIENT_SECRET")
+

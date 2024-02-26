@@ -5,5 +5,6 @@ urlpatterns = [
 	path("", views.index, name='dashboard'),
 	path("profile/", views.profile, name='profile'),
 	path("game/", views.game, name='game'), 
+	path("authorize/", views.authorize, name="authorize"),
 ]
 

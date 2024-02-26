@@ -16,12 +16,15 @@ services:
       - "8000:8000"
     environment:
       - DEBUG=${DEBUG}
-      - SECRET_KEY={SECRET_KEY}
+      - SECRET_KEY=${SECRET_KEY}
       - DB_NAME=${DB_NAME}
       - DB_USER=${DB_USER}
       - DB_PASS=${DB_PASS}
       - DB_HOST=db
       - DB_PORT=${DB_PORT}
+      - REDIRECT_URI=${REDIRECT_URI}
+      - CLIENT_ID=${CLIENT_ID}
+      - CLIENT_SECRET=${CLIENT_SECRET}
     depends_on:
       - db
 volumes:

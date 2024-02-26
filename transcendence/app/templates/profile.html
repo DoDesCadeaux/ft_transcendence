@@ -23,14 +23,14 @@
         </div>
         <form action="" class="form-profile">
             <div class="form-presentation">
-                Hello Pamartin, <br>Tu peux modifier ton nom d'utilisateur et ta photo de profil. Attention
+                Hello {{ utilisateur.username  }}, <br>Tu peux modifier ton nom d'utilisateur et ta photo de profil. Attention
                 ils seront visible par tous les utilisateurs, fait un choix judicieux et respectueux !
             </div>
 
             <div id="form-profile">
                 <label for="username">Nom d'utilisateur:</label>
                 <input type="text" id="username" name="username" oninput="previewProfile()" maxlength="20"
-                    value="Pamartin">
+                                                                                            value="{{ utilisateur.username }}">
 
                 <label for="profilePicture">Photo de profil:</label>
                 <input type="file" id="profilePicture" name="profilePicture" accept="image/*"
