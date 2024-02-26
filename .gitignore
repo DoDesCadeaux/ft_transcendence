@@ -1,6 +1,7 @@
 CMakeLists.txt
 cmake-build-debug
 objs
+node_modules
 .idea
 .vscode/
 .DS_Store
