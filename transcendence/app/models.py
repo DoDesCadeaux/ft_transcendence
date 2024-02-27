@@ -1,6 +1,7 @@
 from django.db import models
+from django.contrib.auth.models import AbstractUser
 
-class User(models.Model):
+class User(AbstractUser):
     id_api = models.CharField(max_length=100, unique=True)
     name = models.CharField(max_length=100)
     username = models.CharField(max_length=100, unique=True)
@@ -8,8 +9,24 @@ class User(models.Model):
     play_time = models.DurationField()
     state = models.CharField(max_length=50)  # Par exemple: online, offline, in-game
 
-    def __str__(self):
-        return f"{self.name} - {self.username}"
+    USERNAME_FIELD = 'id_api'
+    password = models.CharField(max_length=128, null=True)  # Ajoutez cette ligne
+
+    def formatted_play_time(self):
+        total_seconds = self.play_time.total_seconds()
+        hours, remainder = divmod(total_seconds, 3600)
+        minutes, seconds = divmod(remainder, 60)
+
+        if hours > 0:
+            return f"{int(hours)}h {int(minutes)}min"
+        elif minutes > 0:
+            return f"{int(minutes)}min"
+        elif seconds > 0:
+            return f"{int(seconds)}sec"
+        else:
+            return "0min"
+    # def __str__(self):
+    #     return f"{self.name} - {self.username}"
 
 class Tournament(models.Model):
     name = models.CharField(max_length=100)
@@ -17,6 +34,7 @@ class Tournament(models.Model):
 
     def __str__(self):
         return f"{self.name}"
+    
 
 class Match(models.Model):
     tournament = models.ForeignKey(Tournament, on_delete=models.CASCADE, related_name="matches")

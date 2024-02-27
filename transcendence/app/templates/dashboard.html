@@ -14,12 +14,12 @@
         <div class="hello item-card">
             <img class="icon" src="../static/img/presentation.svg" alt="">
             <div class="text-title">Bonjour</div>
-            <div class="text-content">Pamartin</div>
+            <div class="text-content">{{ user.username  }}</div>
         </div>
         <div class="time item-card">
             <img class="icon" src="../static/img/time.svg" alt="">
             <div class="text-title">Temps de jeu</div>
-            <div class="text-content">20 min</div>
+            <div class="text-content">{{ user.formatted_play_time }}</div>
         </div>
         <div class="oneVSone item-card">
             <img class="icon" src="../static/img/play.svg" alt="">

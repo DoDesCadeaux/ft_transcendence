@@ -16,8 +16,8 @@
             <img class="logo pointer" src="../static/img/logo.svg" alt="logo 42Transcendence" >
         </a>
         <div class="user">
-            <img class="photo" src="../static/img/pamartin.jpg" alt="user">
-            <div class="name">Pamartin</div>
+            <img class="photo" src="{{ user.photo.url }}" alt="user">
+            <div class="name">{{ user.username }}</div>
             <a href="{% url 'profile' %}">
                 <img class='banner-icon pointer' src="../static/img/settings.svg" alt="">
             </a>
