@@ -25,8 +25,8 @@ class User(AbstractUser):
             return f"{int(seconds)}sec"
         else:
             return "0min"
-    # def __str__(self):
-    #     return f"{self.name} - {self.username}"
+        def __str__(self):
+            return f"{self.name} - {self.username}"
 
 class Tournament(models.Model):
     name = models.CharField(max_length=100)
