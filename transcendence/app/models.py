@@ -12,6 +12,9 @@ class User(AbstractUser):
     USERNAME_FIELD = 'id_api'
     password = models.CharField(max_length=128, null=True)  # Ajoutez cette ligne
 
+    def __str__(self):
+        return f"{self.name} - {self.username}"
+
     def formatted_play_time(self):
         total_seconds = self.play_time.total_seconds()
         hours, remainder = divmod(total_seconds, 3600)
@@ -25,8 +28,7 @@ class User(AbstractUser):
             return f"{int(seconds)}sec"
         else:
             return "0min"
-        def __str__(self):
-            return f"{self.name} - {self.username}"
+        
 
 class Tournament(models.Model):
     name = models.CharField(max_length=100)
