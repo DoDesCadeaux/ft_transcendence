@@ -1,0 +1,1674 @@
+// {
+//   "contractName": "PongScoreboard",
+  "abi": [
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "player",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "score",
+          "type": "uint256"
+        }
+      ],
+      "name": "ScoreUpdated",
+      "type": "event"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "name": "scores",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "player",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "score",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "newScore",
+          "type": "uint256"
+        }
+      ],
+      "name": "updateScore",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "player",
+          "type": "address"
+        }
+      ],
+      "name": "getScore",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    }
+  ],
+  // "metadata": "{\"compiler\":{\"version\":\"0.5.16+commit.9c3226ce\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"player\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"score\",\"type\":\"uint256\"}],\"name\":\"ScoreUpdated\",\"type\":\"event\"},{\"constant\":true,\"inputs\":[{\"internalType\":\"address\",\"name\":\"player\",\"type\":\"address\"}],\"name\":\"getScore\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"name\":\"scores\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"player\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"score\",\"type\":\"uint256\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"newScore\",\"type\":\"uint256\"}],\"name\":\"updateScore\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"}],\"devdoc\":{\"methods\":{}},\"userdoc\":{\"methods\":{}}},\"settings\":{\"compilationTarget\":{\"project:/PongScoreboard.sol\":\"PongScoreboard\"},\"evmVersion\":\"istanbul\",\"libraries\":{},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"project:/PongScoreboard.sol\":{\"keccak256\":\"0x35ec3606636c976a44209a01405aee5994c8b0f2e9df5964cfebb483ff87fd3c\",\"urls\":[\"bzz-raw://3675a0678d6eb29a8d6661559268881e7f97550cf6156666b088071cd4ef825e\",\"dweb:/ipfs/Qmbn434H655YUv1hMrEuzPCG9TruL6fqj3apDhTJxpBaVn\"]}},\"version\":1}",
+  // "bytecode": "0x608060405234801561001057600080fd5b50610332806100206000396000f3fe608060405234801561001057600080fd5b50600436106100415760003560e01c806376dd110f14610046578063d47875d0146100d1578063f853e34d14610129575b600080fd5b6100886004803603602081101561005c57600080fd5b81019080803573ffffffffffffffffffffffffffffffffffffffff169060200190929190505050610157565b604051808373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1681526020018281526020019250505060405180910390f35b610113600480360360208110156100e757600080fd5b81019080803573ffffffffffffffffffffffffffffffffffffffff16906020019092919050505061019b565b6040518082815260200191505060405180910390f35b6101556004803603602081101561013f57600080fd5b81019080803590602001909291905050506101e6565b005b60006020528060005260406000206000915090508060000160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff16908060010154905082565b60008060008373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff168152602001908152602001600020600101549050919050565b336000803373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200190815260200160002060000160006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff160217905550806000803373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff168152602001908152602001600020600101819055503373ffffffffffffffffffffffffffffffffffffffff167f66ead48cfe0e1d1aa8bad492e906c348dfcfeecbf3b7b2cdf9b1f3cfa42a2945826040518082815260200191505060405180910390a25056fea265627a7a723158200afa21327b60017f83a1b21d58d3f0d7a1815fc050f903bd5d26e505c00c58da64736f6c63430005100032",
+  // "deployedBytecode": "0x608060405234801561001057600080fd5b50600436106100415760003560e01c806376dd110f14610046578063d47875d0146100d1578063f853e34d14610129575b600080fd5b6100886004803603602081101561005c57600080fd5b81019080803573ffffffffffffffffffffffffffffffffffffffff169060200190929190505050610157565b604051808373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1681526020018281526020019250505060405180910390f35b610113600480360360208110156100e757600080fd5b81019080803573ffffffffffffffffffffffffffffffffffffffff16906020019092919050505061019b565b6040518082815260200191505060405180910390f35b6101556004803603602081101561013f57600080fd5b81019080803590602001909291905050506101e6565b005b60006020528060005260406000206000915090508060000160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff16908060010154905082565b60008060008373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff168152602001908152602001600020600101549050919050565b336000803373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200190815260200160002060000160006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff160217905550806000803373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff168152602001908152602001600020600101819055503373ffffffffffffffffffffffffffffffffffffffff167f66ead48cfe0e1d1aa8bad492e906c348dfcfeecbf3b7b2cdf9b1f3cfa42a2945826040518082815260200191505060405180910390a25056fea265627a7a723158200afa21327b60017f83a1b21d58d3f0d7a1815fc050f903bd5d26e505c00c58da64736f6c63430005100032",
+  // "sourceMap": "26:1037:0:-;;;;8:9:-1;5:2;;;30:1;27;20:12;5:2;26:1037:0;;;;;;;",
+  // "deployedSourceMap": "26:1037:0:-;;;;8:9:-1;5:2;;;30:1;27;20:12;5:2;26:1037:0;;;;;;;;;;;;;;;;;;;;;;;;;;;;;266:39;;;;;;13:2:-1;8:3;5:11;2:2;;;29:1;26;19:12;2:2;266:39:0;;;;;;;;;;;;;;;;;;;:::i;:::-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;951:110;;;;;;13:2:-1;8:3;5:11;2:2;;;29:1;26;19:12;2:2;951:110:0;;;;;;;;;;;;;;;;;;;:::i;:::-;;;;;;;;;;;;;;;;;;;696:197;;;;;;13:2:-1;8:3;5:11;2:2;;;29:1;26;19:12;2:2;696:197:0;;;;;;;;;;;;;;;;;:::i;:::-;;266:39;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;:::o;951:110::-;1008:7;1034:6;:14;1041:6;1034:14;;;;;;;;;;;;;;;:20;;;1027:27;;951:110;;;:::o;696:197::-;782:10;754:6;:18;761:10;754:18;;;;;;;;;;;;;;;:25;;;:38;;;;;;;;;;;;;;;;;;829:8;802:6;:18;809:10;802:18;;;;;;;;;;;;;;;:24;;:35;;;;865:10;852:34;;;877:8;852:34;;;;;;;;;;;;;;;;;;696:197;:::o",
+  // "source": "pragma solidity ^0.5.16;\n\ncontract PongScoreboard {\n    struct Score {\n        address player;\n        uint256 score;\n    }\n\n\t//the 'public' keyword gives public access to the map and its content \n\t//\t& it automaticaly creates a getter at compilation \"scores()\"\n    mapping(address => Score) public scores;\n\n    event ScoreUpdated(address indexed player, uint256 score);\n\n\t//\"updates score from existing player or creates a ew one if unknown\"\n    //external = can be called outside the contract\n\t//msg.sender = the caller\n\t//emit = trigger an event -> way for smart contracts to communicate information to external entities, \n\t//\t\t\t\t\t\t\tsuch as frontend applications or other smart contracts.\n    function updateScore(uint256 newScore) external {\n        scores[msg.sender].player = msg.sender;\n        scores[msg.sender].score = newScore;\n        emit ScoreUpdated(msg.sender, newScore);\n    }\n\n\t//view --> does not modify blockchain = no gas fee\n    function getScore(address player) external view returns (uint256) {\n        return scores[player].score;\n    }\n}\n",
+  // "sourcePath": "/Users/Verdoodt/Desktop/ft_transcendence/blockchain/contracts/PongScoreboard.sol",
+  // "ast": {
+  //   "absolutePath": "project:/PongScoreboard.sol",
+  //   "exportedSymbols": {
+  //     "PongScoreboard": [
+  //       59
+  //     ]
+  //   },
+  //   "id": 60,
+  //   "nodeType": "SourceUnit",
+  //   "nodes": [
+  //     {
+  //       "id": 1,
+  //       "literals": [
+  //         "solidity",
+  //         "^",
+  //         "0.5",
+  //         ".16"
+  //       ],
+  //       "nodeType": "PragmaDirective",
+  //       "src": "0:24:0"
+  //     },
+  //     {
+  //       "baseContracts": [],
+  //       "contractDependencies": [],
+  //       "contractKind": "contract",
+  //       "documentation": null,
+  //       "fullyImplemented": true,
+  //       "id": 59,
+  //       "linearizedBaseContracts": [
+  //         59
+  //       ],
+  //       "name": "PongScoreboard",
+  //       "nodeType": "ContractDefinition",
+  //       "nodes": [
+  //         {
+  //           "canonicalName": "PongScoreboard.Score",
+  //           "id": 6,
+  //           "members": [
+  //             {
+  //               "constant": false,
+  //               "id": 3,
+  //               "name": "player",
+  //               "nodeType": "VariableDeclaration",
+  //               "scope": 6,
+  //               "src": "79:14:0",
+  //               "stateVariable": false,
+  //               "storageLocation": "default",
+  //               "typeDescriptions": {
+  //                 "typeIdentifier": "t_address",
+  //                 "typeString": "address"
+  //               },
+  //               "typeName": {
+  //                 "id": 2,
+  //                 "name": "address",
+  //                 "nodeType": "ElementaryTypeName",
+  //                 "src": "79:7:0",
+  //                 "stateMutability": "nonpayable",
+  //                 "typeDescriptions": {
+  //                   "typeIdentifier": "t_address",
+  //                   "typeString": "address"
+  //                 }
+  //               },
+  //               "value": null,
+  //               "visibility": "internal"
+  //             },
+  //             {
+  //               "constant": false,
+  //               "id": 5,
+  //               "name": "score",
+  //               "nodeType": "VariableDeclaration",
+  //               "scope": 6,
+  //               "src": "103:13:0",
+  //               "stateVariable": false,
+  //               "storageLocation": "default",
+  //               "typeDescriptions": {
+  //                 "typeIdentifier": "t_uint256",
+  //                 "typeString": "uint256"
+  //               },
+  //               "typeName": {
+  //                 "id": 4,
+  //                 "name": "uint256",
+  //                 "nodeType": "ElementaryTypeName",
+  //                 "src": "103:7:0",
+  //                 "typeDescriptions": {
+  //                   "typeIdentifier": "t_uint256",
+  //                   "typeString": "uint256"
+  //                 }
+  //               },
+  //               "value": null,
+  //               "visibility": "internal"
+  //             }
+  //           ],
+  //           "name": "Score",
+  //           "nodeType": "StructDefinition",
+  //           "scope": 59,
+  //           "src": "56:67:0",
+  //           "visibility": "public"
+  //         },
+  //         {
+  //           "constant": false,
+  //           "id": 10,
+  //           "name": "scores",
+  //           "nodeType": "VariableDeclaration",
+  //           "scope": 59,
+  //           "src": "266:39:0",
+  //           "stateVariable": true,
+  //           "storageLocation": "default",
+  //           "typeDescriptions": {
+  //             "typeIdentifier": "t_mapping$_t_address_$_t_struct$_Score_$6_storage_$",
+  //             "typeString": "mapping(address => struct PongScoreboard.Score)"
+  //           },
+  //           "typeName": {
+  //             "id": 9,
+  //             "keyType": {
+  //               "id": 7,
+  //               "name": "address",
+  //               "nodeType": "ElementaryTypeName",
+  //               "src": "274:7:0",
+  //               "typeDescriptions": {
+  //                 "typeIdentifier": "t_address",
+  //                 "typeString": "address"
+  //               }
+  //             },
+  //             "nodeType": "Mapping",
+  //             "src": "266:25:0",
+  //             "typeDescriptions": {
+  //               "typeIdentifier": "t_mapping$_t_address_$_t_struct$_Score_$6_storage_$",
+  //               "typeString": "mapping(address => struct PongScoreboard.Score)"
+  //             },
+  //             "valueType": {
+  //               "contractScope": null,
+  //               "id": 8,
+  //               "name": "Score",
+  //               "nodeType": "UserDefinedTypeName",
+  //               "referencedDeclaration": 6,
+  //               "src": "285:5:0",
+  //               "typeDescriptions": {
+  //                 "typeIdentifier": "t_struct$_Score_$6_storage_ptr",
+  //                 "typeString": "struct PongScoreboard.Score"
+  //               }
+  //             }
+  //           },
+  //           "value": null,
+  //           "visibility": "public"
+  //         },
+  //         {
+  //           "anonymous": false,
+  //           "documentation": null,
+  //           "id": 16,
+  //           "name": "ScoreUpdated",
+  //           "nodeType": "EventDefinition",
+  //           "parameters": {
+  //             "id": 15,
+  //             "nodeType": "ParameterList",
+  //             "parameters": [
+  //               {
+  //                 "constant": false,
+  //                 "id": 12,
+  //                 "indexed": true,
+  //                 "name": "player",
+  //                 "nodeType": "VariableDeclaration",
+  //                 "scope": 16,
+  //                 "src": "331:22:0",
+  //                 "stateVariable": false,
+  //                 "storageLocation": "default",
+  //                 "typeDescriptions": {
+  //                   "typeIdentifier": "t_address",
+  //                   "typeString": "address"
+  //                 },
+  //                 "typeName": {
+  //                   "id": 11,
+  //                   "name": "address",
+  //                   "nodeType": "ElementaryTypeName",
+  //                   "src": "331:7:0",
+  //                   "stateMutability": "nonpayable",
+  //                   "typeDescriptions": {
+  //                     "typeIdentifier": "t_address",
+  //                     "typeString": "address"
+  //                   }
+  //                 },
+  //                 "value": null,
+  //                 "visibility": "internal"
+  //               },
+  //               {
+  //                 "constant": false,
+  //                 "id": 14,
+  //                 "indexed": false,
+  //                 "name": "score",
+  //                 "nodeType": "VariableDeclaration",
+  //                 "scope": 16,
+  //                 "src": "355:13:0",
+  //                 "stateVariable": false,
+  //                 "storageLocation": "default",
+  //                 "typeDescriptions": {
+  //                   "typeIdentifier": "t_uint256",
+  //                   "typeString": "uint256"
+  //                 },
+  //                 "typeName": {
+  //                   "id": 13,
+  //                   "name": "uint256",
+  //                   "nodeType": "ElementaryTypeName",
+  //                   "src": "355:7:0",
+  //                   "typeDescriptions": {
+  //                     "typeIdentifier": "t_uint256",
+  //                     "typeString": "uint256"
+  //                   }
+  //                 },
+  //                 "value": null,
+  //                 "visibility": "internal"
+  //               }
+  //             ],
+  //             "src": "330:39:0"
+  //           },
+  //           "src": "312:58:0"
+  //         },
+  //         {
+  //           "body": {
+  //             "id": 44,
+  //             "nodeType": "Block",
+  //             "src": "744:149:0",
+  //             "statements": [
+  //               {
+  //                 "expression": {
+  //                   "argumentTypes": null,
+  //                   "id": 28,
+  //                   "isConstant": false,
+  //                   "isLValue": false,
+  //                   "isPure": false,
+  //                   "lValueRequested": false,
+  //                   "leftHandSide": {
+  //                     "argumentTypes": null,
+  //                     "expression": {
+  //                       "argumentTypes": null,
+  //                       "baseExpression": {
+  //                         "argumentTypes": null,
+  //                         "id": 21,
+  //                         "name": "scores",
+  //                         "nodeType": "Identifier",
+  //                         "overloadedDeclarations": [],
+  //                         "referencedDeclaration": 10,
+  //                         "src": "754:6:0",
+  //                         "typeDescriptions": {
+  //                           "typeIdentifier": "t_mapping$_t_address_$_t_struct$_Score_$6_storage_$",
+  //                           "typeString": "mapping(address => struct PongScoreboard.Score storage ref)"
+  //                         }
+  //                       },
+  //                       "id": 24,
+  //                       "indexExpression": {
+  //                         "argumentTypes": null,
+  //                         "expression": {
+  //                           "argumentTypes": null,
+  //                           "id": 22,
+  //                           "name": "msg",
+  //                           "nodeType": "Identifier",
+  //                           "overloadedDeclarations": [],
+  //                           "referencedDeclaration": 74,
+  //                           "src": "761:3:0",
+  //                           "typeDescriptions": {
+  //                             "typeIdentifier": "t_magic_message",
+  //                             "typeString": "msg"
+  //                           }
+  //                         },
+  //                         "id": 23,
+  //                         "isConstant": false,
+  //                         "isLValue": false,
+  //                         "isPure": false,
+  //                         "lValueRequested": false,
+  //                         "memberName": "sender",
+  //                         "nodeType": "MemberAccess",
+  //                         "referencedDeclaration": null,
+  //                         "src": "761:10:0",
+  //                         "typeDescriptions": {
+  //                           "typeIdentifier": "t_address_payable",
+  //                           "typeString": "address payable"
+  //                         }
+  //                       },
+  //                       "isConstant": false,
+  //                       "isLValue": true,
+  //                       "isPure": false,
+  //                       "lValueRequested": false,
+  //                       "nodeType": "IndexAccess",
+  //                       "src": "754:18:0",
+  //                       "typeDescriptions": {
+  //                         "typeIdentifier": "t_struct$_Score_$6_storage",
+  //                         "typeString": "struct PongScoreboard.Score storage ref"
+  //                       }
+  //                     },
+  //                     "id": 25,
+  //                     "isConstant": false,
+  //                     "isLValue": true,
+  //                     "isPure": false,
+  //                     "lValueRequested": true,
+  //                     "memberName": "player",
+  //                     "nodeType": "MemberAccess",
+  //                     "referencedDeclaration": 3,
+  //                     "src": "754:25:0",
+  //                     "typeDescriptions": {
+  //                       "typeIdentifier": "t_address",
+  //                       "typeString": "address"
+  //                     }
+  //                   },
+  //                   "nodeType": "Assignment",
+  //                   "operator": "=",
+  //                   "rightHandSide": {
+  //                     "argumentTypes": null,
+  //                     "expression": {
+  //                       "argumentTypes": null,
+  //                       "id": 26,
+  //                       "name": "msg",
+  //                       "nodeType": "Identifier",
+  //                       "overloadedDeclarations": [],
+  //                       "referencedDeclaration": 74,
+  //                       "src": "782:3:0",
+  //                       "typeDescriptions": {
+  //                         "typeIdentifier": "t_magic_message",
+  //                         "typeString": "msg"
+  //                       }
+  //                     },
+  //                     "id": 27,
+  //                     "isConstant": false,
+  //                     "isLValue": false,
+  //                     "isPure": false,
+  //                     "lValueRequested": false,
+  //                     "memberName": "sender",
+  //                     "nodeType": "MemberAccess",
+  //                     "referencedDeclaration": null,
+  //                     "src": "782:10:0",
+  //                     "typeDescriptions": {
+  //                       "typeIdentifier": "t_address_payable",
+  //                       "typeString": "address payable"
+  //                     }
+  //                   },
+  //                   "src": "754:38:0",
+  //                   "typeDescriptions": {
+  //                     "typeIdentifier": "t_address",
+  //                     "typeString": "address"
+  //                   }
+  //                 },
+  //                 "id": 29,
+  //                 "nodeType": "ExpressionStatement",
+  //                 "src": "754:38:0"
+  //               },
+  //               {
+  //                 "expression": {
+  //                   "argumentTypes": null,
+  //                   "id": 36,
+  //                   "isConstant": false,
+  //                   "isLValue": false,
+  //                   "isPure": false,
+  //                   "lValueRequested": false,
+  //                   "leftHandSide": {
+  //                     "argumentTypes": null,
+  //                     "expression": {
+  //                       "argumentTypes": null,
+  //                       "baseExpression": {
+  //                         "argumentTypes": null,
+  //                         "id": 30,
+  //                         "name": "scores",
+  //                         "nodeType": "Identifier",
+  //                         "overloadedDeclarations": [],
+  //                         "referencedDeclaration": 10,
+  //                         "src": "802:6:0",
+  //                         "typeDescriptions": {
+  //                           "typeIdentifier": "t_mapping$_t_address_$_t_struct$_Score_$6_storage_$",
+  //                           "typeString": "mapping(address => struct PongScoreboard.Score storage ref)"
+  //                         }
+  //                       },
+  //                       "id": 33,
+  //                       "indexExpression": {
+  //                         "argumentTypes": null,
+  //                         "expression": {
+  //                           "argumentTypes": null,
+  //                           "id": 31,
+  //                           "name": "msg",
+  //                           "nodeType": "Identifier",
+  //                           "overloadedDeclarations": [],
+  //                           "referencedDeclaration": 74,
+  //                           "src": "809:3:0",
+  //                           "typeDescriptions": {
+  //                             "typeIdentifier": "t_magic_message",
+  //                             "typeString": "msg"
+  //                           }
+  //                         },
+  //                         "id": 32,
+  //                         "isConstant": false,
+  //                         "isLValue": false,
+  //                         "isPure": false,
+  //                         "lValueRequested": false,
+  //                         "memberName": "sender",
+  //                         "nodeType": "MemberAccess",
+  //                         "referencedDeclaration": null,
+  //                         "src": "809:10:0",
+  //                         "typeDescriptions": {
+  //                           "typeIdentifier": "t_address_payable",
+  //                           "typeString": "address payable"
+  //                         }
+  //                       },
+  //                       "isConstant": false,
+  //                       "isLValue": true,
+  //                       "isPure": false,
+  //                       "lValueRequested": false,
+  //                       "nodeType": "IndexAccess",
+  //                       "src": "802:18:0",
+  //                       "typeDescriptions": {
+  //                         "typeIdentifier": "t_struct$_Score_$6_storage",
+  //                         "typeString": "struct PongScoreboard.Score storage ref"
+  //                       }
+  //                     },
+  //                     "id": 34,
+  //                     "isConstant": false,
+  //                     "isLValue": true,
+  //                     "isPure": false,
+  //                     "lValueRequested": true,
+  //                     "memberName": "score",
+  //                     "nodeType": "MemberAccess",
+  //                     "referencedDeclaration": 5,
+  //                     "src": "802:24:0",
+  //                     "typeDescriptions": {
+  //                       "typeIdentifier": "t_uint256",
+  //                       "typeString": "uint256"
+  //                     }
+  //                   },
+  //                   "nodeType": "Assignment",
+  //                   "operator": "=",
+  //                   "rightHandSide": {
+  //                     "argumentTypes": null,
+  //                     "id": 35,
+  //                     "name": "newScore",
+  //                     "nodeType": "Identifier",
+  //                     "overloadedDeclarations": [],
+  //                     "referencedDeclaration": 18,
+  //                     "src": "829:8:0",
+  //                     "typeDescriptions": {
+  //                       "typeIdentifier": "t_uint256",
+  //                       "typeString": "uint256"
+  //                     }
+  //                   },
+  //                   "src": "802:35:0",
+  //                   "typeDescriptions": {
+  //                     "typeIdentifier": "t_uint256",
+  //                     "typeString": "uint256"
+  //                   }
+  //                 },
+  //                 "id": 37,
+  //                 "nodeType": "ExpressionStatement",
+  //                 "src": "802:35:0"
+  //               },
+  //               {
+  //                 "eventCall": {
+  //                   "argumentTypes": null,
+  //                   "arguments": [
+  //                     {
+  //                       "argumentTypes": null,
+  //                       "expression": {
+  //                         "argumentTypes": null,
+  //                         "id": 39,
+  //                         "name": "msg",
+  //                         "nodeType": "Identifier",
+  //                         "overloadedDeclarations": [],
+  //                         "referencedDeclaration": 74,
+  //                         "src": "865:3:0",
+  //                         "typeDescriptions": {
+  //                           "typeIdentifier": "t_magic_message",
+  //                           "typeString": "msg"
+  //                         }
+  //                       },
+  //                       "id": 40,
+  //                       "isConstant": false,
+  //                       "isLValue": false,
+  //                       "isPure": false,
+  //                       "lValueRequested": false,
+  //                       "memberName": "sender",
+  //                       "nodeType": "MemberAccess",
+  //                       "referencedDeclaration": null,
+  //                       "src": "865:10:0",
+  //                       "typeDescriptions": {
+  //                         "typeIdentifier": "t_address_payable",
+  //                         "typeString": "address payable"
+  //                       }
+  //                     },
+  //                     {
+  //                       "argumentTypes": null,
+  //                       "id": 41,
+  //                       "name": "newScore",
+  //                       "nodeType": "Identifier",
+  //                       "overloadedDeclarations": [],
+  //                       "referencedDeclaration": 18,
+  //                       "src": "877:8:0",
+  //                       "typeDescriptions": {
+  //                         "typeIdentifier": "t_uint256",
+  //                         "typeString": "uint256"
+  //                       }
+  //                     }
+  //                   ],
+  //                   "expression": {
+  //                     "argumentTypes": [
+  //                       {
+  //                         "typeIdentifier": "t_address_payable",
+  //                         "typeString": "address payable"
+  //                       },
+  //                       {
+  //                         "typeIdentifier": "t_uint256",
+  //                         "typeString": "uint256"
+  //                       }
+  //                     ],
+  //                     "id": 38,
+  //                     "name": "ScoreUpdated",
+  //                     "nodeType": "Identifier",
+  //                     "overloadedDeclarations": [],
+  //                     "referencedDeclaration": 16,
+  //                     "src": "852:12:0",
+  //                     "typeDescriptions": {
+  //                       "typeIdentifier": "t_function_event_nonpayable$_t_address_$_t_uint256_$returns$__$",
+  //                       "typeString": "function (address,uint256)"
+  //                     }
+  //                   },
+  //                   "id": 42,
+  //                   "isConstant": false,
+  //                   "isLValue": false,
+  //                   "isPure": false,
+  //                   "kind": "functionCall",
+  //                   "lValueRequested": false,
+  //                   "names": [],
+  //                   "nodeType": "FunctionCall",
+  //                   "src": "852:34:0",
+  //                   "typeDescriptions": {
+  //                     "typeIdentifier": "t_tuple$__$",
+  //                     "typeString": "tuple()"
+  //                   }
+  //                 },
+  //                 "id": 43,
+  //                 "nodeType": "EmitStatement",
+  //                 "src": "847:39:0"
+  //               }
+  //             ]
+  //           },
+  //           "documentation": null,
+  //           "id": 45,
+  //           "implemented": true,
+  //           "kind": "function",
+  //           "modifiers": [],
+  //           "name": "updateScore",
+  //           "nodeType": "FunctionDefinition",
+  //           "parameters": {
+  //             "id": 19,
+  //             "nodeType": "ParameterList",
+  //             "parameters": [
+  //               {
+  //                 "constant": false,
+  //                 "id": 18,
+  //                 "name": "newScore",
+  //                 "nodeType": "VariableDeclaration",
+  //                 "scope": 45,
+  //                 "src": "717:16:0",
+  //                 "stateVariable": false,
+  //                 "storageLocation": "default",
+  //                 "typeDescriptions": {
+  //                   "typeIdentifier": "t_uint256",
+  //                   "typeString": "uint256"
+  //                 },
+  //                 "typeName": {
+  //                   "id": 17,
+  //                   "name": "uint256",
+  //                   "nodeType": "ElementaryTypeName",
+  //                   "src": "717:7:0",
+  //                   "typeDescriptions": {
+  //                     "typeIdentifier": "t_uint256",
+  //                     "typeString": "uint256"
+  //                   }
+  //                 },
+  //                 "value": null,
+  //                 "visibility": "internal"
+  //               }
+  //             ],
+  //             "src": "716:18:0"
+  //           },
+  //           "returnParameters": {
+  //             "id": 20,
+  //             "nodeType": "ParameterList",
+  //             "parameters": [],
+  //             "src": "744:0:0"
+  //           },
+  //           "scope": 59,
+  //           "src": "696:197:0",
+  //           "stateMutability": "nonpayable",
+  //           "superFunction": null,
+  //           "visibility": "external"
+  //         },
+  //         {
+  //           "body": {
+  //             "id": 57,
+  //             "nodeType": "Block",
+  //             "src": "1017:44:0",
+  //             "statements": [
+  //               {
+  //                 "expression": {
+  //                   "argumentTypes": null,
+  //                   "expression": {
+  //                     "argumentTypes": null,
+  //                     "baseExpression": {
+  //                       "argumentTypes": null,
+  //                       "id": 52,
+  //                       "name": "scores",
+  //                       "nodeType": "Identifier",
+  //                       "overloadedDeclarations": [],
+  //                       "referencedDeclaration": 10,
+  //                       "src": "1034:6:0",
+  //                       "typeDescriptions": {
+  //                         "typeIdentifier": "t_mapping$_t_address_$_t_struct$_Score_$6_storage_$",
+  //                         "typeString": "mapping(address => struct PongScoreboard.Score storage ref)"
+  //                       }
+  //                     },
+  //                     "id": 54,
+  //                     "indexExpression": {
+  //                       "argumentTypes": null,
+  //                       "id": 53,
+  //                       "name": "player",
+  //                       "nodeType": "Identifier",
+  //                       "overloadedDeclarations": [],
+  //                       "referencedDeclaration": 47,
+  //                       "src": "1041:6:0",
+  //                       "typeDescriptions": {
+  //                         "typeIdentifier": "t_address",
+  //                         "typeString": "address"
+  //                       }
+  //                     },
+  //                     "isConstant": false,
+  //                     "isLValue": true,
+  //                     "isPure": false,
+  //                     "lValueRequested": false,
+  //                     "nodeType": "IndexAccess",
+  //                     "src": "1034:14:0",
+  //                     "typeDescriptions": {
+  //                       "typeIdentifier": "t_struct$_Score_$6_storage",
+  //                       "typeString": "struct PongScoreboard.Score storage ref"
+  //                     }
+  //                   },
+  //                   "id": 55,
+  //                   "isConstant": false,
+  //                   "isLValue": true,
+  //                   "isPure": false,
+  //                   "lValueRequested": false,
+  //                   "memberName": "score",
+  //                   "nodeType": "MemberAccess",
+  //                   "referencedDeclaration": 5,
+  //                   "src": "1034:20:0",
+  //                   "typeDescriptions": {
+  //                     "typeIdentifier": "t_uint256",
+  //                     "typeString": "uint256"
+  //                   }
+  //                 },
+  //                 "functionReturnParameters": 51,
+  //                 "id": 56,
+  //                 "nodeType": "Return",
+  //                 "src": "1027:27:0"
+  //               }
+  //             ]
+  //           },
+  //           "documentation": null,
+  //           "id": 58,
+  //           "implemented": true,
+  //           "kind": "function",
+  //           "modifiers": [],
+  //           "name": "getScore",
+  //           "nodeType": "FunctionDefinition",
+  //           "parameters": {
+  //             "id": 48,
+  //             "nodeType": "ParameterList",
+  //             "parameters": [
+  //               {
+  //                 "constant": false,
+  //                 "id": 47,
+  //                 "name": "player",
+  //                 "nodeType": "VariableDeclaration",
+  //                 "scope": 58,
+  //                 "src": "969:14:0",
+  //                 "stateVariable": false,
+  //                 "storageLocation": "default",
+  //                 "typeDescriptions": {
+  //                   "typeIdentifier": "t_address",
+  //                   "typeString": "address"
+  //                 },
+  //                 "typeName": {
+  //                   "id": 46,
+  //                   "name": "address",
+  //                   "nodeType": "ElementaryTypeName",
+  //                   "src": "969:7:0",
+  //                   "stateMutability": "nonpayable",
+  //                   "typeDescriptions": {
+  //                     "typeIdentifier": "t_address",
+  //                     "typeString": "address"
+  //                   }
+  //                 },
+  //                 "value": null,
+  //                 "visibility": "internal"
+  //               }
+  //             ],
+  //             "src": "968:16:0"
+  //           },
+  //           "returnParameters": {
+  //             "id": 51,
+  //             "nodeType": "ParameterList",
+  //             "parameters": [
+  //               {
+  //                 "constant": false,
+  //                 "id": 50,
+  //                 "name": "",
+  //                 "nodeType": "VariableDeclaration",
+  //                 "scope": 58,
+  //                 "src": "1008:7:0",
+  //                 "stateVariable": false,
+  //                 "storageLocation": "default",
+  //                 "typeDescriptions": {
+  //                   "typeIdentifier": "t_uint256",
+  //                   "typeString": "uint256"
+  //                 },
+  //                 "typeName": {
+  //                   "id": 49,
+  //                   "name": "uint256",
+  //                   "nodeType": "ElementaryTypeName",
+  //                   "src": "1008:7:0",
+  //                   "typeDescriptions": {
+  //                     "typeIdentifier": "t_uint256",
+  //                     "typeString": "uint256"
+  //                   }
+  //                 },
+  //                 "value": null,
+  //                 "visibility": "internal"
+  //               }
+  //             ],
+  //             "src": "1007:9:0"
+  //           },
+  //           "scope": 59,
+  //           "src": "951:110:0",
+  //           "stateMutability": "view",
+  //           "superFunction": null,
+  //           "visibility": "external"
+  //         }
+  //       ],
+  //       "scope": 60,
+  //       "src": "26:1037:0"
+  //     }
+  //   ],
+  //   "src": "0:1064:0"
+  // },
+  // "legacyAST": {
+  //   "attributes": {
+  //     "absolutePath": "project:/PongScoreboard.sol",
+  //     "exportedSymbols": {
+  //       "PongScoreboard": [
+  //         59
+  //       ]
+  //     }
+  //   },
+  //   "children": [
+  //     {
+  //       "attributes": {
+  //         "literals": [
+  //           "solidity",
+  //           "^",
+  //           "0.5",
+  //           ".16"
+  //         ]
+  //       },
+  //       "id": 1,
+  //       "name": "PragmaDirective",
+  //       "src": "0:24:0"
+  //     },
+  //     {
+  //       "attributes": {
+  //         "baseContracts": [
+  //           null
+  //         ],
+  //         "contractDependencies": [
+  //           null
+  //         ],
+  //         "contractKind": "contract",
+  //         "documentation": null,
+  //         "fullyImplemented": true,
+  //         "linearizedBaseContracts": [
+  //           59
+  //         ],
+  //         "name": "PongScoreboard",
+  //         "scope": 60
+  //       },
+  //       "children": [
+  //         {
+  //           "attributes": {
+  //             "canonicalName": "PongScoreboard.Score",
+  //             "name": "Score",
+  //             "scope": 59,
+  //             "visibility": "public"
+  //           },
+  //           "children": [
+  //             {
+  //               "attributes": {
+  //                 "constant": false,
+  //                 "name": "player",
+  //                 "scope": 6,
+  //                 "stateVariable": false,
+  //                 "storageLocation": "default",
+  //                 "type": "address",
+  //                 "value": null,
+  //                 "visibility": "internal"
+  //               },
+  //               "children": [
+  //                 {
+  //                   "attributes": {
+  //                     "name": "address",
+  //                     "stateMutability": "nonpayable",
+  //                     "type": "address"
+  //                   },
+  //                   "id": 2,
+  //                   "name": "ElementaryTypeName",
+  //                   "src": "79:7:0"
+  //                 }
+  //               ],
+  //               "id": 3,
+  //               "name": "VariableDeclaration",
+  //               "src": "79:14:0"
+  //             },
+  //             {
+  //               "attributes": {
+  //                 "constant": false,
+  //                 "name": "score",
+  //                 "scope": 6,
+  //                 "stateVariable": false,
+  //                 "storageLocation": "default",
+  //                 "type": "uint256",
+  //                 "value": null,
+  //                 "visibility": "internal"
+  //               },
+  //               "children": [
+  //                 {
+  //                   "attributes": {
+  //                     "name": "uint256",
+  //                     "type": "uint256"
+  //                   },
+  //                   "id": 4,
+  //                   "name": "ElementaryTypeName",
+  //                   "src": "103:7:0"
+  //                 }
+  //               ],
+  //               "id": 5,
+  //               "name": "VariableDeclaration",
+  //               "src": "103:13:0"
+  //             }
+  //           ],
+  //           "id": 6,
+  //           "name": "StructDefinition",
+  //           "src": "56:67:0"
+  //         },
+  //         {
+  //           "attributes": {
+  //             "constant": false,
+  //             "name": "scores",
+  //             "scope": 59,
+  //             "stateVariable": true,
+  //             "storageLocation": "default",
+  //             "type": "mapping(address => struct PongScoreboard.Score)",
+  //             "value": null,
+  //             "visibility": "public"
+  //           },
+  //           "children": [
+  //             {
+  //               "attributes": {
+  //                 "type": "mapping(address => struct PongScoreboard.Score)"
+  //               },
+  //               "children": [
+  //                 {
+  //                   "attributes": {
+  //                     "name": "address",
+  //                     "type": "address"
+  //                   },
+  //                   "id": 7,
+  //                   "name": "ElementaryTypeName",
+  //                   "src": "274:7:0"
+  //                 },
+  //                 {
+  //                   "attributes": {
+  //                     "contractScope": null,
+  //                     "name": "Score",
+  //                     "referencedDeclaration": 6,
+  //                     "type": "struct PongScoreboard.Score"
+  //                   },
+  //                   "id": 8,
+  //                   "name": "UserDefinedTypeName",
+  //                   "src": "285:5:0"
+  //                 }
+  //               ],
+  //               "id": 9,
+  //               "name": "Mapping",
+  //               "src": "266:25:0"
+  //             }
+  //           ],
+  //           "id": 10,
+  //           "name": "VariableDeclaration",
+  //           "src": "266:39:0"
+  //         },
+  //         {
+  //           "attributes": {
+  //             "anonymous": false,
+  //             "documentation": null,
+  //             "name": "ScoreUpdated"
+  //           },
+  //           "children": [
+  //             {
+  //               "children": [
+  //                 {
+  //                   "attributes": {
+  //                     "constant": false,
+  //                     "indexed": true,
+  //                     "name": "player",
+  //                     "scope": 16,
+  //                     "stateVariable": false,
+  //                     "storageLocation": "default",
+  //                     "type": "address",
+  //                     "value": null,
+  //                     "visibility": "internal"
+  //                   },
+  //                   "children": [
+  //                     {
+  //                       "attributes": {
+  //                         "name": "address",
+  //                         "stateMutability": "nonpayable",
+  //                         "type": "address"
+  //                       },
+  //                       "id": 11,
+  //                       "name": "ElementaryTypeName",
+  //                       "src": "331:7:0"
+  //                     }
+  //                   ],
+  //                   "id": 12,
+  //                   "name": "VariableDeclaration",
+  //                   "src": "331:22:0"
+  //                 },
+  //                 {
+  //                   "attributes": {
+  //                     "constant": false,
+  //                     "indexed": false,
+  //                     "name": "score",
+  //                     "scope": 16,
+  //                     "stateVariable": false,
+  //                     "storageLocation": "default",
+  //                     "type": "uint256",
+  //                     "value": null,
+  //                     "visibility": "internal"
+  //                   },
+  //                   "children": [
+  //                     {
+  //                       "attributes": {
+  //                         "name": "uint256",
+  //                         "type": "uint256"
+  //                       },
+  //                       "id": 13,
+  //                       "name": "ElementaryTypeName",
+  //                       "src": "355:7:0"
+  //                     }
+  //                   ],
+  //                   "id": 14,
+  //                   "name": "VariableDeclaration",
+  //                   "src": "355:13:0"
+  //                 }
+  //               ],
+  //               "id": 15,
+  //               "name": "ParameterList",
+  //               "src": "330:39:0"
+  //             }
+  //           ],
+  //           "id": 16,
+  //           "name": "EventDefinition",
+  //           "src": "312:58:0"
+  //         },
+  //         {
+  //           "attributes": {
+  //             "documentation": null,
+  //             "implemented": true,
+  //             "isConstructor": false,
+  //             "kind": "function",
+  //             "modifiers": [
+  //               null
+  //             ],
+  //             "name": "updateScore",
+  //             "scope": 59,
+  //             "stateMutability": "nonpayable",
+  //             "superFunction": null,
+  //             "visibility": "external"
+  //           },
+  //           "children": [
+  //             {
+  //               "children": [
+  //                 {
+  //                   "attributes": {
+  //                     "constant": false,
+  //                     "name": "newScore",
+  //                     "scope": 45,
+  //                     "stateVariable": false,
+  //                     "storageLocation": "default",
+  //                     "type": "uint256",
+  //                     "value": null,
+  //                     "visibility": "internal"
+  //                   },
+  //                   "children": [
+  //                     {
+  //                       "attributes": {
+  //                         "name": "uint256",
+  //                         "type": "uint256"
+  //                       },
+  //                       "id": 17,
+  //                       "name": "ElementaryTypeName",
+  //                       "src": "717:7:0"
+  //                     }
+  //                   ],
+  //                   "id": 18,
+  //                   "name": "VariableDeclaration",
+  //                   "src": "717:16:0"
+  //                 }
+  //               ],
+  //               "id": 19,
+  //               "name": "ParameterList",
+  //               "src": "716:18:0"
+  //             },
+  //             {
+  //               "attributes": {
+  //                 "parameters": [
+  //                   null
+  //                 ]
+  //               },
+  //               "children": [],
+  //               "id": 20,
+  //               "name": "ParameterList",
+  //               "src": "744:0:0"
+  //             },
+  //             {
+  //               "children": [
+  //                 {
+  //                   "children": [
+  //                     {
+  //                       "attributes": {
+  //                         "argumentTypes": null,
+  //                         "isConstant": false,
+  //                         "isLValue": false,
+  //                         "isPure": false,
+  //                         "lValueRequested": false,
+  //                         "operator": "=",
+  //                         "type": "address"
+  //                       },
+  //                       "children": [
+  //                         {
+  //                           "attributes": {
+  //                             "argumentTypes": null,
+  //                             "isConstant": false,
+  //                             "isLValue": true,
+  //                             "isPure": false,
+  //                             "lValueRequested": true,
+  //                             "member_name": "player",
+  //                             "referencedDeclaration": 3,
+  //                             "type": "address"
+  //                           },
+  //                           "children": [
+  //                             {
+  //                               "attributes": {
+  //                                 "argumentTypes": null,
+  //                                 "isConstant": false,
+  //                                 "isLValue": true,
+  //                                 "isPure": false,
+  //                                 "lValueRequested": false,
+  //                                 "type": "struct PongScoreboard.Score storage ref"
+  //                               },
+  //                               "children": [
+  //                                 {
+  //                                   "attributes": {
+  //                                     "argumentTypes": null,
+  //                                     "overloadedDeclarations": [
+  //                                       null
+  //                                     ],
+  //                                     "referencedDeclaration": 10,
+  //                                     "type": "mapping(address => struct PongScoreboard.Score storage ref)",
+  //                                     "value": "scores"
+  //                                   },
+  //                                   "id": 21,
+  //                                   "name": "Identifier",
+  //                                   "src": "754:6:0"
+  //                                 },
+  //                                 {
+  //                                   "attributes": {
+  //                                     "argumentTypes": null,
+  //                                     "isConstant": false,
+  //                                     "isLValue": false,
+  //                                     "isPure": false,
+  //                                     "lValueRequested": false,
+  //                                     "member_name": "sender",
+  //                                     "referencedDeclaration": null,
+  //                                     "type": "address payable"
+  //                                   },
+  //                                   "children": [
+  //                                     {
+  //                                       "attributes": {
+  //                                         "argumentTypes": null,
+  //                                         "overloadedDeclarations": [
+  //                                           null
+  //                                         ],
+  //                                         "referencedDeclaration": 74,
+  //                                         "type": "msg",
+  //                                         "value": "msg"
+  //                                       },
+  //                                       "id": 22,
+  //                                       "name": "Identifier",
+  //                                       "src": "761:3:0"
+  //                                     }
+  //                                   ],
+  //                                   "id": 23,
+  //                                   "name": "MemberAccess",
+  //                                   "src": "761:10:0"
+  //                                 }
+  //                               ],
+  //                               "id": 24,
+  //                               "name": "IndexAccess",
+  //                               "src": "754:18:0"
+  //                             }
+  //                           ],
+  //                           "id": 25,
+  //                           "name": "MemberAccess",
+  //                           "src": "754:25:0"
+  //                         },
+  //                         {
+  //                           "attributes": {
+  //                             "argumentTypes": null,
+  //                             "isConstant": false,
+  //                             "isLValue": false,
+  //                             "isPure": false,
+  //                             "lValueRequested": false,
+  //                             "member_name": "sender",
+  //                             "referencedDeclaration": null,
+  //                             "type": "address payable"
+  //                           },
+  //                           "children": [
+  //                             {
+  //                               "attributes": {
+  //                                 "argumentTypes": null,
+  //                                 "overloadedDeclarations": [
+  //                                   null
+  //                                 ],
+  //                                 "referencedDeclaration": 74,
+  //                                 "type": "msg",
+  //                                 "value": "msg"
+  //                               },
+  //                               "id": 26,
+  //                               "name": "Identifier",
+  //                               "src": "782:3:0"
+  //                             }
+  //                           ],
+  //                           "id": 27,
+  //                           "name": "MemberAccess",
+  //                           "src": "782:10:0"
+  //                         }
+  //                       ],
+  //                       "id": 28,
+  //                       "name": "Assignment",
+  //                       "src": "754:38:0"
+  //                     }
+  //                   ],
+  //                   "id": 29,
+  //                   "name": "ExpressionStatement",
+  //                   "src": "754:38:0"
+  //                 },
+  //                 {
+  //                   "children": [
+  //                     {
+  //                       "attributes": {
+  //                         "argumentTypes": null,
+  //                         "isConstant": false,
+  //                         "isLValue": false,
+  //                         "isPure": false,
+  //                         "lValueRequested": false,
+  //                         "operator": "=",
+  //                         "type": "uint256"
+  //                       },
+  //                       "children": [
+  //                         {
+  //                           "attributes": {
+  //                             "argumentTypes": null,
+  //                             "isConstant": false,
+  //                             "isLValue": true,
+  //                             "isPure": false,
+  //                             "lValueRequested": true,
+  //                             "member_name": "score",
+  //                             "referencedDeclaration": 5,
+  //                             "type": "uint256"
+  //                           },
+  //                           "children": [
+  //                             {
+  //                               "attributes": {
+  //                                 "argumentTypes": null,
+  //                                 "isConstant": false,
+  //                                 "isLValue": true,
+  //                                 "isPure": false,
+  //                                 "lValueRequested": false,
+  //                                 "type": "struct PongScoreboard.Score storage ref"
+  //                               },
+  //                               "children": [
+  //                                 {
+  //                                   "attributes": {
+  //                                     "argumentTypes": null,
+  //                                     "overloadedDeclarations": [
+  //                                       null
+  //                                     ],
+  //                                     "referencedDeclaration": 10,
+  //                                     "type": "mapping(address => struct PongScoreboard.Score storage ref)",
+  //                                     "value": "scores"
+  //                                   },
+  //                                   "id": 30,
+  //                                   "name": "Identifier",
+  //                                   "src": "802:6:0"
+  //                                 },
+  //                                 {
+  //                                   "attributes": {
+  //                                     "argumentTypes": null,
+  //                                     "isConstant": false,
+  //                                     "isLValue": false,
+  //                                     "isPure": false,
+  //                                     "lValueRequested": false,
+  //                                     "member_name": "sender",
+  //                                     "referencedDeclaration": null,
+  //                                     "type": "address payable"
+  //                                   },
+  //                                   "children": [
+  //                                     {
+  //                                       "attributes": {
+  //                                         "argumentTypes": null,
+  //                                         "overloadedDeclarations": [
+  //                                           null
+  //                                         ],
+  //                                         "referencedDeclaration": 74,
+  //                                         "type": "msg",
+  //                                         "value": "msg"
+  //                                       },
+  //                                       "id": 31,
+  //                                       "name": "Identifier",
+  //                                       "src": "809:3:0"
+  //                                     }
+  //                                   ],
+  //                                   "id": 32,
+  //                                   "name": "MemberAccess",
+  //                                   "src": "809:10:0"
+  //                                 }
+  //                               ],
+  //                               "id": 33,
+  //                               "name": "IndexAccess",
+  //                               "src": "802:18:0"
+  //                             }
+  //                           ],
+  //                           "id": 34,
+  //                           "name": "MemberAccess",
+  //                           "src": "802:24:0"
+  //                         },
+  //                         {
+  //                           "attributes": {
+  //                             "argumentTypes": null,
+  //                             "overloadedDeclarations": [
+  //                               null
+  //                             ],
+  //                             "referencedDeclaration": 18,
+  //                             "type": "uint256",
+  //                             "value": "newScore"
+  //                           },
+  //                           "id": 35,
+  //                           "name": "Identifier",
+  //                           "src": "829:8:0"
+  //                         }
+  //                       ],
+  //                       "id": 36,
+  //                       "name": "Assignment",
+  //                       "src": "802:35:0"
+  //                     }
+  //                   ],
+  //                   "id": 37,
+  //                   "name": "ExpressionStatement",
+  //                   "src": "802:35:0"
+  //                 },
+  //                 {
+  //                   "children": [
+  //                     {
+  //                       "attributes": {
+  //                         "argumentTypes": null,
+  //                         "isConstant": false,
+  //                         "isLValue": false,
+  //                         "isPure": false,
+  //                         "isStructConstructorCall": false,
+  //                         "lValueRequested": false,
+  //                         "names": [
+  //                           null
+  //                         ],
+  //                         "type": "tuple()",
+  //                         "type_conversion": false
+  //                       },
+  //                       "children": [
+  //                         {
+  //                           "attributes": {
+  //                             "argumentTypes": [
+  //                               {
+  //                                 "typeIdentifier": "t_address_payable",
+  //                                 "typeString": "address payable"
+  //                               },
+  //                               {
+  //                                 "typeIdentifier": "t_uint256",
+  //                                 "typeString": "uint256"
+  //                               }
+  //                             ],
+  //                             "overloadedDeclarations": [
+  //                               null
+  //                             ],
+  //                             "referencedDeclaration": 16,
+  //                             "type": "function (address,uint256)",
+  //                             "value": "ScoreUpdated"
+  //                           },
+  //                           "id": 38,
+  //                           "name": "Identifier",
+  //                           "src": "852:12:0"
+  //                         },
+  //                         {
+  //                           "attributes": {
+  //                             "argumentTypes": null,
+  //                             "isConstant": false,
+  //                             "isLValue": false,
+  //                             "isPure": false,
+  //                             "lValueRequested": false,
+  //                             "member_name": "sender",
+  //                             "referencedDeclaration": null,
+  //                             "type": "address payable"
+  //                           },
+  //                           "children": [
+  //                             {
+  //                               "attributes": {
+  //                                 "argumentTypes": null,
+  //                                 "overloadedDeclarations": [
+  //                                   null
+  //                                 ],
+  //                                 "referencedDeclaration": 74,
+  //                                 "type": "msg",
+  //                                 "value": "msg"
+  //                               },
+  //                               "id": 39,
+  //                               "name": "Identifier",
+  //                               "src": "865:3:0"
+  //                             }
+  //                           ],
+  //                           "id": 40,
+  //                           "name": "MemberAccess",
+  //                           "src": "865:10:0"
+  //                         },
+  //                         {
+  //                           "attributes": {
+  //                             "argumentTypes": null,
+  //                             "overloadedDeclarations": [
+  //                               null
+  //                             ],
+  //                             "referencedDeclaration": 18,
+  //                             "type": "uint256",
+  //                             "value": "newScore"
+  //                           },
+  //                           "id": 41,
+  //                           "name": "Identifier",
+  //                           "src": "877:8:0"
+  //                         }
+  //                       ],
+  //                       "id": 42,
+  //                       "name": "FunctionCall",
+  //                       "src": "852:34:0"
+  //                     }
+  //                   ],
+  //                   "id": 43,
+  //                   "name": "EmitStatement",
+  //                   "src": "847:39:0"
+  //                 }
+  //               ],
+  //               "id": 44,
+  //               "name": "Block",
+  //               "src": "744:149:0"
+  //             }
+  //           ],
+  //           "id": 45,
+  //           "name": "FunctionDefinition",
+  //           "src": "696:197:0"
+  //         },
+  //         {
+  //           "attributes": {
+  //             "documentation": null,
+  //             "implemented": true,
+  //             "isConstructor": false,
+  //             "kind": "function",
+  //             "modifiers": [
+  //               null
+  //             ],
+  //             "name": "getScore",
+  //             "scope": 59,
+  //             "stateMutability": "view",
+  //             "superFunction": null,
+  //             "visibility": "external"
+  //           },
+  //           "children": [
+  //             {
+  //               "children": [
+  //                 {
+  //                   "attributes": {
+  //                     "constant": false,
+  //                     "name": "player",
+  //                     "scope": 58,
+  //                     "stateVariable": false,
+  //                     "storageLocation": "default",
+  //                     "type": "address",
+  //                     "value": null,
+  //                     "visibility": "internal"
+  //                   },
+  //                   "children": [
+  //                     {
+  //                       "attributes": {
+  //                         "name": "address",
+  //                         "stateMutability": "nonpayable",
+  //                         "type": "address"
+  //                       },
+  //                       "id": 46,
+  //                       "name": "ElementaryTypeName",
+  //                       "src": "969:7:0"
+  //                     }
+  //                   ],
+  //                   "id": 47,
+  //                   "name": "VariableDeclaration",
+  //                   "src": "969:14:0"
+  //                 }
+  //               ],
+  //               "id": 48,
+  //               "name": "ParameterList",
+  //               "src": "968:16:0"
+  //             },
+  //             {
+  //               "children": [
+  //                 {
+  //                   "attributes": {
+  //                     "constant": false,
+  //                     "name": "",
+  //                     "scope": 58,
+  //                     "stateVariable": false,
+  //                     "storageLocation": "default",
+  //                     "type": "uint256",
+  //                     "value": null,
+  //                     "visibility": "internal"
+  //                   },
+  //                   "children": [
+  //                     {
+  //                       "attributes": {
+  //                         "name": "uint256",
+  //                         "type": "uint256"
+  //                       },
+  //                       "id": 49,
+  //                       "name": "ElementaryTypeName",
+  //                       "src": "1008:7:0"
+  //                     }
+  //                   ],
+  //                   "id": 50,
+  //                   "name": "VariableDeclaration",
+  //                   "src": "1008:7:0"
+  //                 }
+  //               ],
+  //               "id": 51,
+  //               "name": "ParameterList",
+  //               "src": "1007:9:0"
+  //             },
+  //             {
+  //               "children": [
+  //                 {
+  //                   "attributes": {
+  //                     "functionReturnParameters": 51
+  //                   },
+  //                   "children": [
+  //                     {
+  //                       "attributes": {
+  //                         "argumentTypes": null,
+  //                         "isConstant": false,
+  //                         "isLValue": true,
+  //                         "isPure": false,
+  //                         "lValueRequested": false,
+  //                         "member_name": "score",
+  //                         "referencedDeclaration": 5,
+  //                         "type": "uint256"
+  //                       },
+  //                       "children": [
+  //                         {
+  //                           "attributes": {
+  //                             "argumentTypes": null,
+  //                             "isConstant": false,
+  //                             "isLValue": true,
+  //                             "isPure": false,
+  //                             "lValueRequested": false,
+  //                             "type": "struct PongScoreboard.Score storage ref"
+  //                           },
+  //                           "children": [
+  //                             {
+  //                               "attributes": {
+  //                                 "argumentTypes": null,
+  //                                 "overloadedDeclarations": [
+  //                                   null
+  //                                 ],
+  //                                 "referencedDeclaration": 10,
+  //                                 "type": "mapping(address => struct PongScoreboard.Score storage ref)",
+  //                                 "value": "scores"
+  //                               },
+  //                               "id": 52,
+  //                               "name": "Identifier",
+  //                               "src": "1034:6:0"
+  //                             },
+  //                             {
+  //                               "attributes": {
+  //                                 "argumentTypes": null,
+  //                                 "overloadedDeclarations": [
+  //                                   null
+  //                                 ],
+  //                                 "referencedDeclaration": 47,
+  //                                 "type": "address",
+  //                                 "value": "player"
+  //                               },
+  //                               "id": 53,
+  //                               "name": "Identifier",
+  //                               "src": "1041:6:0"
+  //                             }
+  //                           ],
+  //                           "id": 54,
+  //                           "name": "IndexAccess",
+  //                           "src": "1034:14:0"
+  //                         }
+  //                       ],
+  //                       "id": 55,
+  //                       "name": "MemberAccess",
+  //                       "src": "1034:20:0"
+  //                     }
+  //                   ],
+  //                   "id": 56,
+  //                   "name": "Return",
+  //                   "src": "1027:27:0"
+  //                 }
+  //               ],
+  //               "id": 57,
+  //               "name": "Block",
+  //               "src": "1017:44:0"
+  //             }
+  //           ],
+  //           "id": 58,
+  //           "name": "FunctionDefinition",
+  //           "src": "951:110:0"
+  //         }
+  //       ],
+  //       "id": 59,
+  //       "name": "ContractDefinition",
+  //       "src": "26:1037:0"
+  //     }
+  //   ],
+  //   "id": 60,
+  //   "name": "SourceUnit",
+  //   "src": "0:1064:0"
+  // },
+  // "compiler": {
+  //   "name": "solc",
+  //   "version": "0.5.16+commit.9c3226ce.Emscripten.clang"
+  // },
+  // "networks": {
+  //   "5777": {
+  //     "events": {},
+  //     "links": {},
+  //     "address": "0x433582a4046E5ea90cF49E19e16bddBB884E9f85",
+  //     "transactionHash": "0x3bd65b1ed09b483ede905163f2915c4b093bfb24ebeca50006c7f75598fb5d76"
+  //   }
+  // },
+  // "schemaVersion": "3.4.16",
+  // "updatedAt": "2024-02-26T15:17:04.366Z",
+  // "networkType": "ethereum",
+  // "devdoc": {
+  //   "methods": {}
+  // },
+  // "userdoc": {
+  //   "methods": {}
+  // }
+// }

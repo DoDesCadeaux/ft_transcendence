@@ -242,40 +242,40 @@
 <script src="./js/index.js"></script>
 <script src="./js/web3.min.js"></script> <!-- Load web3 library -->
 <script>
-    //Configure web3 ad iteract with cotracts
-    window.addEventListener('load', async () => {
-        if (window.ethereum) {
-            window.web3 = new Web3(window.ethereum);
-            try {
-                await window.ethereum.enable(); //requset user to grat permissionn to the web app to access 
-                                                //their Eth account managed by the provider (like MetaMask)
-                interactWithContract();
-            } catch (error) {
-                console.error("User denied account access or error occured:", error);
-            }
-        } else if (window.web3) {
-            window.web3 = new Web3(web3.currentProvider);
-            interactWithContract();
-        } else {
-            console.error("No Ethereum provider detected. Install MetaMask or use a browser with Ethereum support.");
-        }
-    });
+    //Configure web3 ad interact with cotracts
+    // window.addEventListener('load', async () => {
+    //     if (window.ethereum) {
+    //         window.web3 = new Web3(window.ethereum);
+    //         try {
+    //             await window.ethereum.enable(); //requset user to grat permissionn to the web app to access 
+    //                                             //their Eth account managed by the provider (like MetaMask)
+    //             interactWithContract();
+    //         } catch (error) {
+    //             console.error("User denied account access or error occured:", error);
+    //         }
+    //     } else if (window.web3) {
+    //         window.web3 = new Web3(web3.currentProvider);
+    //         interactWithContract();
+    //     } else {
+    //         console.error("No Ethereum provider detected. Install MetaMask or use a browser with Ethereum support.");
+    //     }
+    // });
 
-    const Web3 = require('web3');
-    const interactWithContract = require('./contractInteractions');
-    const abi = require('./PongScoreboardABI.json');
+    // const Web3 = require('web3');
+    // const interactWithContract = require('./contractInteractions');
+    // const abi = require('./PongScoreboardABI.json');
 
-    // Set up web3 with Ganache provider
-    const web3 = new Web3('http://localhost:7545');
+    // // Set up web3 with Ganache provider
+    // const web3 = new Web3('http://localhost:7545');
 
-    // Define your contract address
-    const contractAddress = 'YOUR_CONTRACT_ADDRESS';
+    // // Define your contract address
+    // const contractAddress = 'YOUR_CONTRACT_ADDRESS';
 
-    // Load the contract
-    const pongContract = new web3.eth.Contract(abi, contractAddress);
+    // // Load the contract
+    // const pongContract = new web3.eth.Contract(abi, contractAddress);
 
-    // Call the interactWithContract() function
-    interactWithContract(web3, pongContract, 100);
+    // // Call the interactWithContract() function
+    // interactWithContract(web3, pongContract, 100);
 
 </script>
 
