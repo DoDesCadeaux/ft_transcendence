@@ -37,16 +37,16 @@ def connexion(request):
             if user_info_response.status_code == 200:
                 user_info = user_info_response.json()
                 user_id42 = user_info.get('id')
-                user_name = user_info.get('login')
+                user_login = user_info.get('login')
+                user_name = user_info.get('first_name')
                 user_photo_url = user_info.get('image', {}).get('versions', {}).get('large')
                 delta = timedelta(minutes=0)
-                # Téléchargez la photo depuis l'URL
                 response = urlopen(user_photo_url)
                 photo_name = f"{user_id42}.jpg"
 
                 user, created = User.objects.get_or_create(
                     id_api=user_id42,
-                    defaults={'name': user_name, 'username': user_name, 'play_time': delta, 'state': "online", 'photo': photo_name}
+                    defaults={'name': user_name, 'username': user_login, 'play_time': delta, 'state': "online", 'photo': photo_name}
                 )
                 user.photo.save(photo_name, File(response))
                 if not created:
