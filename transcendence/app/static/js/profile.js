@@ -30,6 +30,7 @@ function updateProfile(element) {
         const photoName = `${user_id}.jpg`;
         formData.append('photo', file, photoName);
     }
+
     fetch(`/api/update_user/${user_id}/`, {
         method: 'PUT',
         body: formData,
@@ -38,10 +39,11 @@ function updateProfile(element) {
         },
     })
     .then(response => response.json())
-    .then(data => {
-        console.log(data);  // Gérez la réponse comme nécessaire
-    })
     .catch(error => {
         console.error('Erreur lors de la mise à jour de l\'utilisateur :', error);
     });
+
+    document.getElementById('profilePicture').value = '';
+
+    alert("Profile mis a jour. Veuillez recharger la page pour visualiser les modifications");
 }

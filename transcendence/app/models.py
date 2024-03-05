@@ -1,18 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
-import os
 
-# Fonction qui permet d'écraser la photo existante 
-def user_photo_path(instance, filename):
-    # Obtenez le chemin actuel de la photo
-    current_path = instance.photo.path if instance.photo else ''
 
-    # Si une photo avec le même nom existe déjà, supprimez-la
-    if os.path.isfile(current_path):
-        os.remove(current_path)
-
-    # Retournez le nouveau chemin de la photo
-    return f'user_photos/{filename}'
+#kwargs = keywords arguments -> permet de passer des variable en plus des arguments dans une fonction
 
 class User(AbstractUser):
     id_api = models.CharField(max_length=100, unique=True)
@@ -41,6 +31,22 @@ class User(AbstractUser):
             return f"{int(seconds)}sec"
         else:
             return "0min"
+    
+    def save(self, *args, **kwargs):
+        # Vérifier s'il y a une photo existante
+        try:
+            #pk c'est la primary key, ici on essaye de recuperer l'user pour
+            #maj sa photo en ecrasant l'ancienne, si on le recup pas on va dans
+            #dans le execept et on fait rien
+            existing_user = User.objects.get(pk=self.pk)
+            if existing_user.photo and self.photo != existing_user.photo:
+                # si il existe on supprime l'ancienne photo avant d'enregistrer la nouvelle
+                existing_user.photo.delete(save=False)
+        except User.DoesNotExist:
+            pass
+
+        #on utilise super pour maj, c'est la class parente par defaut de toutes nos classes
+        super().save(*args, **kwargs)
         
 
 class Tournament(models.Model):

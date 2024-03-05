@@ -53,7 +53,7 @@ def connexion(request):
                     user.state = "online"
                 user.save()
                 auth_login(request, user)
-                return render(request, "dashboard.html")
+                return render(request, "base.html")
             else:
                 return HttpResponse("Failed to retrieve user information", status=user_info_response.status_code)
         else:

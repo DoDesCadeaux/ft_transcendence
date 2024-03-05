@@ -5,6 +5,7 @@ from rest_framework import status
 from app.models import User
 from app.serializer import UserManagementSerializer  # Assurez-vous d'avoir un fichier serializers.py dans votre application principale
 
+
 class UserUpdateAPIView(generics.UpdateAPIView):
     queryset = User.objects.all()
     serializer_class = UserManagementSerializer
@@ -27,9 +28,7 @@ class UserUpdateAPIView(generics.UpdateAPIView):
             user.photo = new_photo
 
         user.save()
-        print(user)
-
-
+      
         serializer = UserManagementSerializer(user)
         return Response(serializer.data)
     

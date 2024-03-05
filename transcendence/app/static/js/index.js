@@ -39,7 +39,7 @@ function adpatUriToFetch(uri) {
 		if (/^\/+$/.test(uri))
 			return "/dashboard_fragment";
 		else 
-			return uri.replace(/\/([^\/]*)$/, '_fragment');
+			return uri.replace(/\/([^\/]*)$/, '$1_fragment');
 }
 	
 document.addEventListener('DOMContentLoaded', function() {

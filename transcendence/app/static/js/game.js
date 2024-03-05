@@ -93,10 +93,12 @@ function setupDynamicElements() {
 }
 
 document.body.addEventListener("DOMNodeInserted", function (event) {
-  console.log("Nouveau noeuds");
-  if (event.target.tagName === "input" && event.target.id === "search-input") {
-    setupDynamicElements();
+    if ((event.target.tagName === "input" && event.target.id === "search-input") || document.querySelector("#search-input")) {
+        console.log("Nouveau noeuds");
+        setupDynamicElements();
   }
 });
+
+
 
 setupDynamicElements();
