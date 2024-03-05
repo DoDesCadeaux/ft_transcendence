@@ -1,0 +1,7 @@
+Needed :
+- Node.js --> on E19 computers?
+- npm --> on E19 computers?
+- Truffle framework (& contracts) --> npm install -g truffle truffle-contract
+- Ganache (personal Ethereum blockchain for development purposes) --> npm install -g ganache-cli
+- web3.js --> npm install web3
+
