@@ -518,11 +518,12 @@ body {
                         }
                     }
 
-                    #update-profile {
+                    .update-profile {
                         background-color: var(--orange);
                         color: var(--white-sec);
                         padding: 5px;
                         border-radius: 10px;
+                        cursor: pointer;
 
                     }
                 }

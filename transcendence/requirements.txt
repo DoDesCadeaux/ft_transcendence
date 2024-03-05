@@ -4,3 +4,4 @@ pillow==10.2.0
 requests==2.26.0
 python-dotenv==1.0.1
 social-auth-app-django==5.4.0
+djangorestframework==3.14.0

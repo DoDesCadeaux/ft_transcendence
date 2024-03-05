@@ -1,5 +1,18 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+import os
+
+# Fonction qui permet d'écraser la photo existante 
+def user_photo_path(instance, filename):
+    # Obtenez le chemin actuel de la photo
+    current_path = instance.photo.path if instance.photo else ''
+
+    # Si une photo avec le même nom existe déjà, supprimez-la
+    if os.path.isfile(current_path):
+        os.remove(current_path)
+
+    # Retournez le nouveau chemin de la photo
+    return f'user_photos/{filename}'
 
 class User(AbstractUser):
     id_api = models.CharField(max_length=100, unique=True)

@@ -18,6 +18,30 @@ function previewProfile() {
     previewUsername.textContent = inputUsername;
 }
 
-function updateProfile() {
-    // logique d'envoi des données au backend
+function updateProfile(element) {
+    const inputUsername = document.querySelector('#username').value;
+    const file = document.getElementById('profilePicture').files[0];
+    const user_id = element.id;
+    const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+    const formData = new FormData();
+    formData.append('username', inputUsername);
+    if (file) {
+        const photoName = `${user_id}.jpg`;
+        formData.append('photo', file, photoName);
+    }
+    fetch(`/api/update_user/${user_id}/`, {
+        method: 'PUT',
+        body: formData,
+        headers: {
+            'X-CSRFToken': csrftoken,
+        },
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log(data);  // Gérez la réponse comme nécessaire
+    })
+    .catch(error => {
+        console.error('Erreur lors de la mise à jour de l\'utilisateur :', error);
+    });
 }

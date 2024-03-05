@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>42TranScenDence</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap">
     <link rel="stylesheet" href="../static/style.css">
 </head>
@@ -11,11 +11,15 @@
 <body>
 
     <div class="top-banner">
-        <img class="logo pointer" src="../static/img/logo.svg" alt="logo 42Transcendence" onclick="openDash()">
+        <a href="#dashbordoad">
+            <img class="logo pointer" src="../static/img/logo.svg" alt="logo 42Transcendence" >
+        </a>
         <div class="user">
-            <img class="photo" src="../static/img/pamartin.jpg" alt="user">
-            <div class="name">Pamartin</div>
-            <img class='banner-icon pointer' src="../static/img/settings.svg" alt="" onclick="openProfile()">
+            <img class="photo" src="{{ user.photo.url }}" alt="user">
+            <div class="name">{{ user.username }}</div>
+            <a href="#profile">
+                <img class='banner-icon pointer' src="../static/img/settings.svg" alt="">
+            </a>
             <img class='banner-icon pointer' src="../static/img/exit.svg" alt="">
         </div>
     </div>
@@ -25,45 +29,7 @@
             <div class="dash">
                 <div class="card new-game">
                     <div class="card--title">Nouveau match</div>
-                    <!--<div class="card--content new-game--content">
-                        <div class="invitation-received">Invitation(s) recue(s)
-                            <!-- <ul>
-                                <li class='pointer' onclick="">dduraku</li>
-                                <li class='pointer' onclick="">dduraku</li>
-                                <li class='pointer' onclick="">dduraku</li>
-                            </ul>
-                            <div class="navigation">
-                                <div class="previous pointer"><</div>
-                                <div class="next pointer">></div>
-                            </div> -->
-                    <!--</div>
-                        <div class="invitation-sent">Invitation(s) envoyee(s)
-                            <!-- <ul>
-                                <li class='pointer' onclick="">dduraku</li>
-                                <li class='pointer' onclick="">dduraku</li>
-                                <li class='pointer' onclick="">dduraku</li>
-                            </ul>
-                            <div class="navigation">
-                                <div class="previous pointer"><</div>
-                                <div class="next pointer">></div>
-                            </div> -->
-                    <!--</div>
-                        <div class="invitation-send">Invite un ami
-                            <div id="search">
-                                <div class="bar">
-                                    <input type="text" id="search-input" placeholder="Rechercher...">
-                                    <img class="pointer search" onclick="select()" src="../static/img/send.svg" alt="">
-                                </div>
-                                <ul class="autocomplete">
-                                    <!-- <li>dfsdff</li>
-                                    <li>sdfsdf</li>
-                                    <li>sdfsdf</li>
-                                    <li>sdfsdf</li>
-                                    <li>sdfsdf</li> -->
-                    <!--</ul>
-                            </div>
-                        </div>
-                    </div> -->
+                    
                     <img class="new-game--icon" src="../static/img/playGame.svg" alt="" onclick="newGame()">
                 </div>
 

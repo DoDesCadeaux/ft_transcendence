@@ -63,22 +63,31 @@ def connexion(request):
 
 def index(request):
     if request.user.is_authenticated:
-        return render(request, "dashboard.html")
+        return render(request, "base.html")
     else:
         return redirect("/login/")
     
 def profile(request):
     if request.user.is_authenticated:
-        return render(request, "profile.html")
+        return render(request, "base.html")
     else:
         return redirect("/login/")
 
 def game(request):
     if request.user.is_authenticated:
-        return render(request, "game.html")
+        return render(request, "base.html")
     else:
         return redirect("/login/")
 
 def logout(request):
     auth_logout(request)
     return redirect("/login/")
+
+def dashboard_fragment(request):
+    return render(request, "dashboard.html")
+
+def game_fragment(request):
+    return render(request, "game.html")
+
+def profile_fragment(request):
+    return render(request, "profile.html")

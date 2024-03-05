@@ -1,50 +1,35 @@
-const searchBar = document.querySelector("#search");
-const waitingBloc = document.querySelector(".waiting");
-const waitingMsg = document.querySelector(".waiting-msg");
-const invit = document.querySelector(".invit-game");
-const pong = document.querySelector(".pong");
-const ball = document.querySelector(".wrap-ball");
-const searchInput = document.querySelector("#search-input");
-const autoComplete = document.querySelector(".autocomplete");
-const search = document.querySelectorAll(".search");
-const propositions = ['robert', 'sebastien', 'pierre', 'paul', 'jaques'];
+let searchBar, waitingBloc, searchInput, autoComplete, search, waitingMsg, invit, pong, ball;
 
 function handleInputSearchEvent() {
-    return function () {
-        const searchTerm = searchInput.value.trim();
+  return function () {
+    const searchTerm = searchInput.value.trim();
 
-        // Efface la liste d'autocomplétion
+    autoComplete.innerHTML = "";
+
+    if (searchTerm === "") {
+      return;
+    }
+
+    document.addEventListener("click", function (event) {
+      const isAutocompleteClick = autoComplete.contains(event.target);
+
+      if (!isAutocompleteClick) autoComplete.innerHTML = "";
+    });
+
+    const propositions = ["robert", "sebastien", "pierre", "paul", "jaques"];
+    propositions.forEach((proposition) => {
+      const listItem = document.createElement("li");
+      listItem.textContent = proposition;
+      autoComplete.appendChild(listItem);
+
+      listItem.addEventListener("click", function () {
+        searchInput.value = proposition;
         autoComplete.innerHTML = "";
-
-        // Si la recherche est vide, quitte la fonction
-        if (searchTerm === "") {
-            return;
-        }
-
-        // Si on clique a l'exterieur de la zone d'autocomplétion -> on efface la liste
-        document.addEventListener("click", function (event) {
-            const isAutocompleteClick = autoComplete.contains(event.target);
-
-            if (!isAutocompleteClick)
-                autoComplete.innerHTML = "";
-        });
-
-        propositions.forEach((proposition) => {
-            const listItem = document.createElement("li");
-            listItem.textContent = proposition;
-            autoComplete.appendChild(listItem);
-
-            // Ajoute un gestionnaire d'événement pour sélectionner un résultat
-            listItem.addEventListener("click", function () {
-                searchInput.value = proposition;
-                autoComplete.innerHTML = "";
-                search.id = proposition;
-            });
-        });
-    };
+        search.id = proposition;
+      });
+    });
+  };
 }
-
-searchInput.addEventListener("input", handleInputSearchEvent());
 
 function selectPlayer() {
     printWaiting(search.id);
@@ -57,11 +42,11 @@ function printWaiting(opponent) {
     waitingBloc.classList.remove("displayNone");
     waitingMsg.textContent = `En attente de la reponse de ${opponent}`;
     //Joueur ok
-    // setTimeout(playGame, 3000);
+    setTimeout(playGame, 3000);
     //Joueur pas ok
-    setTimeout(() => {
-        oupsRejected(opponent);
-    }, 3000);
+    // setTimeout(() => {
+    //     oupsRejected(opponent);
+    // }, 3000);
     //Pas de reponse du joueur
     // setTimeout(() => {
     //     oupsUnreachable(opponent);
@@ -91,3 +76,27 @@ function oupsUnreachable(opponent) {
     ball.classList.add("displayNone");
     setTimeout(returnDash, 3000);
 }
+
+function setupDynamicElements() {
+  console.log("Je set up");
+  searchBar = document.querySelector("#search");
+  waitingBloc = document.querySelector(".waiting");
+  searchInput = document.querySelector("#search-input");
+  autoComplete = document.querySelector(".autocomplete");
+  search = document.querySelectorAll(".search");
+  waitingMsg = document.querySelector(".waiting-msg");
+  invit = document.querySelector(".invit-game");
+  pong = document.querySelector(".pong");
+  ball = document.querySelector(".wrap-ball");
+
+  searchInput.addEventListener("input", handleInputSearchEvent());
+}
+
+document.body.addEventListener("DOMNodeInserted", function (event) {
+  console.log("Nouveau noeuds");
+  if (event.target.tagName === "input" && event.target.id === "search-input") {
+    setupDynamicElements();
+  }
+});
+
+setupDynamicElements();
