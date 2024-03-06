@@ -52,6 +52,7 @@ class User(AbstractUser):
 class Tournament(models.Model):
     name = models.CharField(max_length=100)
     winner = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    players = models.ManyToManyField(User, related_name='tournaments')
 
     def __str__(self):
         return f"{self.name}"
