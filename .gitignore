@@ -11,3 +11,5 @@ __pycache__/
 *.pyc
 package-lock.json
 .env
+note.txt
+user_photos/
