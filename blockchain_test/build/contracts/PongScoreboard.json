@@ -2287,34 +2287,14 @@
   },
   "networks": {
     "5777": {
-      "events": {
-        "0x66ead48cfe0e1d1aa8bad492e906c348dfcfeecbf3b7b2cdf9b1f3cfa42a2945": {
-          "anonymous": false,
-          "inputs": [
-            {
-              "indexed": true,
-              "internalType": "address",
-              "name": "player",
-              "type": "address"
-            },
-            {
-              "indexed": false,
-              "internalType": "uint256",
-              "name": "score",
-              "type": "uint256"
-            }
-          ],
-          "name": "ScoreUpdated",
-          "type": "event"
-        }
-      },
+      "events": {},
       "links": {},
-      "address": "0x2427F9Ec4526B267EF1EeBAD19Ef732E682eD95d",
-      "transactionHash": "0x36245aa6edc46edf6d920c0d2d65c535cb5c02728f805e997f1e6bae056c4092"
+      "address": "0xba079447a92900Eacd4293F1A8744EfA7B633AE0",
+      "transactionHash": "0x5b2826a7c3c804f626b6e87a2096e1da60a878ce6b26719857f42f3a3f521618"
     }
   },
   "schemaVersion": "3.4.16",
-  "updatedAt": "2024-03-05T11:45:52.613Z",
+  "updatedAt": "2024-03-06T10:38:47.585Z",
   "networkType": "ethereum",
   "devdoc": {
     "kind": "dev",

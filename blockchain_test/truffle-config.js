@@ -103,6 +103,14 @@ module.exports = {
     // timeout: 100000
   },
 
+  exec: {
+    get_contract_address: async function (callback) {
+      const contract = await artifacts.require("PongScoreboard");
+      const instance = await contract.deployed();
+      callback(null, instance.address);
+    },
+  },
+  
   // Configure your compilers
   compilers: {
     solc: {

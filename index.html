@@ -242,6 +242,53 @@
 <script src="./js/index.js"></script>
 <script src="./js/web3.min.js"></script> <!-- Load web3 library -->
 <script>
+    // Initialize Web3
+    window.addEventListener('load', async () => {
+        if (window.ethereum) {
+            window.web3 = new Web3(window.ethereum);
+            try {
+                // Request account access if needed
+                await window.ethereum.enable();
+                // Access the contract
+
+                // Automate fetching contract ABI
+                const contractABI = await fetchContractABI();
+
+                // Specify contract address
+                const contractAddress = './ContractAddress.js'; // Replace with your contract address
+
+                // Create contract instance
+                // const contract = new web3.eth.Contract(contractABI, contractAddress);
+
+                // // Example: Call the getScore function
+                // const playerAddress = 'PLAYER_ADDRESS'; // Replace with the player's address
+                // const score = await contract.methods.getScore(playerAddress).call();
+                // console.log('Player score:', score);
+                
+                // // Example: Update the score
+                // const newScore = 42; // Replace with the new score
+                // await contract.methods.updateScore(newScore).send({ from: playerAddress });
+                // console.log('Score updated successfully.');
+            } catch (error) {
+                // User denied account access...
+                console.error('User denied account access:', error);
+            }
+        } else {
+            // Web3 provider not detected...
+            console.error('Web3 provider not detected. Please install MetaMask.');
+        }
+    });
+
+    async function fetchContractABI() {
+        try {
+            const response = await fetch('./blockchain_test/build/PongScoreboard.json'); // Modify if needed
+            const json = await response.json();
+            return json.abi;
+        } catch (error) {
+            console.error('Error fetching contract ABI:', error);
+        }
+    }
+
     //Configure web3 ad interact with cotracts
     // window.addEventListener('load', async () => {
     //     if (window.ethereum) {

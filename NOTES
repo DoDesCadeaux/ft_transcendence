@@ -1,7 +1,11 @@
 Needed :
 - Node.js --> on E19 computers?
 - npm --> on E19 computers?
-- Truffle framework (& contracts) --> npm install -g truffle truffle-contract
-- Ganache (personal Ethereum blockchain for development purposes) --> npm install -g ganache-cli
-- web3.js --> npm install web3
+- Truffle framework (& contracts) --> "npm install -g truffle truffle-contract"
+- Ganache (personal Ethereum blockchain for development purposes) --> "npm install -g ganache-cli"
+- web3 JS library --> npm install web3 (could be really problematic because computers are old)
 
+Makefile :
+- launch Ganache local blockchain --> ???
+- compile & migrate the contract to the blockchain --> "truffle migrate"
+- create a file (erase old one if already exists) and store the contracts address
