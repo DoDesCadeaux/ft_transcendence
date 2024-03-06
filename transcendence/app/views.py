@@ -69,10 +69,7 @@ def connexion(request):
 
 
 def index(request):
-	if request.user.is_authenticated:
-		return render(request, "base.html")
-	else:
-		return render(request, "login.html")
+	return render(request, "base.html")
 
 
 def profile(request):
@@ -91,8 +88,11 @@ def game(request):
 
 def logout(request):
 	access_token = request.session.get('access_token')
-
 	request.session.pop(access_token, None)
+
+	activeUser = request.user
+	activeUser.state = "offline"
+	activeUser.save()
 
 	auth_logout(request)
 
@@ -106,6 +106,7 @@ def logout(request):
 		response.delete_cookie(csrf_token)
 
 	return response
+
 
 def dashboard_fragment(request):
 	return render(request, "dashboard.html")

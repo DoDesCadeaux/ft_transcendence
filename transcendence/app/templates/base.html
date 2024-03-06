@@ -10,42 +10,50 @@
 </head>
 
 <body>
-
-    <div class="top-banner">
-        <a href="{% url 'dashboard' %}">
-            <img class="logo pointer" src="../static/img/logo.svg" alt="logo 42Transcendence" >
-        </a>
-        <div class="user">
-            <img class="photo" src="{{ user.photo.url }}" alt="user">
-            <div class="name">{{ user.username }}</div>
-            <a href="{% url 'profile' %}">
-                <img class='banner-icon pointer' src="../static/img/settings.svg" alt="">
+    {% if user.is_authenticated %}
+        <div class="top-banner">
+            <a href="{% url 'dashboard' %}">
+                <img class="logo pointer" src="../static/img/logo.svg" alt="logo 42Transcendence" >
             </a>
-            <img class='banner-icon pointer' src="../static/img/exit.svg" alt="" onclick="location.href='{% url 'logout' %}'">
+            <div class="user">
+                <img class="photo" src="{{ user.photo.url }}" alt="user">
+                <div class="name">{{ user.username }}</div>
+                <a href="{% url 'profile' %}">
+                    <img class='banner-icon pointer' src="../static/img/settings.svg" alt="">
+                </a>
+                <img class='banner-icon pointer' src="../static/img/exit.svg" alt="" onclick="location.href='{% url 'logout' %}'">
+            </div>
         </div>
-    </div>
 
-    <div class="page">
-        <div class="content">
+        <div class="page">
+            <div class="content">
+            </div>
+            <div class="right-banner">
+                <div class="title">Joueurs</div>
+                <ul id="list_joueurs">
+                    <!-- <li>
+                        <div class="status online"></div>
+                        <div class="name">dduraku</div>
+                    </li>
+                    <li>
+                        <div class="status online"></div>
+                        <div class="name">tverdood</div>
+                    </li>
+                    <li>
+                        <div class="status"></div>
+                        <div class="name">adevos</div>
+                    </li> -->
+                </ul>
+            </div>
         </div>
-        <div class="right-banner">
-            <div class="title">Joueurs</div>
-            <ul id="list_joueurs">
-                <!-- <li>
-                    <div class="status online"></div>
-                    <div class="name">dduraku</div>
-                </li>
-                <li>
-                    <div class="status online"></div>
-                    <div class="name">tverdood</div>
-                </li>
-                <li>
-                    <div class="status"></div>
-                    <div class="name">adevos</div>
-                </li> -->
-            </ul>
+    {% else %}
+        <div class="login">
+            <div>Bienvenue</div>
+            <img src="../static/img/logo.svg" alt="logo 42Transcendence">
+            <div style="font-size: x-large;">Connectez-vous pour continuer.</div>
+            <div class="btn-connexion" onclick="location.href='/login/'">Se connecter</div>
         </div>
-    </div>
+    {% endif %}
 </body>
 <script src="../static/js/index.js"></script>
 

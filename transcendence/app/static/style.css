@@ -858,3 +858,25 @@ body {
         top: 5px;
     }
 }
+
+.login{
+    width: 45vh;
+    height: 50vh;
+    background-color: var(--bg);
+    margin: 20vh auto auto auto;
+    border-radius: 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+    font-size: xx-large;
+    color: var(--orange)
+}
+
+.btn-connexion{
+    background-color: var(--orange);
+    color: var(--bg-body);
+    padding: 8px;
+    border-radius: 15px;
+    cursor: pointer;
+}

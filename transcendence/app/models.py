@@ -16,7 +16,8 @@ class User(AbstractUser):
     password = models.CharField(max_length=128, null=True)  # Ajoutez cette ligne
 
     def __str__(self):
-        return f"{self.name} - {self.username}"
+        return f"{self.name} - {self.username} -  {self.state}"
+    
 
     def formatted_play_time(self):
         total_seconds = self.play_time.total_seconds()
