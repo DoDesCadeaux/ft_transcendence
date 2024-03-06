@@ -1,0 +1,98 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap">
+    <link rel="stylesheet" href="{% static 'css/styles_pong.css' %}">
+</head>
+
+<body>
+
+    <div class="top-banner">
+        <img class="logo pointer" src="{% static 'img/logo.svg' %}" alt="logo 42Transcendence" onclick="openDash()">
+        <div class="user">
+            <img class="photo" src="{% static 'img/pamartin.jpg' %}" alt="user">
+            <div class="name">Pamartin</div>
+            <img class='banner-icon pointer' src="{% static 'img/settings.svg' %}" alt="" onclick="openProfile()">
+            <img class='banner-icon pointer' src="{% static 'img/exit.svg' %}" alt="">
+        </div>
+    </div>
+    <div class="game">
+        <div class="game-content">
+            <div class="right-banner" style="margin-top: 10px; margin-right: 10px;">
+                <div class="title">En ligne</div>
+                <ul>
+                    <li>
+                        <div class="status online"></div>
+                        <div class="name">dduraku</div>
+                    </li>
+                </ul>
+                <ul>
+                    <li>
+                        <div class="status online"></div>
+                        <div class="name">tverdood</div>
+                    </li>
+                </ul>
+                <ul>
+                    <li>
+                        <div class="status"></div>
+                        <div class="name">adevos</div>
+                    </li>
+                </ul>
+            </div>
+            <div class="pong displayNone" style="margin-left: 10px;">
+                <div class="opponents">
+                    <div>
+                        <img class="opponents-img" src="{% static 'img/tverdood.jpg' %}" alt="">
+                        <div class="opponents-name1">Tangzer</div>
+                    </div>
+                    <div>
+                        <div class="opponents-name2">Doriant</div>
+                        <img class="opponents-img" src="{% static 'img/dduraku.png' %}" alt="">
+                    </div>
+                </div>
+                <canvas id="pongCanvas" width="900" height="450"></canvas>
+            </div>
+            <button class="start-game-btn" onclick="refreshPage()">Restart pong game</button>
+            <div class="invit-game">
+                <!-- vue avec la bar de recherche -->
+
+                <div id="search">
+                    <div class="bar">
+                        <input type="text" id="search-input" placeholder="Rechercher...">
+                        <img class="pointer search" onclick="selectPlayer()" src="{% static 'img/send.svg' %}" alt="">
+                    </div>
+                    <ul class="autocomplete">
+                        <!-- <li>dfsdff</li>
+                        <li>sdfsdf</li>
+                        <li>sdfsdf</li>
+                        <li>sdfsdf</li>
+                        <li>sdfsdf</li> -->
+                    </ul>
+                </div>
+                <div class="waiting displayNone">
+                    <div class="waiting-msg"></div>
+                    <div class="wrap-ball">
+                        <div class="ball"></div>
+                        <div class="ball"></div>
+                        <div class="ball"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="{% static 'js/dashMatch.js' %}"></script>
+    <script src="{% static 'js/manageSPA.js' %}"></script>
+    <script src="{% static 'js/pong_socket.js' %}"></script>
+    <script src="{% static 'js/pong.js' %}"></script>
+    <script src="{% static 'js/game.js' %}"></script>
+    
+
+</body>
+
+</html>
