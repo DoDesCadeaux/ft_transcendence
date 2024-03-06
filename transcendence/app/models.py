@@ -58,7 +58,7 @@ class Tournament(models.Model):
     
 
 class Match(models.Model):
-    tournament = models.ForeignKey(Tournament, on_delete=models.CASCADE, related_name="matches")
+    tournament = models.ForeignKey(Tournament, on_delete=models.CASCADE, related_name="matches", null=True)
     player1 = models.ForeignKey(User, on_delete=models.CASCADE, related_name='matches_as_player1')
     player2 = models.ForeignKey(User, on_delete=models.CASCADE, related_name='matches_as_player2')
     player1_score = models.IntegerField()
@@ -68,4 +68,5 @@ class Match(models.Model):
 
     def __str__(self):
         return f"{self.player1} VS {self.player2}"
+
 

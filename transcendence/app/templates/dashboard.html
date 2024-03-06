@@ -1,5 +1,4 @@
 <div class="dash">
-    
     <div class="card new-game">
         <div class="card--title">Nouveau match</div>
         <a href="{% url 'game' %}">
@@ -21,7 +20,7 @@
         <div class="oneVSone item-card">
             <img class="icon" src="../static/img/play.svg" alt="">
             <div class="text-title">1 VS 1</div>
-            <div class="text-content">10 sur 30 de gagnes</div>
+            <div id="glabalStatMatch" class="text-content"></div>
         </div>
         <div class="tournois item-card">
             <img class="icon" src="../static/img/tournament.svg" alt="">
