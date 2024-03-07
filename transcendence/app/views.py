@@ -54,9 +54,10 @@ def connexion(request):
 					defaults={'name': user_name, 'username': user_login, 'play_time': delta, 'state': "online",
 							  'photo': photo_name}
 				)
-				user.photo.save(photo_name, File(response))
 				if not created:
 					user.state = "online"
+				else:
+					user.photo.save(photo_name, File(response))
 				user.save()
 				auth_login(request, user)
 				return render(request, "base.html")
@@ -118,3 +119,4 @@ def game_fragment(request):
 
 def profile_fragment(request):
 	return render(request, "profile.html")
+
