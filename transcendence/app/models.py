@@ -61,11 +61,11 @@ class Tournament(models.Model):
 
 class Match(models.Model):
     tournament = models.ForeignKey(Tournament, on_delete=models.CASCADE, related_name="matches", null=True)
-    player1 = models.ForeignKey(User, on_delete=models.CASCADE, related_name='matches_as_player1', null=True)
-    player2 = models.ForeignKey(User, on_delete=models.CASCADE, related_name='matches_as_player2', null=True)
-    player1_score = models.IntegerField()
-    player2_score = models.IntegerField()
-    match_duration = models.DurationField()
+    player1 = models.ForeignKey(User, on_delete=models.CASCADE, related_name='matches_as_player1')
+    player2 = models.ForeignKey(User, on_delete=models.CASCADE, related_name='matches_as_player2')
+    player1_score = models.IntegerField(null=True)
+    player2_score = models.IntegerField(null=True)
+    match_duration = models.DurationField(null=True)
     winner = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='matches_won')
 
     def __str__(self):
