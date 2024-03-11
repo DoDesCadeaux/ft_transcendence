@@ -1,6 +1,6 @@
 :root {
     --bg-body: rgba(34, 33, 51, 1);
-    --bg: rgba(44, 42, 66, 1);
+    --bg: #2c2a42;
     --bg-sec: rgba(44, 42, 66, 0.2);
     --orange: rgb(247, 138, 80);
     --white: rgb(165, 165, 175);
@@ -113,6 +113,22 @@ body {
                     align-items: center;
                     justify-content: center;
                     padding-top: 15px;
+
+                    .create{
+                        font-size: xx-large;
+                        margin: 0 0 0 20px;
+                        /* margin-left: 20px; */
+                        background: var(--orange);
+                        padding: 0 3px 0 3px;
+                        border-radius: 15px;
+                        width: 30px;
+                        height: 30px;
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        color: var(--bg);
+                        cursor: pointer;
+                    }
                 }
 
                 .card--content {
@@ -263,6 +279,7 @@ body {
                 grid-row: 4 /7;
                 grid-column: 1;
 
+
                 .navigation.tournament {
                     align-items: center;
                     justify-content: center;
@@ -275,32 +292,42 @@ body {
                     display: flex;
                     align-items: center;
                     justify-content: space-evenly;
+                    
                 }
 
-                .join,
-                .create {
-                    border: 1px solid var(--orange);
+                .join{
+                    /* border: 1px solid var(--orange);
                     padding: 3px;
-                    margin-top: 5px;
-                    /* background-color: var(--orange); */
                     border-radius: 5px;
                     cursor: pointer;
-                    color: var(--white-sec);
-                    font-size: medium;
+                    color: var(--white-sec); */
+                    margin-left: 15%;
+                    
                 }
 
+                .tournament-name{
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    padding: 15px 0;
+                    font-size: medium;
+                    color: var(--orange);
 
+                }
                 .graph-tournament {
-                    width: 95%;
+                    /* width: 95%;
                     height: calc(100% - 30%);
-                    /* background-color: red; */
                     display: grid;
                     grid-template-columns: repeat(5, 1fr);
                     grid-template-rows: repeat(7, 1fr);
                     align-items: center;
                     justify-items: center;
                     gap: 5px;
-                    margin: 5px;
+                    margin: 5px; */
+                    width: 100%;
+                    display: flex;
+                    justify-content: center;
+                    padding: 20px 0;
                 }
 
                 .player {
@@ -319,8 +346,6 @@ body {
                 .go {
                     width: 100%;
                     height: 100%;
-                    /* border-radius: 100%; */
-                    /* background: blue; */
                     display: flex;
                     flex-direction: row;
                     align-items: center;
@@ -756,15 +781,18 @@ body {
 }
 
 .next,
-.previous {
+.previous,
+.join {
     border: 1px solid var(--white-sec);
-    width: 20px;
-    height: 20px;
+    width: 100px;
+    cursor: pointer;
     border-radius: 5px;
     display: flex;
     align-items: center;
     justify-content: center;
     color: var(--white-sec);
+    padding: 5px 0;
+    font-size: small;
 }
 
 @keyframes ball {
@@ -880,3 +908,41 @@ body {
     border-radius: 15px;
     cursor: pointer;
 }
+
+/* Style de la modal */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.4);
+  }
+  
+  /* Style du contenu de la modal */
+  .modal-content {
+    background-color: var(--orange);
+    margin: 15% auto;
+    padding: 20px;
+    width: 30%;
+    border-radius: 15px;
+  }
+  
+  /* Style pour fermer la modal */
+  .close {
+    color: black;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+  }
+  
+  .close:hover,
+  .close:focus {
+    color: #aaa;
+    text-decoration: none;
+    cursor: pointer;
+  }
+  

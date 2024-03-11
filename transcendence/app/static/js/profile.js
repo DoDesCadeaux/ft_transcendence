@@ -45,5 +45,6 @@ function updateProfile(element) {
 
     document.getElementById('profilePicture').value = '';
 
-    alert("Profile mis a jour. Veuillez recharger la page pour visualiser les modifications");
+    contentNotification.textContent = "Ton profil a été mis a jour. Tu peux recharger la page pour visualiser les modifications";
+    modal.style.display = "block";
 }

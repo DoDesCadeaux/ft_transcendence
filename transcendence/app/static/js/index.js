@@ -1,3 +1,12 @@
+const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+const CURRENT_USER = {
+	id : document.body.getAttribute('data-user-id'),
+	username : document.body.getAttribute('data-user-username'),
+	photo : document.body.getAttribute('data-user-photo'),
+}
+const currentUserId = document.body.getAttribute('data-user-id');
+const currentuserName = document.body.getAttribute('data-user-name');
+
 function loadScript(src, defer) {
     return new Promise((resolve, reject) => {
         const script = document.createElement('script');
@@ -24,6 +33,8 @@ const filesToLoad = [
     '../static/js/pong.js',
     '../static/js/game.js',
     '../static/js/profile.js',
+    '../static/js/modale.js',
+
 ];
 
 // Charger tous les fichiers en parallèle

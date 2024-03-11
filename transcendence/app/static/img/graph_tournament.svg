@@ -1,0 +1,62 @@
+<svg class="graph-tournament" viewBox="114.809 32.25 301.394 305.283" width="301.394" height="305.283" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <defs>
+      <clipPath id="1">
+        <circle cx="136.728" cy="54.171" r="21.919" />
+      </clipPath>
+      <clipPath id="2">
+        <circle cx="219.794" cy="54.171" r="21.919" />
+      </clipPath>
+      <clipPath id="3">
+        <circle cx="179.132" cy="184.096" r="21.919" />
+      </clipPath>
+      <clipPath id="4">
+        <circle cx="309.626" cy="54.171" r="21.919" />
+      </clipPath>
+      <clipPath id="5">
+        <circle cx="394.28" cy="54.171" r="21.919" />
+      </clipPath>
+      <clipPath id="6">
+        <circle cx="352.029" cy="184.096" r="21.919" />
+      </clipPath>
+      <clipPath id="7">
+        <circle cx="265.786" cy="315.61" r="21.919" />
+      </clipPath>
+    </defs>
+
+  <!-- 1er match -->
+    <!-- Joueur1 -->
+  <image id="player1" x="114.809" y="32.25" width="43.841" height="43.841" clip-path="url(#1)" style="" transform="matrix(1, 0, 0, 1, 7.105427357601002e-15, 0)" xlink:href="pamartin.jpg"/>
+    <!-- Joueur2 -->
+  <image x="197.875" y="32.25" width="43.841" height="43.841" clip-path="url(#2)" style="" transform="matrix(1, 0, 0, 1, 7.105427357601002e-15, 0)" xlink:href="url_de_votre_image"/>
+
+  <!-- Vinqueur 1er match  -->
+  <image x="157.213" y="162.176" width="43.841" height="43.841" clip-path="url(#3)" style="" transform="matrix(1, 0, 0, 1, 7.105427357601002e-15, 0)" xlink:href="url_de_votre_image"/>
+  
+  <polyline style="fill: transparent; stroke: rgb(247, 138, 80);" points="136.341 74.502 136.359 90.583 220.684 90.357 220.422 74.502" transform="matrix(1, 0, 0, 1, 7.105427357601002e-15, 0)"/>
+  <line style="fill: rgb(216, 216, 216); stroke: rgb(247, 138, 80);" x1="178.101" y1="91.175" x2="178.683" y2="162.177" transform="matrix(1, 0, 0, 1, 7.105427357601002e-15, 0)"/>
+  <foreignObject x="10" y="30" width="80" height="40" transform="matrix(0.5706071257591248, 0, 0, 0.8498231172561647, 162.47744750976565, 88.79988098144531)" style="">
+    <button xmlns="http://www.w3.org/1999/xhtml">GO</button>
+  </foreignObject>
+
+  <!-- 1er match -->
+    <!-- Joueur3 -->
+  <image x="287.709" y="32.25" width="43.841" height="43.841" clip-path="url(#4)" style="" transform="matrix(1, 0, 0, 1, 7.105427357601002e-15, 0)" xlink:href="url_de_votre_image"/>
+    <!-- Joueur4 -->
+  <image x="372.362" y="32.25" width="43.841" height="43.841" clip-path="url(#5)" style="" transform="matrix(1, 0, 0, 1, 7.105427357601002e-15, 0)" xlink:href="url_de_votre_image"/>
+  
+    <!-- Vinqueur 1er match  -->
+  <image x="330.111" y="162.176" width="43.841" height="43.841" clip-path="url(#6)" style="" transform="matrix(1, 0, 0, 1, 7.105427357601002e-15, 0)" xlink:href="url_de_votre_image"/>
+  
+  <polyline style="fill: transparent; stroke: rgb(247, 138, 80);" points="310.828 74.502 310.847 90.583 395.171 90.357 394.909 74.502" transform="matrix(1, 0, 0, 1, 7.105427357601002e-15, 0)"/>
+  <line style="fill: rgb(216, 216, 216); stroke: rgb(247, 138, 80);" x1="352.588" y1="91.175" x2="353.172" y2="162.177" transform="matrix(1, 0, 0, 1, 7.105427357601002e-15, 0)"/>
+  <foreignObject x="10" y="30" width="80" height="40" transform="matrix(0.5706077218055725, 0, 0, 0.8498223423957826, 338.5542907714844, 88.80022430419922)" style="">
+    <button xmlns="http://www.w3.org/1999/xhtml">GO</button>
+  </foreignObject>
+  <polyline style="fill: transparent; stroke: rgb(247, 138, 80);" points="178.683 206.017 178.723 223.114 353.172 222.871 352.628 206.017" transform="matrix(1, 0, 0, 1, 7.105427357601002e-15, 0)"/>
+  <line style="fill: rgb(216, 216, 216); stroke: rgb(247, 138, 80);" x1="265.076" y1="222.69" x2="266.284" y2="293.692" transform="matrix(1, 0, 0, 1, 7.105427357601002e-15, 0)"/>
+  <foreignObject x="10" y="30" width="80" height="40" transform="matrix(0.5706077218055725, 0, 0, 0.8498223423957826, 249.0661315917969, 226.25933837890625)" style="">
+    <button xmlns="http://www.w3.org/1999/xhtml">GO</button>
+  </foreignObject>
+  
+  <image x="243.867" y="293.692" width="43.841" height="43.841" clip-path="url(#7)" style="" transform="matrix(1, 0, 0, 1, 7.105427357601002e-15, 0)" xlink:href="url_de_votre_image"/>
+</svg>

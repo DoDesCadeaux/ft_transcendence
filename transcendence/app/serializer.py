@@ -15,3 +15,5 @@ class MatchSerializer(serializers.ModelSerializer):
     class Meta:
         model = Match
         fields = '__all__'
+    class NewMatch:
+        fields = ['player1_id', 'player2_id', 'tournament_id']

@@ -16,11 +16,11 @@ const URI = {
    */
   USERS: "/api/users",
   /**
-   * Récupère la liste des posts.
+   * Récupère le nombre de matchs joués et de matchs gagnés.
    * @type {string}
    * @returns total + won
    */
-  MATCHSWON: "/api/results/matchs/",
+  MATCEHSWON: "/api/results/matchs/",
 };
 
 /**
@@ -30,7 +30,8 @@ const URI = {
  *   Les URIs possibles incluent :
  *   - `URI.USERS` : Récupère la liste des utilisateurs sans l'utilisateur actuel.
  *         > id - username - state - photo
- *   - `URI.POST` : Récupère la liste des publications.
+ *   - `URI.MATCEHSWON` : Récupère le nombre de matchs joués et de matchs gagnés.
+ *         > total - won
  * 
  * @returns {Promise<any>} Objet json récupéré ou erreur
  */

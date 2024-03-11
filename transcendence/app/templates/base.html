@@ -9,8 +9,9 @@
     <link rel="stylesheet" href="../static/style.css">
 </head>
 
-<body>
+<body data-user-id="{{ request.user.id }}" data-user-username="{{ request.user.username }}" data-user-photo="{{ request.user.photo.url }}">
     {% if user.is_authenticated %}
+    {% csrf_token %}
         <div class="top-banner">
             <a href="{% url 'dashboard' %}">
                 <img class="logo pointer" src="../static/img/logo.svg" alt="logo 42Transcendence" >
@@ -46,6 +47,12 @@
                 </ul>
             </div>
         </div>
+        <div id="notificationModal" class="modal">
+            <div class="modal-content">
+              <span class="close" onclick="closeNotificationModal()">&times;</span>
+              <p id="content-notif"></p>
+            </div>
+          </div>
     {% else %}
         <div class="login">
             <div>Bienvenue</div>
