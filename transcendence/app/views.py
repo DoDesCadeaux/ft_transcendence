@@ -120,3 +120,5 @@ def game_fragment(request):
 def profile_fragment(request):
 	return render(request, "profile.html")
 
+def tournament_fragment(request):
+	return render(request, "graph-tournament.html")
