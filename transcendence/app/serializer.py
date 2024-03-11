@@ -6,6 +6,11 @@ class UserManagementSerializer(serializers.ModelSerializer):
         model = User
         fields = ['username', 'photo']
 
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['id', 'username', 'photo']
+
 class UserListSerializer(serializers.ModelSerializer):
     class Meta:
         model = User

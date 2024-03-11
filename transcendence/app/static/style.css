@@ -280,29 +280,12 @@ body {
                 grid-column: 1;
 
 
-                .navigation.tournament {
-                    align-items: center;
-                    justify-content: center;
-                    margin: 0;
-                }
+                
 
-                .create-join {
-                    width: 100%;
-                    /* height: 25px; */
-                    display: flex;
-                    align-items: center;
-                    justify-content: space-evenly;
-                    
-                }
+        
 
                 .join{
-                    /* border: 1px solid var(--orange);
-                    padding: 3px;
-                    border-radius: 5px;
-                    cursor: pointer;
-                    color: var(--white-sec); */
                     margin-left: 15%;
-                    
                 }
 
                 .tournament-name{
@@ -328,93 +311,6 @@ body {
                     display: flex;
                     justify-content: center;
                     padding: 20px 0;
-                }
-
-                .player {
-                    width: 80%;
-                    height: 80%;
-
-                    img {
-                        width: 35px;
-                        height: 35px;
-                        border-radius: 50%;
-                        object-fit: cover;
-
-                    }
-                }
-
-                .go {
-                    width: 100%;
-                    height: 100%;
-                    display: flex;
-                    flex-direction: row;
-                    align-items: center;
-                }
-
-                .graph-bar {
-                    width: 2px;
-                    height: 100%;
-                    background-color: var(--orange);
-                }
-
-                .player.un,
-                .player.deux,
-                .player.trois,
-                .player.quatre,
-                .quart-bar {
-                    grid-column: 1;
-                }
-
-                .quart {
-                    grid-column: 2;
-                }
-
-                .player.cinq,
-                .player.six {
-                    grid-column: 3;
-                }
-
-                .demi-bar {
-                    grid-column: 3;
-                    grid-row: 3/6;
-                }
-
-                .demi {
-                    grid-column: 4;
-                    grid-row: 4;
-                }
-
-                .player.un {
-                    grid-row: 1;
-                }
-
-                .player.cinq,
-                .quart-bar.team1,
-                .quart.team1 {
-                    grid-row: 2;
-                }
-
-                .player.deux {
-                    grid-row: 3;
-                }
-
-                .player.sept {
-                    grid-column: 5;
-                    grid-row: 4;
-                }
-
-                .player.trois {
-                    grid-row: 5;
-                }
-
-                .quart-bar.team2,
-                .quart.team2,
-                .player.six {
-                    grid-row: 6;
-                }
-
-                .player.quatre {
-                    grid-row: 7;
                 }
             }
 
@@ -945,4 +841,40 @@ body {
     text-decoration: none;
     cursor: pointer;
   }
+
+
+/* Carousel tournois */
+.new-tournament{
+    position: relative;
+}
+.new-tournament button.btn {
+    position: absolute;
+    background: none;
+    border: none;
+    outline: none;
+    font-size: 2rem;
+    z-index: 2;
+    cursor: pointer;
+    color: var(--orange);
+    transform: translateY(-50%);
+    top: 88%;
+  }
+#prev {
+    left: 50px;
+  }
+#next {
+    right: 50px;
+  }
+.slide {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    /* opacity: 0; */
+    transition: 0.4s ease-in-out;
+    display: none;
+  }
+.slide.active {
+    /* opacity: 1; */
+    display: block;
+}
   

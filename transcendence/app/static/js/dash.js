@@ -35,23 +35,85 @@ document.body.addEventListener("DOMNodeInserted", function (event) {
  * - affichage des tournois
  ***************************************************************************/
 var tournament = null;
+// Créer le bouton précédent
+const prevButton = document.createElement("button");
+prevButton.classList.add("btn");
+prevButton.id = "prev";
+prevButton.innerHTML = "&#10096;";
+
+// Créer le bouton suivant
+const nextButton = document.createElement("button");
+nextButton.classList.add("btn");
+nextButton.id = "next";
+nextButton.innerHTML = "&#10097;";
 
 document.body.addEventListener("DOMNodeInserted", function (event) {
-  if (document.querySelector(".include-tournament") && !tournament){
+  if (document.querySelector(".include-tournament") && !tournament) {
     tournament = document.querySelector(".include-tournament");
-    fetch("tournament_fragment/")
-			.then(response => response.text())
-			.then(data => {
-				tournament.innerHTML = data;
-        let player1 = document.querySelector('image[id="player1"]')
-        player1.setAttribute('xlink:href', CURRENT_USER.photo);
-			})
-			.catch(error => {
-				console.error('Error loading page:', error);
-			});
+    tournament.appendChild(prevButton);
+    tournament.appendChild(nextButton);
+
+    (async () => {
+      const dataTournament = await fetchGET(URI.DATA_TOURNAMENT);
+      console.log(dataTournament);
+      dataTournament.forEach((element, i) => {
+        fetch("tournament_fragment/")
+          .then((response) => response.text())
+          .then((data) => {
+            let li = document.createElement("li");
+            li.innerHTML = data;
+            li.id = element.id;
+            classes =
+              i == 0
+                ? li.classList.add("slide", "active")
+                : li.classList.add("slide");
+            tournament.appendChild(li);
+            const name = li.querySelector(".tournament-name");
+            name.textContent = element.name;
+            const joinDiv = document.createElement("div");
+            joinDiv.classList.add("join");
+            joinDiv.textContent = "Rejoindre";
+            joinDiv.addEventListener('click', function(event) {
+              joinTournament(event);
+            });
+            name.appendChild(joinDiv);
+            let players = li.querySelectorAll(".players-tournament");
+            players.forEach((player, index) => {
+              const photo = element.players[index]
+                ? element.players[index].photo
+                : "media/img/anonymous.png";
+              player.setAttribute("xlink:href", photo);
+            });
+            let winners = li.querySelectorAll(".winner-tournament");
+            winners.forEach((winner, index) => {
+              const photo = element.winners[index] != null
+                ? element.winners[index].photo
+                : "media/img/anonymous.png";
+              winner.setAttribute("xlink:href", photo);
+            });
+          })
+          .catch((error) => {
+            console.error("Error loading page:", error);
+          });
+      });
+      const buttons = document.querySelectorAll(".btn");
+      const slides = document.getElementsByClassName("slide");
+      buttons.forEach((button) => {
+        button.addEventListener("click", (e) => {
+          const calcNextSlide = e.target.id === "next" ? 1 : -1;
+          const slideActive = document.querySelector(".active");
+
+          newIndex = calcNextSlide + [...slides].indexOf(slideActive);
+
+          if (newIndex < 0) newIndex = [...slides].length - 1;
+          if (newIndex >= [...slides].length) newIndex = 0;
+          slides[newIndex].classList.add("active");
+          slideActive.classList.remove("active");
+        });
+      });
+    })();
   }
-  if (!document.querySelector(".include-tournament"))
-    tournament = null;
+  if (!document.querySelector(".include-tournament")) tournament = null;
 });
 
 /****************************************************************************
@@ -63,8 +125,23 @@ document.body.addEventListener("DOMNodeInserted", function (event) {
  * Action du bouton "rejoindre" avec appel a la db pour verifier si'il reste
  * de la place + modale de notification
  ***************************************************************************/
-function joinTournament() {
-  contentNotification.textContent = "Tu as rejoins le tournois avec succes";
+function joinTournament(e) {
+  const id = document.querySelector('.active').id;
+  const formData = new FormData();
+    formData.append("id", id);
+    fetch(`/api/tournament/join/`, {
+      method: "POST",
+      body: formData,
+      headers: {
+        "X-CSRFToken": csrftoken,
+      },
+    })
+      .then((response) => {
+        return response.text()
+      })
+      .then(data => {
+        contentNotification.textContent = JSON.parse(data);
+      })
   modal.style.display = "block";
 }
 
@@ -104,7 +181,7 @@ function createTournament() {
   validation.style.margin = "20px";
   validation.style.borderRadius = "5px";
   validation.style.cursor = "pointer";
-  validation.onclick = function() {
+  validation.onclick = function () {
     handleCreateTournament(input, warning);
   };
 
@@ -116,31 +193,30 @@ function createTournament() {
   modal.style.display = "block";
 }
 
-function handleCreateTournament(input, warning){
-    if (!input.value){
-        warning.style.display = "";
-    }
-    else{
-        contentNotification.innerHTML = "";
-        const formData = new FormData();
-        const name = encodeURIComponent(input.value);
-        formData.append('name', name);
-        fetch(`/api/tournament/create/`, {
-            method: 'POST',
-            body: formData,
-            headers: {
-                'X-CSRFToken': csrftoken,
-            },
-        })
-        .then(response =>{
-            response.json();
-            contentNotification.textContent = `Le tournoi ${name} a bien été créé !`;
-        })
-        .catch(error => {
-            console.error('Erreur lors de la création du tournoi :', error);
-            contentNotification.textContent = `La création du tournoi a échouée`;
-        });
-    }
+function handleCreateTournament(input, warning) {
+  if (!input.value) {
+    warning.style.display = "";
+  } else {
+    contentNotification.innerHTML = "";
+    const formData = new FormData();
+    const name = encodeURIComponent(input.value);
+    formData.append("name", name);
+    fetch(`/api/tournament/create/`, {
+      method: "POST",
+      body: formData,
+      headers: {
+        "X-CSRFToken": csrftoken,
+      },
+    })
+      .then((response) => {
+        response.json();
+        contentNotification.textContent = `Le tournoi ${name} a bien été créé !`;
+      })
+      .catch((error) => {
+        console.error("Erreur lors de la création du tournoi :", error);
+        contentNotification.textContent = `La création du tournoi a échouée`;
+      });
+  }
 }
 
 /****************************************************************************

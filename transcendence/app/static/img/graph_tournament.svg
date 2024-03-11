@@ -1,62 +1,48 @@
-<svg class="graph-tournament" viewBox="114.809 32.25 301.394 305.283" width="301.394" height="305.283" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <defs>
-      <clipPath id="1">
-        <circle cx="136.728" cy="54.171" r="21.919" />
-      </clipPath>
-      <clipPath id="2">
-        <circle cx="219.794" cy="54.171" r="21.919" />
-      </clipPath>
-      <clipPath id="3">
-        <circle cx="179.132" cy="184.096" r="21.919" />
-      </clipPath>
-      <clipPath id="4">
-        <circle cx="309.626" cy="54.171" r="21.919" />
-      </clipPath>
-      <clipPath id="5">
-        <circle cx="394.28" cy="54.171" r="21.919" />
-      </clipPath>
-      <clipPath id="6">
-        <circle cx="352.029" cy="184.096" r="21.919" />
-      </clipPath>
-      <clipPath id="7">
-        <circle cx="265.786" cy="315.61" r="21.919" />
-      </clipPath>
-    </defs>
-
-  <!-- 1er match -->
-    <!-- Joueur1 -->
-  <image id="player1" x="114.809" y="32.25" width="43.841" height="43.841" clip-path="url(#1)" style="" transform="matrix(1, 0, 0, 1, 7.105427357601002e-15, 0)" xlink:href="pamartin.jpg"/>
-    <!-- Joueur2 -->
-  <image x="197.875" y="32.25" width="43.841" height="43.841" clip-path="url(#2)" style="" transform="matrix(1, 0, 0, 1, 7.105427357601002e-15, 0)" xlink:href="url_de_votre_image"/>
-
-  <!-- Vinqueur 1er match  -->
-  <image x="157.213" y="162.176" width="43.841" height="43.841" clip-path="url(#3)" style="" transform="matrix(1, 0, 0, 1, 7.105427357601002e-15, 0)" xlink:href="url_de_votre_image"/>
-  
-  <polyline style="fill: transparent; stroke: rgb(247, 138, 80);" points="136.341 74.502 136.359 90.583 220.684 90.357 220.422 74.502" transform="matrix(1, 0, 0, 1, 7.105427357601002e-15, 0)"/>
-  <line style="fill: rgb(216, 216, 216); stroke: rgb(247, 138, 80);" x1="178.101" y1="91.175" x2="178.683" y2="162.177" transform="matrix(1, 0, 0, 1, 7.105427357601002e-15, 0)"/>
-  <foreignObject x="10" y="30" width="80" height="40" transform="matrix(0.5706071257591248, 0, 0, 0.8498231172561647, 162.47744750976565, 88.79988098144531)" style="">
+<?xml version="1.0" encoding="utf-8"?>
+<svg viewBox="7.237 0 301.39 305.277" width="301.39" height="305.277" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <defs>
+    <clipPath id="1">
+      <circle cx="29.156" cy="21.919" r="21.919"/>
+    </clipPath>
+    <clipPath id="2">
+      <circle cx="112.222" cy="21.919" r="21.919"/>
+    </clipPath>
+    <clipPath id="3">
+      <circle cx="71.56" cy="151.844" r="21.919"/>
+    </clipPath>
+    <clipPath id="4">
+      <circle cx="202.054" cy="21.919" r="21.919"/>
+    </clipPath>
+    <clipPath id="5">
+      <circle cx="286.708" cy="21.919" r="21.919"/>
+    </clipPath>
+    <clipPath id="6">
+      <circle cx="244.457" cy="151.844" r="21.919"/>
+    </clipPath>
+    <clipPath id="7">
+      <circle cx="158.214" cy="283.358" r="21.919"/>
+    </clipPath>
+  </defs>
+  <image id="player1" x="7.237" y="-0.002" width="43.841" height="43.841" clip-path="url(#1)" style="" transform="matrix(1, 0, 0, 1, 7.105427357601002e-15, 0)" xlink:href="pamartin.jpg"/>
+  <image x="90.303" y="-0.002" width="43.841" height="43.841" clip-path="url(#2)" style="" transform="matrix(1, 0, 0, 1, 7.105427357601002e-15, 0)" xlink:href="url_de_votre_image"/>
+  <image x="49.641" y="129.924" width="43.841" height="43.841" clip-path="url(#3)" style="" transform="matrix(1, 0, 0, 1, 7.105427357601002e-15, 0)" xlink:href="url_de_votre_image"/>
+  <polyline style="fill: transparent; stroke: rgb(247, 138, 80);" points="28.769 42.25 28.787 58.331 113.112 58.105 112.85 42.25" transform="matrix(1, 0, 0, 1, 7.105427357601002e-15, 0)"/>
+  <line style="fill: rgb(216, 216, 216); stroke: rgb(247, 138, 80);" x1="70.529" y1="58.923" x2="71.111" y2="129.925" transform="matrix(1, 0, 0, 1, 7.105427357601002e-15, 0)"/>
+  <foreignObject x="10" y="30" width="80" height="40" transform="matrix(0.5706069469451904, 0, 0, 0.8498231172561647, 54.906208038330085, 56.547794342041016)" style="">
     <button xmlns="http://www.w3.org/1999/xhtml">GO</button>
   </foreignObject>
-
-  <!-- 1er match -->
-    <!-- Joueur3 -->
-  <image x="287.709" y="32.25" width="43.841" height="43.841" clip-path="url(#4)" style="" transform="matrix(1, 0, 0, 1, 7.105427357601002e-15, 0)" xlink:href="url_de_votre_image"/>
-    <!-- Joueur4 -->
-  <image x="372.362" y="32.25" width="43.841" height="43.841" clip-path="url(#5)" style="" transform="matrix(1, 0, 0, 1, 7.105427357601002e-15, 0)" xlink:href="url_de_votre_image"/>
-  
-    <!-- Vinqueur 1er match  -->
-  <image x="330.111" y="162.176" width="43.841" height="43.841" clip-path="url(#6)" style="" transform="matrix(1, 0, 0, 1, 7.105427357601002e-15, 0)" xlink:href="url_de_votre_image"/>
-  
-  <polyline style="fill: transparent; stroke: rgb(247, 138, 80);" points="310.828 74.502 310.847 90.583 395.171 90.357 394.909 74.502" transform="matrix(1, 0, 0, 1, 7.105427357601002e-15, 0)"/>
-  <line style="fill: rgb(216, 216, 216); stroke: rgb(247, 138, 80);" x1="352.588" y1="91.175" x2="353.172" y2="162.177" transform="matrix(1, 0, 0, 1, 7.105427357601002e-15, 0)"/>
-  <foreignObject x="10" y="30" width="80" height="40" transform="matrix(0.5706077218055725, 0, 0, 0.8498223423957826, 338.5542907714844, 88.80022430419922)" style="">
+  <image x="180.137" y="-0.002" width="43.841" height="43.841" clip-path="url(#4)" style="" transform="matrix(1, 0, 0, 1, 7.105427357601002e-15, 0)" xlink:href="url_de_votre_image"/>
+  <image x="264.79" y="-0.002" width="43.841" height="43.841" clip-path="url(#5)" style="" transform="matrix(1, 0, 0, 1, 7.105427357601002e-15, 0)" xlink:href="url_de_votre_image"/>
+  <image x="222.539" y="129.924" width="43.841" height="43.841" clip-path="url(#6)" style="" transform="matrix(1, 0, 0, 1, 7.105427357601002e-15, 0)" xlink:href="url_de_votre_image"/>
+  <polyline style="fill: transparent; stroke: rgb(247, 138, 80);" points="203.256 42.25 203.275 58.331 287.599 58.105 287.337 42.25" transform="matrix(1, 0, 0, 1, 7.105427357601002e-15, 0)"/>
+  <line style="fill: rgb(216, 216, 216); stroke: rgb(247, 138, 80);" x1="245.016" y1="58.923" x2="245.6" y2="129.925" transform="matrix(1, 0, 0, 1, 7.105427357601002e-15, 0)"/>
+  <foreignObject x="10" y="30" width="80" height="40" transform="matrix(0.5706079006195068, 0, 0, 0.8498231172561647, 230.9830474853516, 56.54813766479492)" style="">
     <button xmlns="http://www.w3.org/1999/xhtml">GO</button>
   </foreignObject>
-  <polyline style="fill: transparent; stroke: rgb(247, 138, 80);" points="178.683 206.017 178.723 223.114 353.172 222.871 352.628 206.017" transform="matrix(1, 0, 0, 1, 7.105427357601002e-15, 0)"/>
-  <line style="fill: rgb(216, 216, 216); stroke: rgb(247, 138, 80);" x1="265.076" y1="222.69" x2="266.284" y2="293.692" transform="matrix(1, 0, 0, 1, 7.105427357601002e-15, 0)"/>
-  <foreignObject x="10" y="30" width="80" height="40" transform="matrix(0.5706077218055725, 0, 0, 0.8498223423957826, 249.0661315917969, 226.25933837890625)" style="">
+  <polyline style="fill: transparent; stroke: rgb(247, 138, 80);" points="71.111 173.765 71.151 190.862 245.6 190.619 245.056 173.765" transform="matrix(1, 0, 0, 1, 7.105427357601002e-15, 0)"/>
+  <line style="fill: rgb(216, 216, 216); stroke: rgb(247, 138, 80);" x1="157.504" y1="190.438" x2="158.712" y2="261.44" transform="matrix(1, 0, 0, 1, 7.105427357601002e-15, 0)"/>
+  <foreignObject x="10" y="30" width="80" height="40" transform="matrix(0.5706079006195068, 0, 0, 0.8498231172561647, 141.4948883056641, 194.00724792480472)" style="">
     <button xmlns="http://www.w3.org/1999/xhtml">GO</button>
   </foreignObject>
-  
-  <image x="243.867" y="293.692" width="43.841" height="43.841" clip-path="url(#7)" style="" transform="matrix(1, 0, 0, 1, 7.105427357601002e-15, 0)" xlink:href="url_de_votre_image"/>
+  <image x="136.295" y="261.44" width="43.841" height="43.841" clip-path="url(#7)" style="" transform="matrix(1, 0, 0, 1, 7.105427357601002e-15, 0)" xlink:href="url_de_votre_image"/>
 </svg>

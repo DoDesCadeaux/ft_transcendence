@@ -21,6 +21,12 @@ const URI = {
    * @returns total + won
    */
   MATCEHSWON: "/api/results/matchs/",
+  /**
+   * Récupère toutes les données du tournois
+   * @type {string}
+   * @returns id + name + winner + players
+   */
+  DATA_TOURNAMENT : "/api/globalData/tournaments/" ,
 };
 
 /**
@@ -38,6 +44,7 @@ const URI = {
 async function fetchGET(uri) {
   try {
     const response = await fetch(uri);
+    console.log(response)
     const data = await response.json();
     return data;
   } catch (error) {
