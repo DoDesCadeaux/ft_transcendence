@@ -97,6 +97,16 @@ document.body.addEventListener("DOMNodeInserted", function (event) {
                 : "media/img/anonymous.png";
               winner.setAttribute("xlink:href", photo);
             });
+            let btnGo = document.querySelectorAll('btn-gomatch');
+            if (!isSubscribeTo(element.players)){
+              btnGo.forEach(button => button.style.display="none");
+            }
+            else if (!isSubscribeTo(element.players.slice(0, 2))){
+              btnGo[0].style.display="none";
+              if (element.winners[1] != null)
+                btnGo[1].style.display="none";
+            }
+            
           })
           .catch((error) => {
             console.error("Error loading page:", error);
@@ -122,6 +132,11 @@ document.body.addEventListener("DOMNodeInserted", function (event) {
   if (!document.querySelector(".include-tournament")) tournament = null;
 });
 
+function isSubscribeTo(list){
+  return list.some(player => 
+    player.id == CURRENT_USER.id
+  );
+}
 /****************************************************************************
  * FIN GESTION TOURNOIS
  ***************************************************************************/
