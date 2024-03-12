@@ -12,11 +12,9 @@ function loadScript(src, defer) {
         const script = document.createElement('script');
         script.src = src;
         script.async = true;
-
         script.onload = () => {
             resolve();
         };
-
         script.onerror = () => {
             reject(new Error(`Impossible de charger le fichier : ${src}`));
         };

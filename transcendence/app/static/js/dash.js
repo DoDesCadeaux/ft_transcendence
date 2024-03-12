@@ -50,12 +50,18 @@ nextButton.innerHTML = "&#10097;";
 document.body.addEventListener("DOMNodeInserted", function (event) {
   if (document.querySelector(".include-tournament") && !tournament) {
     tournament = document.querySelector(".include-tournament");
-    tournament.appendChild(prevButton);
-    tournament.appendChild(nextButton);
 
     (async () => {
       const dataTournament = await fetchGET(URI.DATA_TOURNAMENT);
       console.log(dataTournament);
+      if (dataTournament.length < 1){
+        const  empty = document.createElement('p');
+        empty.textContent = "Il n'y a aucun tournois, tu peux en créer un nouveau en appuyant sur le bouton plus";
+        tournament.appendChild(empty);
+        return ;
+      }
+      tournament.appendChild(prevButton);
+      tournament.appendChild(nextButton);
       dataTournament.forEach((element, i) => {
         fetch("tournament_fragment/")
           .then((response) => response.text())

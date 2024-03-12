@@ -143,10 +143,6 @@ class CreateJoinTournamentAPIView(generics.GenericAPIView):
             # Récupérer l'ensemble des joueurs du tournoi
             players_set = tournament.players.all()
 
-            print(players_set)
-            
-            
-            # Obtenir la longueur de l'ensemble des joueurs
 
             # Vérifier si la longueur est supérieure à 4
             if len(players_set) >= 4:
