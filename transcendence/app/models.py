@@ -61,8 +61,8 @@ class Tournament(models.Model):
 
 class Match(models.Model):
     tournament = models.ForeignKey(Tournament, on_delete=models.CASCADE, related_name="matches", null=True)
-    player1 = models.ForeignKey(User, on_delete=models.CASCADE, related_name='matches_as_player1')
-    player2 = models.ForeignKey(User, on_delete=models.CASCADE, related_name='matches_as_player2')
+    player1 = models.ForeignKey(User, on_delete=models.CASCADE, related_name='matches_as_player1', default=1)
+    player2 = models.ForeignKey(User, on_delete=models.CASCADE, related_name='matches_as_player2', default=2)
     player1_score = models.IntegerField(null=True)
     player2_score = models.IntegerField(null=True)
     match_duration = models.DurationField(null=True)
