@@ -2,7 +2,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 
 
-#kwargs = keywords arguments -> permet de passer des variable en plus des arguments dans une fonction
+# kwargs = keywords arguments -> permet de passer des variable en plus des arguments dans une fonction
 
 class User(AbstractUser):
     id_api = models.CharField(max_length=100, unique=True)
@@ -17,7 +17,6 @@ class User(AbstractUser):
 
     def __str__(self):
         return f"{self.name} - {self.username} -  {self.state}"
-    
 
     def formatted_play_time(self):
         total_seconds = self.play_time.total_seconds()
@@ -32,13 +31,13 @@ class User(AbstractUser):
             return f"{int(seconds)}sec"
         else:
             return "0min"
-    
+
     def save(self, *args, **kwargs):
         # Vérifier s'il y a une photo existante
         try:
-            #pk c'est la primary key, ici on essaye de recuperer l'user pour
-            #maj sa photo en ecrasant l'ancienne, si on le recup pas on va dans
-            #dans le execept et on fait rien
+            # pk c'est la primary key, ici on essaye de recuperer l'user pour
+            # maj sa photo en ecrasant l'ancienne, si on le recup pas on va dans
+            # dans le execept et on fait rien
             existing_user = User.objects.get(pk=self.pk)
             if existing_user.photo and self.photo != existing_user.photo:
                 # si il existe on supprime l'ancienne photo avant d'enregistrer la nouvelle
@@ -46,9 +45,9 @@ class User(AbstractUser):
         except User.DoesNotExist:
             pass
 
-        #on utilise super pour maj, c'est la class parente par defaut de toutes nos classes
+        # on utilise super pour maj, c'est la class parente par defaut de toutes nos classes
         super().save(*args, **kwargs)
-        
+
 
 class Tournament(models.Model):
     name = models.CharField(max_length=100)
@@ -57,7 +56,7 @@ class Tournament(models.Model):
 
     def __str__(self):
         return f"{self.name}"
-    
+
 
 class Match(models.Model):
     tournament = models.ForeignKey(Tournament, on_delete=models.CASCADE, related_name="matches", null=True)
@@ -70,5 +69,3 @@ class Match(models.Model):
 
     def __str__(self):
         return f"{self.player1} VS {self.player2}"
-
-

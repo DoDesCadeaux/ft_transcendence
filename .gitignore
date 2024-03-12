@@ -13,3 +13,4 @@ package-lock.json
 .env
 note.txt
 user_photos/
+staticfiles/
