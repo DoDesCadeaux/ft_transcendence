@@ -26,12 +26,14 @@ function loadScript(src, defer) {
 // Liste des fichiers JavaScript à charger
 const filesToLoad = [
 	'../static/js/fetch.js',
+    '../static/js/optionsApexChart.js',
 	'../static/js/dash.js',
 	'../static/js/listPlayers.js',
     '../static/js/pong.js',
     '../static/js/game.js',
     '../static/js/profile.js',
     '../static/js/modale.js',
+
 
 ];
 

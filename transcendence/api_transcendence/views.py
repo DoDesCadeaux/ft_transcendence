@@ -6,6 +6,11 @@ from django.db import models
 from app.models import User, Match, Tournament
 from app.serializer import *
 from django.shortcuts import get_object_or_404
+import ast
+from django.db.models import Avg, ExpressionWrapper, F, fields, Sum
+from datetime import timedelta
+
+
 
 class UserListAPIView(generics.ListAPIView):
     serializer_class = UserListSerializer
@@ -109,6 +114,19 @@ class CreateFinishMatchAPIView(generics.GenericAPIView):
             match.player2_score = request.data.get('player2_score')
             match.match_duration = request.data.get('match_duration')
             match.winner_id = match.player1_id if match.player1_score > match.player2_score else match.player2_id
+            
+            # Récupérer les durées actuelles des joueurs depuis la base de données
+            player1_duration = match.player1.match_duration if match.player1.match_duration else timedelta(seconds=0)
+            player2_duration = match.player2.match_duration if match.player2.match_duration else timedelta(seconds=0)
+            
+            # Ajouter la durée du match aux durées des joueurs
+            match.player1.match_duration = player1_duration + match.match_duration
+            match.player2.match_duration = player2_duration + match.match_duration
+            
+            # Enregistrer les modifications
+            match.player1.save()
+            match.player2.save()
+            match.save()
 
             return Response({"message": "Le match a été mis à jour"}, status=status.HTTP_400_BAD_REQUEST)
         return Response({"detail": "Invalid action."}, status=status.HTTP_404_NOT_FOUND)
@@ -183,8 +201,7 @@ class DataMatchTournamentAPIView(generics.GenericAPIView):
                     'name': tournament.name,
                     'players': UserSerializer(tournament.players.all(), many=True).data,
                     'winners': [None, None, None]
-            }
-                # Obtenez les joueurs
+                }
                 players = tournament_info['players']
 
                 # # Vérifiez si vous avez au moins 2 joueurs
@@ -254,13 +271,6 @@ class DataMatchTournamentAPIView(generics.GenericAPIView):
 
 
 
-# FActorisationfrom django.shortcuts import get_object_or_404
-# from rest_framework.response import Response
-# from rest_framework import generics
-# from django.contrib.auth.models import User
-# from .models import Tournament, Match
-# from .serializers import UserSerializer
-
 # class DataMatchTournamentAPIView(generics.GenericAPIView):
 #     def get(self, request, *args, **kwargs):
 #         game = kwargs.get('game')
@@ -290,14 +300,28 @@ class DataMatchTournamentAPIView(generics.GenericAPIView):
 #             'id': tournament.id,
 #             'name': tournament.name,
 #             'players': players,
-#             'winners': [self.get_winner(tournament, players[:2]),
-#                         self.get_winner(tournament, players[-2:]),
-#                         self.get_winner(tournament, tournament_info['winners'][:2])]
+#             # 'winners' : [None, None, None]
+#             'winners': [self.get_winner(tournament, players, 1, players),
+#                         self.get_winner(tournament, players, 2, players),
+#                         None]
 #         }
+#         tournament_info['winners'][2] = self.get_winner(tournament, tournament_info['winners'][:2], 3, players)
 #         return tournament_info
 
-#     def get_winner
-#     (self, tournament, player_list):
+#     def get_winner(self, tournament, player_list, pool, players):
+#         if pool == 1:
+#             if len(players) < 2:
+#                 return None
+#             player_list = players[:2]
+#         elif pool == 2:
+#             if len(players) < 4:
+#                 return None
+#             player_list =  players[-2:]
+#         else:
+#             if player_list[0] is None or player_list[1] is not None:
+#                 return None
+            
+            
 #         winner_demi = Match.objects.filter(
 #             tournament_id=tournament.id,
 #             player1_id__in=[player['id'] for player in player_list],
@@ -310,3 +334,166 @@ class DataMatchTournamentAPIView(generics.GenericAPIView):
 #             return winner_demi_serializer.data
 #         else:
 #             return None
+
+
+class FullStatsAPIView(generics.GenericAPIView):
+    def get(self, request, *args, **kwargs):
+        params = request.GET.get('list')
+        ids = ast.literal_eval(params)
+        
+        if ids:
+            buts_data = []
+            duration_data = []
+            percent_won_data = []
+            percent_won_demi_data = []
+            percent_won_final_data = []
+        
+            for id in ids:
+                user = User.objects.get(id=id)
+                buts_data.append(self.getButsData(user))
+                duration_data.append(self.getDurationData(user))
+                percent_won_data.append(self.getPercentWonData(user))
+                won_demi , won_final = self.getPercentWonTournyData(user)
+                percent_won_demi_data.append(won_demi)
+                percent_won_final_data.append(won_final)
+            stats_data = {
+                'buts': buts_data,
+                'duration': duration_data,
+                'percentWon': percent_won_data,
+                'percentWonDemi': percent_won_demi_data,
+                'percentWonFinal': percent_won_final_data
+            }
+            return Response(stats_data)
+        else:
+            return Response({'error': 'Opération non prise en charge'})
+        
+    def getPercentWonData(self, user):
+        matches_played = Match.objects.filter(models.Q(player1=user.id) | models.Q(player2=user.id)).count()
+        matches_won = Match.objects.filter(winner=user.id).count()
+
+        if matches_played > 0:
+            win_percentage = (matches_won * 100) / matches_played
+        else:
+            win_percentage = 0
+
+        return {
+            'label': user.username,
+            'data': win_percentage
+        }
+    
+    def getButsData(self, user):
+        # Calcul du nombre total de buts marqués par l'utilisateur
+        goals_for = Match.objects.filter(models.Q(player1=user) | models.Q(player2=user)).aggregate(total_goals=Sum(models.Case(
+            models.When(player1=user, then='player1_score'),
+            models.When(player2=user, then='player2_score'),
+            default=0
+        ))
+        )['total_goals'] or 0
+
+        # Calcul du nombre total de buts encaissés par l'utilisateur
+        goals_against = Match.objects.filter(models.Q(player1=user) | models.Q(player2=user)).aggregate(total_goals=Sum(models.Case(
+            models.When(player1=user, then='player2_score'),
+            models.When(player2=user, then='player1_score'),
+            default=0
+        ))
+        )['total_goals'] or 0
+        
+        return {
+            'name': user.username,
+            'data': [goals_for, goals_against]
+        }
+    
+    def getDurationData(self, user):
+        # Filtrer les matchs où l'utilisateur est soit joueur 1 soit joueur 2
+        matches_participated = Match.objects.filter(models.Q(player1=user) | models.Q(player2=user))
+        
+        # Calculer le temps moyen des matchs auquel l'utilisateur a participé
+        average_duration_participated = matches_participated.aggregate(average_duration=Avg(ExpressionWrapper(F('match_duration'), output_field=fields.DurationField())))['average_duration']
+        average_duration_participated_minutes = average_duration_participated.total_seconds() / 60 if average_duration_participated else 0
+        
+        # Filtrer les matchs sans ID de tournoi
+        matches_without_tournament = matches_participated.filter(tournament=None)
+        
+        # Calculer le temps moyen des matchs sans ID de tournoi
+        average_duration_without_tournament = matches_without_tournament.aggregate(average_duration=Avg(ExpressionWrapper(F('match_duration'), output_field=fields.DurationField())))['average_duration']
+        average_duration_without_tournament_minutes = average_duration_without_tournament.total_seconds() / 60 if average_duration_without_tournament else 0
+        
+        # Filtrer les matchs avec ID de tournoi
+        matches_with_tournament = matches_participated.exclude(tournament=None)
+        
+        # Calculer le temps moyen des matchs avec ID de tournoi
+        average_duration_with_tournament = matches_with_tournament.aggregate(average_duration=Avg(ExpressionWrapper(F('match_duration'), output_field=fields.DurationField())))['average_duration']
+        average_duration_with_tournament_minutes = average_duration_with_tournament.total_seconds() / 60 if average_duration_with_tournament else 0
+        
+        return {
+            'name': user.username,
+            'data': [average_duration_participated_minutes, average_duration_without_tournament_minutes, average_duration_with_tournament_minutes]
+        }
+    
+    def getPercentWonTournyData(self, user):
+        tournaments_participated = Tournament.objects.filter(players=user)
+        total_demi = 0
+        total_final = 0
+        won_demi = 0
+        won_final = 0
+        # Pour chaque tournoi, récupérer les matchs correspondants
+        for tournament in tournaments_participated:
+            print(tournament)
+            matches = Match.objects.filter(tournament=tournament)
+            if (len(matches) == 1 or len(matches) == 2):
+                print(matches)
+                for match_play in matches:
+                    participed = match_play.player1 == user or match_play.player2 == user
+                    if participed:
+                        total_demi += 1
+                    if match_play.winner == user:
+                        won_demi += 1
+            if(len(matches) == 3):
+                participed = matches[3].player1 == user or matches[3].player2 == user
+                if participed:
+                    total_final += 1
+                if matches[3].winner == user:
+                    won_final += 1
+        
+        if total_demi != 0:
+            res_demi = (won_demi * 100) / total_demi
+        else:
+            res_demi = 0
+            
+        if total_final != 0:
+            res_final = (won_final * 100) / total_final
+        else:
+            res_final = 0
+
+        percent_demi = {'label': user.username, 'data': res_demi}
+        percent_final = {'label': user.username, 'data': res_final}  
+        
+        
+        return percent_demi, percent_final
+            
+
+
+
+
+
+
+# buts_data = [
+#             { 'name': 'pamartin', 'data': [10, 15] },
+#             { 'name': 'dduraku', 'data': [10, 15] }
+#         ]
+#         duration_data = [
+#             { 'name': 'pamartin', 'data': [3, 5, 3] },
+#             { 'name': 'dduraku', 'data': [3, 6, 5] }
+#         ]
+#         percent_won_data = [
+#             { 'label': 'pamartin', 'data': 67 },
+#             { 'label': 'dduraku', 'data': 80 }
+#         ]
+#         percent_won_demi_data = [
+#             { 'label': 'pamartin', 'data': 57 },
+#             { 'label': 'dduraku', 'data': 65 }
+#         ]
+#         percent_won_final_data = [
+#             { 'label': 'pamartin', 'data': 5 },
+#             { 'label': 'dduraku', 'data': 15 }
+#         ]

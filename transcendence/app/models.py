@@ -56,7 +56,7 @@ class Tournament(models.Model):
     players = models.ManyToManyField(User, related_name='tournaments')
 
     def __str__(self):
-        return f"{self.name}"
+        return f"{self.pk} : {self.name}"
     
 
 class Match(models.Model):
@@ -69,6 +69,6 @@ class Match(models.Model):
     winner = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='matches_won')
 
     def __str__(self):
-        return f"{self.player1} VS {self.player2}"
+        return f"{self.pk} : {self.player1} VS {self.player2}"
 
 
