@@ -10,7 +10,13 @@ import ast
 from django.db.models import Avg, ExpressionWrapper, F, fields, Sum
 from datetime import timedelta
 
+class UserInfoAPIView(generics.ListAPIView):
+    serializer_class = UserListSerializer
 
+    def get(self, request, *args, **kwargs):
+        current_user = self.request.user
+        serializer = self.serializer_class(current_user) 
+        return Response(serializer.data)
 
 class UserListAPIView(generics.ListAPIView):
     serializer_class = UserListSerializer
@@ -72,8 +78,13 @@ class ResultsAPIView(generics.GenericAPIView):
             response = {'total': matches_played.count(), 'won': matches_won.count()}
             return Response(response)
         elif game == 'tournaments':
-            # Logique pour les tournois
-            print("coucou")
+            tournaments_won = 0
+            tournaments_participated = Tournament.objects.filter(players=current_player)
+            for tournament in tournaments_participated:
+                if tournament.winner == current_player:
+                    tournaments_won += 1
+            response = {'total': tournaments_participated.count(), 'won': tournaments_won}
+            return Response(response)
         else:
             # Gérer d'autres cas ou renvoyer une réponse d'erreur
             return Response({'error': 'Opération non prise en charge'})
@@ -474,26 +485,3 @@ class FullStatsAPIView(generics.GenericAPIView):
 
 
 
-
-
-
-# buts_data = [
-#             { 'name': 'pamartin', 'data': [10, 15] },
-#             { 'name': 'dduraku', 'data': [10, 15] }
-#         ]
-#         duration_data = [
-#             { 'name': 'pamartin', 'data': [3, 5, 3] },
-#             { 'name': 'dduraku', 'data': [3, 6, 5] }
-#         ]
-#         percent_won_data = [
-#             { 'label': 'pamartin', 'data': 67 },
-#             { 'label': 'dduraku', 'data': 80 }
-#         ]
-#         percent_won_demi_data = [
-#             { 'label': 'pamartin', 'data': 57 },
-#             { 'label': 'dduraku', 'data': 65 }
-#         ]
-#         percent_won_final_data = [
-#             { 'label': 'pamartin', 'data': 5 },
-#             { 'label': 'dduraku', 'data': 15 }
-#         ]

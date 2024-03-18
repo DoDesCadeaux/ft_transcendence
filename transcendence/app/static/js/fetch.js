@@ -10,6 +10,12 @@
  */
 const URI = {
   /**
+   * Récupère la photo et l'username de l'utilisateur.
+   * @type {string}
+   * @returns - username  - photo
+   */
+  USER: "/api/user",
+  /**
    * Récupère la liste des utilisateurs.
    * @type {string}
    * @returns id - username - state - photo
@@ -21,6 +27,12 @@ const URI = {
    * @returns total + won
    */
   MATCEHSWON: "/api/results/matchs/",
+  /**
+   * Récupère le nombre de matchs joués et de matchs gagnés.
+   * @type {string}
+   * @returns total + won
+   */
+  TOURNAMENTWON: "/api/results/tournaments/",
   /**
    * Récupère toutes les données du tournois
    * @type {string}

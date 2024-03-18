@@ -25,6 +25,7 @@ body {
   padding: 0;
   margin: 25px 25px 25px 25px;
   font-family: "Roboto", sans-serif;
+  overflow-y: hidden;
 }
 /****************************************************************************
  * FIN Setup Global
@@ -72,6 +73,9 @@ cursor: pointer;
 }
 .displayNone {
   display: none !important;
+}
+.notAllowed {
+    cursor: not-allowed;
 }
 /****************************************************************************
  * FIN Utils

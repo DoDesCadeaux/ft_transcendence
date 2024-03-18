@@ -21,7 +21,18 @@ document.body.addEventListener("DOMNodeInserted", function (event) {
       globalStatMatch.textContent = msg;
     })();
     globalStatTournament = document.querySelector("#glabalStatTournament");
-    globalStatTournament.textContent = "Zéro tournoi a ton actif";
+    // globalStatTournament.textContent = "Zéro tournoi a ton actif";
+    (async () => {
+      const data = await fetchGET(URI.TOURNAMENTWON);
+      console.log(data)
+      var msg =
+        data.total == 0
+          ? "Zéro tournoi a ton actif"
+          : data.won > 1
+          ? `${data.won} sur ${data.total} de gagnés`
+          : `${data.won} sur ${data.total} de gagné`;
+      globalStatTournament.textContent = msg;
+    })();
   }
   if (!document.querySelector("#glabalStatMatch")) {
     globalStatMatch = null;

@@ -24,6 +24,8 @@ function handleInputSearchEvent(users) {
       listItem.textContent = "Aucun joueur n'est disponible, tente ta chance plus tard !";
       autoComplete.appendChild(listItem);
     }
+    
+    const btn_search = document.querySelector('#search .bar .search')
 
     users.forEach((user) => {
       if (user.state == "online") {
@@ -32,6 +34,10 @@ function handleInputSearchEvent(users) {
         autoComplete.appendChild(listItem);
 
         listItem.addEventListener("click", function () {
+          if (btn_search.className.includes('notAllowed')){
+            btn_search.classList.remove('notAllowed');
+            btn_search.classList.add('pointer');
+          }
           searchInput.value = user.username;
           autoComplete.innerHTML = "";
           search.id = user.username;
@@ -42,9 +48,12 @@ function handleInputSearchEvent(users) {
 }
 
 function selectPlayer() {
-  printWaiting(search.id);
-  search.id = "";
-  searchInput.value = "";
+  const btn_search = document.querySelector('#search .bar .search')
+  if (btn_search.className.includes("pointer")){
+    printWaiting(search.id);
+    search.id = "";
+    searchInput.value = "";
+  }
 }
 
 function printWaiting(opponent) {

@@ -9,4 +9,6 @@ urlpatterns = [
     path('tournament/<str:action>/', CreateJoinTournamentAPIView.as_view(), name='tournament_match'),
     path('globalData/<str:game>/', DataMatchTournamentAPIView.as_view(), name='data'),
     path('stats/', FullStatsAPIView.as_view(), name='stats'),
+    path('user/', UserInfoAPIView.as_view(), name='user_infos'),
+    
 ]

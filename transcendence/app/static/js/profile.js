@@ -1,3 +1,16 @@
+(async () => {
+    console.log("coucou")
+    const data = await fetchGET(URI.USER);
+    const banner_username = document.querySelector(".top-banner .user .name")
+    const banner_photo = document.querySelector(".top-banner .user .photo")
+    if (banner_photo){
+        banner_username.textContent = data.username;
+        banner_photo.src = data.photo + '?timestamp=' + new Date().getTime()
+    }
+    console.log(data.photo)
+
+  })();
+
 function previewProfile() {
     const fileInput = document.getElementById('profilePicture');
     const previewImage = document.querySelector('.preview-img');
@@ -25,10 +38,12 @@ function updateProfile(element) {
     const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
 
     const formData = new FormData();
+    var photoName =''
     formData.append('username', inputUsername);
     if (file) {
-        const photoName = `${user_id}.jpg`;
+        photoName = `${user_id}.jpg`;
         formData.append('photo', file, photoName);
+        console.log(file)
     }
 
     fetch(`/api/update_user/${user_id}/`, {
@@ -38,13 +53,29 @@ function updateProfile(element) {
             'X-CSRFToken': csrftoken,
         },
     })
-    .then(response => response.json())
+    .then(response =>  {
+        (async () => {
+            console.log("coucou")
+            const data = await fetchGET(URI.USER);
+            const banner_username = document.querySelector(".top-banner .user .name")
+            const banner_photo = document.querySelector(".top-banner .user .photo")
+            banner_username.textContent = data.username;
+            banner_photo.src = data.photo + '?timestamp=' + new Date().getTime()
+            console.log(data.photo)
+
+          })();
+    
+    })
     .catch(error => {
         console.error('Erreur lors de la mise à jour de l\'utilisateur :', error);
     });
 
     document.getElementById('profilePicture').value = '';
 
-    contentNotification.textContent = "Ton profil a été mis a jour. Tu peux recharger la page pour visualiser les modifications";
+    contentNotification.textContent = `Ton profil a bien été mis a jour.`;
     modal.style.display = "block";
+
+    
+
+
 }
