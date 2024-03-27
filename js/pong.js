@@ -3,6 +3,8 @@ const canvas = document.getElementById("pongCanvas");
 const ctx = canvas.getContext("2d");
 
 // Set up initial vars
+let gamePaused = false;
+const padding = 10;
 const paddleWidth = 10;
 const paddleHeight = 80;
 let paddleLeftY = canvas.height / 2 - paddleHeight / 2;
@@ -15,7 +17,7 @@ let ballX = canvas.width / 2;
 let ballY = canvas.height / 2;
 let startGame = 1;
 let ballInPlay = false;
-const pointsToScore = 2;
+const pointsToScore = 5;
 let scoreLeft = 0;
 let scoreRight = 0;
 let victoriesR = 0;
@@ -38,18 +40,20 @@ document.addEventListener("keyup", function (event) {
 
 // Ajoutez un événement pour gérer lorsque la touche Espace est enfoncée
 document.addEventListener("keydown", function (event) {
-    if (event.key === " ") {
-        if (!ballInPlay) {
-            // Relancer la partie
-            resetGame();
-        }
-    }
+    if (event.key === " " && !ballInPlay)
+        resetGame();
+    if (event.key === " " && gamePaused)
+        gamePaused = 0;
 });
 
 // Main loop
 function gameLoop() {
+    if (gamePaused) {
+        setTimeout(gameLoop, 1000 / 120);
+        return;
+    }
     if ((startGame % 2) != 0) {
-		countdown(1);
+		countdown(3);
 	}
     // Déplacer les barres des joueurs en fonction des touches enfoncées
     if (keysPressed["w"]) {
@@ -93,18 +97,11 @@ function move() {
 
 	// Ball collision with paddles
 	// Left
-	if (ballX < paddleWidth + ballSize && ballY > paddleLeftY && ballY < paddleLeftY + paddleHeight) {
+	if (ballX < paddleWidth + ballSize + padding && ballY > paddleLeftY && ballY < paddleLeftY + paddleHeight) {
 		// Calculate the relative position of the ball on the paddle
 		let relativeIntersectY = ballY - (paddleLeftY + paddleHeight / 2);
 		let normalizedRelativeIntersectionY = relativeIntersectY / (paddleHeight / 2);
-		if (normalizedRelativeIntersectionY == 0)
-			normalizedRelativeIntersectionY += 0.001;
-		if (normalizedRelativeIntersectionY == 1)
-			normalizedRelativeIntersectionY -= 0.001;
-		if (normalizedRelativeIntersectionY == -1)
-			normalizedRelativeIntersectionY += 0.001;
-		
-		normalizedRelativeIntersectionY = Math.max(-1, Math.min(1, normalizedRelativeIntersectionY));
+		normalize(normalizedRelativeIntersectionY);
 
 		// Calculate the bounce angle
 		let bounceAngle = normalizedRelativeIntersectionY * (Math.PI / 4);
@@ -113,24 +110,17 @@ function move() {
 		let direction = (ballX + ballSize < canvas.width/2) ? 1 : -1;
 		ballSpeedX = Math.cos(bounceAngle) * ballSpeed;
 		ballSpeedY = Math.sin(bounceAngle) * ballSpeed;
-		ballX = paddleWidth + ballSize; // Move the ball slightly away from the paddle
+		ballX = paddleWidth + ballSize + padding; // Move the ball slightly away from the paddle
 
 		ballSpeedY *= 1.05;
         ballSpeedX *= 1.05;
 	}
 	//Right
-	if (ballX > canvas.width - paddleWidth - ballSize && ballY > paddleRightY && ballY < paddleRightY + paddleHeight) {
+	if (ballX > canvas.width - paddleWidth - ballSize - padding && ballY > paddleRightY && ballY < paddleRightY + paddleHeight) {
 		// Calculate the relative position of the ball on the paddle
 		let relativeIntersectY = ballY - (paddleRightY + paddleHeight / 2);
 		let normalizedRelativeIntersectionY = relativeIntersectY / (paddleHeight / 2);
-		if (normalizedRelativeIntersectionY == 0)
-			normalizedRelativeIntersectionY += 0.001;
-		if (normalizedRelativeIntersectionY == 1)
-			normalizedRelativeIntersectionY -= 0.001;
-		if (normalizedRelativeIntersectionY == -1)
-			normalizedRelativeIntersectionY += 0.001;
-
-		normalizedRelativeIntersectionY = Math.max(-1, Math.min(1, normalizedRelativeIntersectionY));
+		normalize(normalizedRelativeIntersectionY);
 
 		// Calculate the bounce angle
 		let bounceAngle = normalizedRelativeIntersectionY * (Math.PI / 4);
@@ -139,14 +129,16 @@ function move() {
 		let direction = (ballX + ballSize < canvas.width/2) ? 1 : -1;
 		ballSpeedX = -Math.cos(bounceAngle) * ballSpeed;
 		ballSpeedY = Math.sin(bounceAngle) * ballSpeed;
-		ballX = canvas.width - paddleWidth - ballSize; // Move the ball slightly away from the paddle
-		ballSpeedY *= 1.05;
-        ballSpeedX *= 1.05;
+		ballX = canvas.width - paddleWidth - ballSize - padding; // Move the ball slightly away from the paddle
+		ballSpeedY *= 1.10;
+        ballSpeedX *= 1.10;
 	}
 
     // Ball goes off-screen to the left or right
     if (ballX < ballSize) {
         // La balle sort à gauche, donc le joueur de droite marque un point
+        gamePaused = true;
+        resetPaddles();
         scoreRight++;
         totalScoreR++;
         if (scoreRight == pointsToScore) {
@@ -157,6 +149,8 @@ function move() {
         }
     } else if (ballX > canvas.width - ballSize) {
         // La balle sort à droite, donc le joueur de gauche marque un point
+        gamePaused = true;
+        resetPaddles();
         scoreLeft++;
         totalScoreL++;
         if (scoreLeft == pointsToScore) {
@@ -175,14 +169,16 @@ function draw() {
 
     // Draw paddles
     ctx.fillStyle = "#f78a50";
-    ctx.fillRect(0, paddleLeftY, paddleWidth, paddleHeight);
-    ctx.fillRect(canvas.width - paddleWidth, paddleRightY, paddleWidth, paddleHeight);
+    ctx.fillRect(padding, paddleLeftY, paddleWidth, paddleHeight);
+    ctx.fillRect(canvas.width - paddleWidth - padding, paddleRightY, paddleWidth, paddleHeight);
 
     // Draw line
+    ctx.beginPath();
     ctx.moveTo(canvas.width / 2, canvas.height);
     ctx.lineTo(canvas.width / 2, 0);
     ctx.strokeStyle = "#f78a50";
-    ctx.lineWidth = 5;
+    ctx.lineWidth = 2;
+    ctx.stroke();
 
     // Draw ball
     ctx.beginPath();
@@ -217,7 +213,7 @@ function endGame() {
     ctx.textAlign = "center";
     ctx.fillText(`${winner} a gagne`, canvas.width / 2, canvas.height / 2 - 30);
     ctx.fillText(`${scoreLeft} - ${scoreRight}`, canvas.width / 2 - 1, canvas.height / 2 + 10);
-    ctx.fillText("Appuyez sur 'espace' pour relancer une partie", canvas.width / 2, canvas.height / 2 + 45);
+    ctx.fillText("Appuyez sur espace pour relancer une partie", canvas.width / 2, canvas.height / 2 + 45);
 }
   
 function countdown(seconds) {
@@ -237,21 +233,19 @@ function countdown(seconds) {
 
 		seconds--;
 
-		// Check if the countdown is finished
+		// Checks if the countdown is finished
 		if (seconds < 0) {
 			clearInterval(interval);
 
-			ctx.clearRect(canvas.width / 2 - 150, canvas.height / 2 - 60, 300, 100);
+			ctx.clearRect(0, 0, canvas.width, canvas.height);
 
 			ctx.font = "30px Roboto";
     		ctx.fillStyle = "white";
     		ctx.textAlign = "center";
-			ctx.fillText('Compte à rebours terminé', canvas.width / 2, canvas.height / 2);
-
-			resetGame();
+            ctx.fillText('Appuyez sur espace pour commencer la partie.', canvas.width / 2, canvas.height / 2);
 		}
 	}, 1000);
-	startGame++;
+    startGame++;
 }
 
 function resetGame() {
@@ -273,4 +267,17 @@ function resetBall() {
     ballY = canvas.height / 2;
     ballSpeedX = -ballSpeedX; // Inverser la direction de la balle
     // ballSpeedY = Math.random() > 0.5 ? -5 : 5; // Choisir une direction de balle aléatoire
+}
+
+function normalize(normalizedRelativeIntersectionY) {
+    if (normalizedRelativeIntersectionY == 0)
+		normalizedRelativeIntersectionY += 0.001;
+	if (normalizedRelativeIntersectionY == 1)
+		normalizedRelativeIntersectionY -= 0.001;
+	if (normalizedRelativeIntersectionY == -1)
+		normalizedRelativeIntersectionY += 0.001;
+
+	normalizedRelativeIntersectionY = Math.max(-1, Math.min(1, normalizedRelativeIntersectionY));
+
+    return normalizedRelativeIntersectionY;
 }

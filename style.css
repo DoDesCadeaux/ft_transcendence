@@ -577,7 +577,7 @@ body {
                     border: 1px solid var(--orange);
                     /* border-radius: 15px; */
                     display: block;
-                    padding: 30px;
+                    /*padding: 30px;*/
                     margin: 0 auto;
                 }
 
