@@ -126,6 +126,7 @@ function playGame(opponent) {
       console.log(data);
       photos[0].src = data.player1.photo;
       photos[1].src = data.player2.photo;
+      setAsyncVariables(data);
     })
     .catch((error) => {
       console.error("Erreur lors de la création du tournoi :", error);
@@ -136,6 +137,7 @@ function playGame(opponent) {
   pong.classList.remove("displayNone");
   searchBar.classList.remove("displayNone");
   waitingBloc.classList.add("displayNone");
+  
   gameLoop();
 }
 
