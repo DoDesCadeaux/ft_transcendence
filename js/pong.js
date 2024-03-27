@@ -8,12 +8,12 @@ const paddleHeight = 80;
 let paddleLeftY = canvas.height / 2 - paddleHeight / 2;
 let paddleRightY = canvas.height / 2 - paddleHeight / 2;
 const ballSize = 10;
-const ballSpeed = 2;
-let ballSpeedX = ballSpeed;
-let ballSpeedY = ballSpeed;
+const ballSpeed = 4;
+let ballSpeedX = Math.sin(ballSpeed) * ballSpeed;
+let ballSpeedY = Math.cos(ballSpeed) * ballSpeed;
 let ballX = canvas.width / 2;
 let ballY = canvas.height / 2;
-let round = 1; // Be careful, var used to display the countdown & count rounds --> round 1&2 = 1; round 2&3 = 2; ...
+let startGame = 1;
 let ballInPlay = false;
 const pointsToScore = 2;
 let scoreLeft = 0;
@@ -48,8 +48,8 @@ document.addEventListener("keydown", function (event) {
 
 // Main loop
 function gameLoop() {
-    if ((round % 2) != 0) {
-		countdown(3);
+    if ((startGame % 2) != 0) {
+		countdown(1);
 	}
     // Déplacer les barres des joueurs en fonction des touches enfoncées
     if (keysPressed["w"]) {
@@ -91,21 +91,58 @@ function move() {
     if (ballY <= ballSize || ballY >= canvas.height - ballSize)
         ballSpeedY = -ballSpeedY;
 
-    // Ball collision with paddles (Left & Right)
-    if (ballX < paddleWidth + ballSize && ballY > paddleLeftY && ballY < paddleLeftY + paddleHeight) {
-        ballX = paddleWidth + ballSize;
-        ballSpeedX = -ballSpeedX;
-    }
-    if (ballX > canvas.width - paddleWidth - ballSize && ballY > paddleRightY && ballY < paddleRightY + paddleHeight) {
-        ballX = canvas.width - paddleWidth - ballSize;
-        ballSpeedX = -ballSpeedX;
-    }
+	// Ball collision with paddles
+	// Left
+	if (ballX < paddleWidth + ballSize && ballY > paddleLeftY && ballY < paddleLeftY + paddleHeight) {
+		// Calculate the relative position of the ball on the paddle
+		let relativeIntersectY = ballY - (paddleLeftY + paddleHeight / 2);
+		let normalizedRelativeIntersectionY = relativeIntersectY / (paddleHeight / 2);
+		if (normalizedRelativeIntersectionY == 0)
+			normalizedRelativeIntersectionY += 0.001;
+		if (normalizedRelativeIntersectionY == 1)
+			normalizedRelativeIntersectionY -= 0.001;
+		if (normalizedRelativeIntersectionY == -1)
+			normalizedRelativeIntersectionY += 0.001;
+		
+		normalizedRelativeIntersectionY = Math.max(-1, Math.min(1, normalizedRelativeIntersectionY));
 
-    // Fonctionnalité du jeu : a chaque goal, la vitesse de la balle augmente de 5%
-    if (ballX <= ballSize || ballX >= canvas.width - ballSize) {
-        ballSpeedY *= 1.05;
+		// Calculate the bounce angle
+		let bounceAngle = normalizedRelativeIntersectionY * (Math.PI / 4);
+
+		// Adjust ball speed based on the bounce angle
+		let direction = (ballX + ballSize < canvas.width/2) ? 1 : -1;
+		ballSpeedX = Math.cos(bounceAngle) * ballSpeed;
+		ballSpeedY = Math.sin(bounceAngle) * ballSpeed;
+		ballX = paddleWidth + ballSize; // Move the ball slightly away from the paddle
+
+		ballSpeedY *= 1.05;
         ballSpeedX *= 1.05;
-    }
+	}
+	//Right
+	if (ballX > canvas.width - paddleWidth - ballSize && ballY > paddleRightY && ballY < paddleRightY + paddleHeight) {
+		// Calculate the relative position of the ball on the paddle
+		let relativeIntersectY = ballY - (paddleRightY + paddleHeight / 2);
+		let normalizedRelativeIntersectionY = relativeIntersectY / (paddleHeight / 2);
+		if (normalizedRelativeIntersectionY == 0)
+			normalizedRelativeIntersectionY += 0.001;
+		if (normalizedRelativeIntersectionY == 1)
+			normalizedRelativeIntersectionY -= 0.001;
+		if (normalizedRelativeIntersectionY == -1)
+			normalizedRelativeIntersectionY += 0.001;
+
+		normalizedRelativeIntersectionY = Math.max(-1, Math.min(1, normalizedRelativeIntersectionY));
+
+		// Calculate the bounce angle
+		let bounceAngle = normalizedRelativeIntersectionY * (Math.PI / 4);
+
+		// Adjust ball speed based on the bounce angle
+		let direction = (ballX + ballSize < canvas.width/2) ? 1 : -1;
+		ballSpeedX = -Math.cos(bounceAngle) * ballSpeed;
+		ballSpeedY = Math.sin(bounceAngle) * ballSpeed;
+		ballX = canvas.width - paddleWidth - ballSize; // Move the ball slightly away from the paddle
+		ballSpeedY *= 1.05;
+        ballSpeedX *= 1.05;
+	}
 
     // Ball goes off-screen to the left or right
     if (ballX < ballSize) {
@@ -135,11 +172,6 @@ function move() {
 function draw() {
     // Clear canvas
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-    // Background image
-    // const bgImage = new Image();
-    // bgImage.src = "./background.png";
-    // ctx.drawImage(bgImage, 0, 0, canvas.width, canvas. height);
 
     // Draw paddles
     ctx.fillStyle = "#f78a50";
@@ -175,8 +207,7 @@ function endGame() {
     ballInPlay = false;
     ballSpeedX = ballSpeed;
     ballSpeedY = ballSpeed;
-	paddleLeftY = canvas.height / 2 - paddleHeight / 2;
-	paddleRightY = canvas.height / 2 - paddleHeight / 2;
+	resetPaddles();
 
 	// Afficher le score final et proposer de relancer la partie
     var winner = scoreLeft > scoreRight ? "Dduraku" : "Tverdood"
@@ -220,14 +251,20 @@ function countdown(seconds) {
 			resetGame();
 		}
 	}, 1000);
-	round++;
+	startGame++;
 }
 
 function resetGame() {
     ballInPlay = true;
     scoreLeft = 0;
     scoreRight = 0;
+	resetPaddles();
     resetBall();
+}
+
+function resetPaddles() {
+	paddleLeftY = canvas.height / 2 - paddleHeight / 2;
+	paddleRightY = canvas.height / 2 - paddleHeight / 2;
 }
 
 // Réinitialiser la position de la balle
