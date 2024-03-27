@@ -25,6 +25,20 @@ let victoriesR = 0;
 let victoriesL = 0;
 let totalScoreR = 0;
 let totalScoreL = 0;
+let startTime;
+let endTime;
+
+function startTimer() {
+    startTime = new Date();
+}
+
+function stopTimer() {
+    endTime = new Date();
+}
+
+function getGameDuration() {
+    return (endTime - startTime) / 1000;
+}
 
 // Variables pour stocker les états des touches
 let keysPressed = {};
@@ -41,8 +55,10 @@ document.addEventListener("keyup", function (event) {
 
 // Ajoutez un événement pour gérer lorsque la touche Espace est enfoncée
 document.addEventListener("keydown", function (event) {
-    if (event.key === " " && !ballInPlay && !countdownInProgress)
+    if (event.key === " " && !ballInPlay && !countdownInProgress) {
+        startTimer();
         resetGame();
+    }
     if (event.key === " " && gamePaused)
         gamePaused = 0;
 });
@@ -54,6 +70,7 @@ function gameLoop() {
         return;
     }
     if ((startGame % 2) != 0) {
+        countdownInProgress = true;
 		countdown(3);
 	}
     // Déplacer les barres des joueurs en fonction des touches enfoncées
@@ -77,7 +94,6 @@ function gameLoop() {
             paddleRightY += 10;
         }
     }
-
     if (ballInPlay) {
         move();
         draw();
@@ -198,29 +214,9 @@ function draw() {
         endGame();
     }
 }
-
-// Terminer le jeu
-function endGame() {
-    ballInPlay = false;
-    ballSpeedX = ballSpeed;
-    ballSpeedY = ballSpeed;
-	resetPaddles();
-
-	// Afficher le score final et proposer de relancer la partie
-    var winner = scoreLeft > scoreRight ? "Dduraku" : "Tverdood"
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-	ctx.font = "30px Roboto";
-    ctx.fillStyle = "#f78a50";
-    ctx.textAlign = "center";
-    ctx.fillText(`${winner} a gagne`, canvas.width / 2, canvas.height / 2 - 30);
-    ctx.fillText(`${scoreLeft} - ${scoreRight}`, canvas.width / 2 - 1, canvas.height / 2 + 10);
-
-    document.removeEventListener('keydown', keyPressHandler);
-    // ctx.fillText("Appuyez sur espace pour relancer une partie", canvas.width / 2, canvas.height / 2 + 45);
-}
   
 function countdown(seconds) {
-    countdownInProgress = true;
+    // countdownInProgress = true;
 	ctx.font = "30px Roboto";
     ctx.fillStyle = "white";
     ctx.textAlign = "center";
@@ -249,12 +245,30 @@ function countdown(seconds) {
             ctx.fillText('Appuyez sur espace pour commencer la partie.', canvas.width / 2, canvas.height / 2);
 
             countdownInProgress = false;
-            
-            document.addEventListener("keydown", keyDownHandler);
+
+            // document.addEventListener("keydown", keyDownHandler);
 		}
 	}, 1000);
 
     startGame++;
+}
+
+// Terminer le jeu
+function endGame() {
+    ballInPlay = false;
+    stopTimer();
+
+	// Afficher le score final et proposer de relancer la partie
+    var winner = scoreLeft > scoreRight ? "Dduraku" : "Tverdood"
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+	ctx.font = "30px Roboto";
+    ctx.fillStyle = "#f78a50";
+    ctx.textAlign = "center";
+    ctx.fillText(`${winner} a gagne`, canvas.width / 2, canvas.height / 2 - 30);
+    ctx.fillText(`${scoreLeft} - ${scoreRight}`, canvas.width / 2 - 1, canvas.height / 2 + 10);
+
+    document.removeEventListener('keydown', keyPressHandler);
+    // ctx.fillText("Appuyez sur espace pour relancer une partie", canvas.width / 2, canvas.height / 2 + 45);
 }
 
 function resetGame() {
