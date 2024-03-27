@@ -4,6 +4,7 @@ const ctx = canvas.getContext("2d");
 
 // Set up initial vars
 let gamePaused = false;
+let countdownInProgress = false;
 const padding = 10;
 const paddleWidth = 10;
 const paddleHeight = 80;
@@ -40,7 +41,7 @@ document.addEventListener("keyup", function (event) {
 
 // Ajoutez un événement pour gérer lorsque la touche Espace est enfoncée
 document.addEventListener("keydown", function (event) {
-    if (event.key === " " && !ballInPlay)
+    if (event.key === " " && !ballInPlay && !countdownInProgress)
         resetGame();
     if (event.key === " " && gamePaused)
         gamePaused = 0;
@@ -213,10 +214,13 @@ function endGame() {
     ctx.textAlign = "center";
     ctx.fillText(`${winner} a gagne`, canvas.width / 2, canvas.height / 2 - 30);
     ctx.fillText(`${scoreLeft} - ${scoreRight}`, canvas.width / 2 - 1, canvas.height / 2 + 10);
-    ctx.fillText("Appuyez sur espace pour relancer une partie", canvas.width / 2, canvas.height / 2 + 45);
+
+    document.removeEventListener('keydown', keyPressHandler);
+    // ctx.fillText("Appuyez sur espace pour relancer une partie", canvas.width / 2, canvas.height / 2 + 45);
 }
   
 function countdown(seconds) {
+    countdownInProgress = true;
 	ctx.font = "30px Roboto";
     ctx.fillStyle = "white";
     ctx.textAlign = "center";
@@ -243,8 +247,13 @@ function countdown(seconds) {
     		ctx.fillStyle = "white";
     		ctx.textAlign = "center";
             ctx.fillText('Appuyez sur espace pour commencer la partie.', canvas.width / 2, canvas.height / 2);
+
+            countdownInProgress = false;
+            
+            document.addEventListener("keydown", keyDownHandler);
 		}
 	}, 1000);
+
     startGame++;
 }
 
