@@ -266,6 +266,7 @@ function handleCreateTournament(input, warning) {
     })
       .then((response) => {
         response.json();
+        console.log(response);
         nameClear = decodeURIComponent(name);
         contentNotification.textContent = `Le tournoi ${nameClear} a bien été créé !`;
       })

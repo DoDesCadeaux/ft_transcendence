@@ -10,5 +10,7 @@ urlpatterns = [
     path('globalData/<str:game>/', DataMatchTournamentAPIView.as_view(), name='data'),
     path('stats/', FullStatsAPIView.as_view(), name='stats'),
     path('user/', UserInfoAPIView.as_view(), name='user_infos'),
+    path('notif/<str:action>/', ManageNotifAPIView.as_view(), name='manage_notif'),
+    path('checkNotif/<str:action>/', CheckNotifAPIView.as_view(), name='check_notif'),
     
 ]

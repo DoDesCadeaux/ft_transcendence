@@ -39,6 +39,12 @@ const URI = {
    * @returns id + name + winner + players
    */
   DATA_TOURNAMENT : "/api/globalData/tournaments/" ,
+  /**
+   * Récupère toutes les données du tournois
+   * @type {string}
+   * @returns id de la notif
+   */
+  CHECK_NOTIF_RECEIVED : "/api/checkNotif/received/" ,
 };
 
 /**
@@ -56,7 +62,6 @@ const URI = {
 async function fetchGET(uri) {
   try {
     const response = await fetch(uri);
-    console.log(response)
     const data = await response.json();
     return data;
   } catch (error) {

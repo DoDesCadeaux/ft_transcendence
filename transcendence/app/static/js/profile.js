@@ -1,5 +1,4 @@
 (async () => {
-    console.log("coucou")
     const data = await fetchGET(URI.USER);
     const banner_username = document.querySelector(".top-banner .user .name")
     const banner_photo = document.querySelector(".top-banner .user .photo")

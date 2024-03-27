@@ -3,7 +3,7 @@ from rest_framework import generics
 from rest_framework.response import Response
 from rest_framework import status
 from django.db import models
-from app.models import User, Match, Tournament
+from app.models import User, Match, Tournament, Notification
 from app.serializer import *
 from django.shortcuts import get_object_or_404
 import ast
@@ -32,7 +32,6 @@ class UserListAPIView(generics.ListAPIView):
         }
 
         return Response(data)
-
 
 class UserUpdateAPIView(generics.UpdateAPIView):
     queryset = User.objects.all()
@@ -89,7 +88,6 @@ class ResultsAPIView(generics.GenericAPIView):
             # Gérer d'autres cas ou renvoyer une réponse d'erreur
             return Response({'error': 'Opération non prise en charge'})
         
-
 class CreateFinishMatchAPIView(generics.GenericAPIView):
     #                                               DATA DOIT CONTENIR :
     #               action = create                         |               action = finish
@@ -142,7 +140,6 @@ class CreateFinishMatchAPIView(generics.GenericAPIView):
             return Response({"message": "Le match a été mis à jour"}, status=status.HTTP_400_BAD_REQUEST)
         return Response({"detail": "Invalid action."}, status=status.HTTP_404_NOT_FOUND)
 
-
 class CreateJoinTournamentAPIView(generics.GenericAPIView):
     #                                               DATA DOIT CONTENIR :
     #               action = create                         |               action = join
@@ -191,9 +188,7 @@ class CreateJoinTournamentAPIView(generics.GenericAPIView):
             print(players_set)
 
             return Response(f"Inscription réussie au tournoi {tournament.name} !",status=status.HTTP_200_OK)
-            
-
-        
+                
 # Permet de récupérer les infos globales d'un match ou d'un tournois 
 class DataMatchTournamentAPIView(generics.GenericAPIView):
     def get(self, request, *args, **kwargs):
@@ -279,73 +274,6 @@ class DataMatchTournamentAPIView(generics.GenericAPIView):
             # Gérer d'autres cas ou renvoyer une réponse d'erreur
             # Prout
             return Response({'error': 'Opération non prise en charge'})
-
-
-
-# class DataMatchTournamentAPIView(generics.GenericAPIView):
-#     def get(self, request, *args, **kwargs):
-#         game = kwargs.get('game')
-
-#         if game == 'matchs':
-#             print("coucou")
-#             # return Response(response)
-#         elif game == 'tournaments':
-#             tournaments = Tournament.objects.all()
-
-#             tournament_data = []
-#             for tournament in tournaments:
-#                 tournament_info = self.get_tournament_info(tournament)
-#                 tournament_data.append(tournament_info)
-
-#             return Response(tournament_data)
-
-#         else:
-#             print("coucou")
-#             # Gérer d'autres cas ou renvoyer une réponse d'erreur
-#             # Prout
-#             return Response({'error': 'Opération non prise en charge'})
-
-#     def get_tournament_info(self, tournament):
-#         players = UserSerializer(tournament.players.all(), many=True).data
-#         tournament_info = {
-#             'id': tournament.id,
-#             'name': tournament.name,
-#             'players': players,
-#             # 'winners' : [None, None, None]
-#             'winners': [self.get_winner(tournament, players, 1, players),
-#                         self.get_winner(tournament, players, 2, players),
-#                         None]
-#         }
-#         tournament_info['winners'][2] = self.get_winner(tournament, tournament_info['winners'][:2], 3, players)
-#         return tournament_info
-
-#     def get_winner(self, tournament, player_list, pool, players):
-#         if pool == 1:
-#             if len(players) < 2:
-#                 return None
-#             player_list = players[:2]
-#         elif pool == 2:
-#             if len(players) < 4:
-#                 return None
-#             player_list =  players[-2:]
-#         else:
-#             if player_list[0] is None or player_list[1] is not None:
-#                 return None
-            
-            
-#         winner_demi = Match.objects.filter(
-#             tournament_id=tournament.id,
-#             player1_id__in=[player['id'] for player in player_list],
-#             player2_id__in=[player['id'] for player in player_list]
-#         ).values('winner').first()
-
-#         if winner_demi:
-#             winner_demi_user = get_object_or_404(User, id=winner_demi['winner'])
-#             winner_demi_serializer = UserSerializer(winner_demi_user)
-#             return winner_demi_serializer.data
-#         else:
-#             return None
-
 
 class FullStatsAPIView(generics.GenericAPIView):
     def get(self, request, *args, **kwargs):
@@ -482,6 +410,76 @@ class FullStatsAPIView(generics.GenericAPIView):
         
         return percent_demi, percent_final
             
+class ManageNotifAPIView(generics.GenericAPIView):
+    #                                               DATA DOIT CONTENIR :
+    #               action = create                         |               action = update
+    # {                                                     |  {
+    #     opponent : [opponent_username],                         |       id : [id de la notif], 
+    #                                                               state : [soit 1, 2 ou 3]
+    # }                                                     |  }      
+    def post(self, request, *args, **kwargs):
+        current_player = self.request.user
+        action = kwargs.get('action')
+        print(request.data.get('opponent'))
+    
+        if action == 'create':
+            try:
+                player2 = User.objects.get(username=request.data.get('opponent'))
+            except User.DoesNotExist:
+                return Response({"detail": "User not found."}, status=status.HTTP_404_NOT_FOUND)
+            new_notification = Notification.objects.create(
+                user_from=current_player,
+                user_to=player2,
+                state=0
+            )
+            print(new_notification)   
+            return Response({"notification_id": new_notification.id}, status=status.HTTP_201_CREATED)
+        elif action == 'update':
+            try:
+                notification = Notification.objects.get(id=request.data.get('id'))
+            except Notification.DoesNotExist:
+                return Response({"detail": "Notification not found."}, status=status.HTTP_404_NOT_FOUND)
+        
+            if notification.state == 0:
+                notification.state = request.data.get('state')
+                notification.save()
 
+            return Response({"message": "L'état de la notification a été mis a jour"}, status=status.HTTP_400_BAD_REQUEST)
+        return Response({"detail": "Invalid action."}, status=status.HTTP_404_NOT_FOUND)
 
+class CheckNotifAPIView(generics.GenericAPIView):
+    def get(self, request, *args, **kwargs):
+        current_user = self.request.user
+        action = kwargs.get('action')
+        
+        if action == 'received':
+            try:
+                notification = Notification.objects.get(user_to=current_user, state=0)
+                print(f"{notification.user_from}")
+                response = {
+                    "id": notification.id,
+                    "from": notification.user_from.username,
+                    "to": notification.user_to.username,
+                }
+                return Response(response, status=status.HTTP_200_OK)
+            except Notification.DoesNotExist:
+                return Response({"detail": "Pas de notification en attente."}, status=status.HTTP_404_NOT_FOUND)    
+        if action == 'sent':
+            print("sent")
+            try:
+                idNotif = request.GET.get('id')
+                notification = Notification.objects.get(id=idNotif)
+                return Response({notification.state}, status=status.HTTP_200_OK)
+            except Notification.DoesNotExist:
+                return Response({"detail": "La notification n'a pas été trouvée."}, status=status.HTTP_404_NOT_FOUND)
+        return Response({"detail": "Action invalide."}, status=status.HTTP_400_BAD_REQUEST) 
+        
+      
+        
+        
+        
+        
+        
 
+        
+        

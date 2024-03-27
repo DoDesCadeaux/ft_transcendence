@@ -7,6 +7,7 @@ const contentNotification = document.querySelector('#content-notif');
  * FErmeture avec la croix ou bien en cliquant en dehors de la modale
  ***************************************************************************/
 function closeNotificationModal() {
+    console.log("fermeture en cours");
     modal.style.display = 'none';
     contentNotification.innerHTML = "";
     window.onclick = null;  // Désactive l'événement de clic après la fermeture de la modal
@@ -19,6 +20,7 @@ window.onclick = function(event) {
       window.onclick = null;
     }
 };
+
 /****************************************************************************
  * FIN GESTION DE LA FERMETURE DE LA MODALE
  ***************************************************************************/

@@ -1,7 +1,14 @@
 let check = 0;
 
-let searchBar, waitingBloc, searchInput, autoComplete, search, waitingMsg, invit, pong, ball;
-
+let searchBar,
+  waitingBloc,
+  searchInput,
+  autoComplete,
+  search,
+  waitingMsg,
+  invit,
+  pong,
+  ball;
 
 function handleInputSearchEvent(users) {
   return function () {
@@ -21,11 +28,12 @@ function handleInputSearchEvent(users) {
 
     if (users.length == 0) {
       const listItem = document.createElement("li");
-      listItem.textContent = "Aucun joueur n'est disponible, tente ta chance plus tard !";
+      listItem.textContent =
+        "Aucun joueur n'est disponible, tente ta chance plus tard !";
       autoComplete.appendChild(listItem);
     }
-    
-    const btn_search = document.querySelector('#search .bar .search')
+
+    const btn_search = document.querySelector("#search .bar .search");
 
     users.forEach((user) => {
       if (user.state == "online") {
@@ -34,9 +42,9 @@ function handleInputSearchEvent(users) {
         autoComplete.appendChild(listItem);
 
         listItem.addEventListener("click", function () {
-          if (btn_search.className.includes('notAllowed')){
-            btn_search.classList.remove('notAllowed');
-            btn_search.classList.add('pointer');
+          if (btn_search.className.includes("notAllowed")) {
+            btn_search.classList.remove("notAllowed");
+            btn_search.classList.add("pointer");
           }
           searchInput.value = user.username;
           autoComplete.innerHTML = "";
@@ -48,31 +56,61 @@ function handleInputSearchEvent(users) {
 }
 
 function selectPlayer() {
-  const btn_search = document.querySelector('#search .bar .search')
-  if (btn_search.className.includes("pointer")){
-    printWaiting(search.id);
-    search.id = "";
-    searchInput.value = "";
+  const btn_search = document.querySelector("#search .bar .search");
+  if (btn_search.className.includes("pointer")) {
+    const formData = new FormData();
+    const opponent = search.id;
+    console.log(search.id);
+    formData.append("opponent", opponent);
+    fetch(`/api/notif/create/`, {
+      method: "POST",
+      body: formData,
+      headers: {
+        "X-CSRFToken": csrftoken,
+      },
+    })
+      .then((response) => response.json())
+      // .then((response) => { return response.json();})
+      .then((data) => {
+        console.log(data); // Utiliser les données JSON retournées
+        const notificationId = data.notification_id; // Récupérer l'ID de la notification depuis les données JSON
+        console.log(notificationId);
+        search.id = "";
+        searchInput.value = "";
+        printWaiting(opponent, notificationId);
+      })
+      .catch((error) => {
+        console.error("Erreur lors de la création de la notif :", error);
+      });
   }
 }
 
-function printWaiting(opponent) {
+function printWaiting(opponent, notifId) {
   searchBar.classList.add("displayNone");
   waitingBloc.classList.remove("displayNone");
   waitingMsg.textContent = `En attente de la reponse de ${opponent}`;
-  //Joueur ok
-  setTimeout(playGame, 3000);
-  //Joueur pas ok
-  // setTimeout(() => {
-  //     oupsRejected(opponent);
-  // }, 3000);
-  //Pas de reponse du joueur
-  // setTimeout(() => {
-  //     oupsUnreachable(opponent);
-  //   }, 3000);
+
+  const interval = setInterval(() => {
+    fetch(`http://localhost:8000/api/checkNotif/sent/?id=${notifId}`)
+      .then((response) => response.json())
+      .then((data) => {
+        if (data[0] != 0) {
+          clearInterval(interval); // Arrêter l'intervalle une fois que l'état n'est plus 0
+          console.log("L'état de la notification est :", data[0]);
+          if  (data[0] == 1)
+            playGame();
+          else if (data[0] == 2)
+            oupsRejected(opponent);
+          else
+            oupsUnreachable(opponent);
+        }
+      })
+      .catch((error) => console.error("Erreur :", error));
+  }, 2000);
 }
 
-function playGame() {
+function playGame(opponent) {
+  //Mettre a jour les photos 
   invit.classList.add("displayNone");
   pong.classList.remove("displayNone");
   searchBar.classList.remove("displayNone");
@@ -84,7 +122,6 @@ function oupsRejected(opponent) {
   waitingMsg.textContent = `Oups ... ${opponent} ne veux pas jouer.`;
   ball.classList.add("displayNone");
   setTimeout(function () {
-    // Redirection vers la vue "dashboard"
     window.location.href = "/";
   }, 3000);
 }
@@ -92,7 +129,9 @@ function oupsRejected(opponent) {
 function oupsUnreachable(opponent) {
   waitingMsg.textContent = `Oups ... ${opponent} ne semble pas etre disponible.`;
   ball.classList.add("displayNone");
-  setTimeout(returnDash, 3000);
+  setTimeout(function () {
+    window.location.href = "/";
+  }, 3000);
 }
 
 function setupDynamicElements() {
@@ -107,21 +146,18 @@ function setupDynamicElements() {
   ball = document.querySelector(".wrap-ball");
 
   (async () => {
-  	const dataUsers = await fetchGET(URI.USERS);
-    const usersOnline =  dataUsers.users.filter(user => user.state !== "offline" && user.state !== "in-game");
+    const dataUsers = await fetchGET(URI.USERS);
+    const usersOnline = dataUsers.users.filter(
+      (user) => user.state !== "offline" && user.state !== "in-game"
+    );
     searchInput.addEventListener("input", handleInputSearchEvent(usersOnline));
   })();
 }
 
 document.body.addEventListener("DOMNodeInserted", function (event) {
-  if (document.querySelector("#search-input") && check == 0){
+  if (document.querySelector("#search-input") && check == 0) {
     setupDynamicElements();
-    check +=1;
+    check += 1;
   }
-  if (!document.querySelector("#search-input"))
-    check = 0;
+  if (!document.querySelector("#search-input")) check = 0;
 });
-
-
-
-

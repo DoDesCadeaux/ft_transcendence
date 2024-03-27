@@ -1,8 +1,11 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from django.conf import settings
 
 
 #kwargs = keywords arguments -> permet de passer des variable en plus des arguments dans une fonction
+
+
 
 class User(AbstractUser):
     id_api = models.CharField(max_length=100, unique=True)
@@ -70,5 +73,10 @@ class Match(models.Model):
 
     def __str__(self):
         return f"{self.pk} : {self.player1} VS {self.player2}"
+
+class Notification(models.Model):
+    user_from = models.ForeignKey(User, on_delete=models.CASCADE, related_name='sent_notifications')
+    user_to = models.ForeignKey(User, on_delete=models.CASCADE, related_name='received_notifications')
+    state = models.PositiveSmallIntegerField(choices=((0, 'waiting'), (1, 'accepted'), (2, 'declined'), (3, 'timeout')), default=0)
 
 
