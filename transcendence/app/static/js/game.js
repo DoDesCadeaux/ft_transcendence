@@ -97,12 +97,9 @@ function printWaiting(opponent, notifId) {
         if (data[0] != 0) {
           clearInterval(interval); // Arrêter l'intervalle une fois que l'état n'est plus 0
           console.log("L'état de la notification est :", data[0]);
-          if  (data[0] == 1)
-            playGame();
-          else if (data[0] == 2)
-            oupsRejected(opponent);
-          else
-            oupsUnreachable(opponent);
+          if (data[0] == 1) playGame(opponent);
+          else if (data[0] == 2) oupsRejected(opponent);
+          else oupsUnreachable(opponent);
         }
       })
       .catch((error) => console.error("Erreur :", error));
@@ -110,7 +107,31 @@ function printWaiting(opponent, notifId) {
 }
 
 function playGame(opponent) {
-  //Mettre a jour les photos 
+  //Mettre a jour les photos
+  const photos = document.querySelectorAll(".opponents-img");
+  console.log(photos);
+  const formData = new FormData();
+  formData.append("opponent", opponent);
+  fetch(`/api/match/create/`, {
+    method: "POST",
+    body: formData,
+    headers: {
+      "X-CSRFToken": csrftoken,
+    },
+  })
+    .then((response) => {
+      return response.json();
+    })
+    .then((data) => {
+      console.log(data);
+      photos[0].src = data.player1.photo;
+      photos[1].src = data.player2.photo;
+    })
+    .catch((error) => {
+      console.error("Erreur lors de la création du tournoi :", error);
+      contentNotification.textContent = `La création du tournoi a échouée`;
+    });
+
   invit.classList.add("displayNone");
   pong.classList.remove("displayNone");
   searchBar.classList.remove("displayNone");

@@ -100,19 +100,37 @@ class CreateFinishMatchAPIView(generics.GenericAPIView):
     def post(self, request, *args, **kwargs):
         current_player = self.request.user
         action = kwargs.get('action')
+        print(request.data.get('opponent'))
+        
         
         if action == 'create':
             try:
-                player2 = User.objects.get(id=request.data.get('opponent'))
+                player2 = User.objects.get(username=request.data.get('opponent'))
             except User.DoesNotExist:
                 return Response({"detail": "User not found."}, status=status.HTTP_404_NOT_FOUND)
-            
+            print("creation")
             new_match = Match.objects.create(
-                player1_id=current_player,
-                player2_id=player2,
+                player1=current_player,
+                player2=player2,
                 tournament_id=request.data.get('tournament')  # Assurez-vous de récupérer ou de passer l'ID du tournoi
             )
-            return Response({"match_id": new_match.id}, status=status.HTTP_400_BAD_REQUEST)
+            print("fin de création")
+            response = {
+                "match_id" : new_match.id,
+                "player1" : {
+                    "username" : new_match.player1.username,
+                    "photo" : new_match.player1.photo.url,
+                },
+                "player2" : {
+                    "username" : new_match.player2.username,
+                    "photo" : new_match.player2.photo.url,
+                }
+            }
+            player2.state = 'in-game'
+            current_player.state = 'in-game'
+            player2.save()
+            current_player.save()
+            return Response(response, status=status.HTTP_201_CREATED)
         elif action == 'finish':
             try:
                 match = Match.objects.get(id=request.data.get('id'))
@@ -183,9 +201,6 @@ class CreateJoinTournamentAPIView(generics.GenericAPIView):
 
             # Sauvegarder les modifications
             tournament.save()
-            print(len(players_set))
-            
-            print(players_set)
 
             return Response(f"Inscription réussie au tournoi {tournament.name} !",status=status.HTTP_200_OK)
                 
@@ -194,10 +209,10 @@ class DataMatchTournamentAPIView(generics.GenericAPIView):
     def get(self, request, *args, **kwargs):
         game = kwargs.get('game')
 
-        if game == 'matchs':
-            print("coucou")
+        # if game == 'matchs':
+        #     print("coucou")
             # return Response(response)
-        elif game == 'tournaments':
+        if game == 'tournaments':
             tournaments = Tournament.objects.all()
 
             tournament_data = []
@@ -219,15 +234,8 @@ class DataMatchTournamentAPIView(generics.GenericAPIView):
                         player1_id__in=[player['id'] for player in first_two_players],
                         player2_id__in=[player['id'] for player in first_two_players]
                     ).values('winner').first()
-                    
-                    
-                    print(winner_demi_first)
-                    
                     if  winner_demi_first is not None:
                         winner_demi_user = get_object_or_404(User, id=winner_demi_first['winner'])
-                        
-                        
-                        
 
                     # Utilisez le serializer pour convertir l'utilisateur en données JSON
                     winner_demi_serializer = UserSerializer(winner_demi_user)
@@ -270,9 +278,6 @@ class DataMatchTournamentAPIView(generics.GenericAPIView):
                 tournament_data.append(tournament_info)
             return Response(tournament_data)
         else:
-            print("coucou")
-            # Gérer d'autres cas ou renvoyer une réponse d'erreur
-            # Prout
             return Response({'error': 'Opération non prise en charge'})
 
 class FullStatsAPIView(generics.GenericAPIView):
@@ -377,10 +382,8 @@ class FullStatsAPIView(generics.GenericAPIView):
         won_final = 0
         # Pour chaque tournoi, récupérer les matchs correspondants
         for tournament in tournaments_participated:
-            print(tournament)
             matches = Match.objects.filter(tournament=tournament)
             if (len(matches) == 1 or len(matches) == 2):
-                print(matches)
                 for match_play in matches:
                     participed = match_play.player1 == user or match_play.player2 == user
                     if participed:
@@ -420,7 +423,6 @@ class ManageNotifAPIView(generics.GenericAPIView):
     def post(self, request, *args, **kwargs):
         current_player = self.request.user
         action = kwargs.get('action')
-        print(request.data.get('opponent'))
     
         if action == 'create':
             try:
@@ -432,7 +434,6 @@ class ManageNotifAPIView(generics.GenericAPIView):
                 user_to=player2,
                 state=0
             )
-            print(new_notification)   
             return Response({"notification_id": new_notification.id}, status=status.HTTP_201_CREATED)
         elif action == 'update':
             try:
@@ -455,7 +456,6 @@ class CheckNotifAPIView(generics.GenericAPIView):
         if action == 'received':
             try:
                 notification = Notification.objects.get(user_to=current_user, state=0)
-                print(f"{notification.user_from}")
                 response = {
                     "id": notification.id,
                     "from": notification.user_from.username,
@@ -465,7 +465,6 @@ class CheckNotifAPIView(generics.GenericAPIView):
             except Notification.DoesNotExist:
                 return Response({"detail": "Pas de notification en attente."}, status=status.HTTP_404_NOT_FOUND)    
         if action == 'sent':
-            print("sent")
             try:
                 idNotif = request.GET.get('id')
                 notification = Notification.objects.get(id=idNotif)
