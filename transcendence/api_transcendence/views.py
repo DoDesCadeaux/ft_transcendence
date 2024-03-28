@@ -354,21 +354,21 @@ class FullStatsAPIView(generics.GenericAPIView):
         
         # Calculer le temps moyen des matchs auquel l'utilisateur a participé
         average_duration_participated = matches_participated.aggregate(average_duration=Avg(ExpressionWrapper(F('match_duration'), output_field=fields.DurationField())))['average_duration']
-        average_duration_participated_minutes = average_duration_participated.total_seconds() / 60 if average_duration_participated else 0
+        average_duration_participated_minutes = int(average_duration_participated.total_seconds() / 60) if average_duration_participated else 0
         
         # Filtrer les matchs sans ID de tournoi
         matches_without_tournament = matches_participated.filter(tournament=None)
         
         # Calculer le temps moyen des matchs sans ID de tournoi
         average_duration_without_tournament = matches_without_tournament.aggregate(average_duration=Avg(ExpressionWrapper(F('match_duration'), output_field=fields.DurationField())))['average_duration']
-        average_duration_without_tournament_minutes = average_duration_without_tournament.total_seconds() / 60 if average_duration_without_tournament else 0
+        average_duration_without_tournament_minutes = int(average_duration_without_tournament.total_seconds() / 60) if average_duration_without_tournament else 0
         
         # Filtrer les matchs avec ID de tournoi
         matches_with_tournament = matches_participated.exclude(tournament=None)
         
         # Calculer le temps moyen des matchs avec ID de tournoi
         average_duration_with_tournament = matches_with_tournament.aggregate(average_duration=Avg(ExpressionWrapper(F('match_duration'), output_field=fields.DurationField())))['average_duration']
-        average_duration_with_tournament_minutes = average_duration_with_tournament.total_seconds() / 60 if average_duration_with_tournament else 0
+        average_duration_with_tournament_minutes = int(average_duration_with_tournament.total_seconds() / 60) if average_duration_with_tournament else 0
         
         return {
             'name': user.username,
