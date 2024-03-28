@@ -928,6 +928,18 @@ color: var(--white);
   text-decoration: none;
   cursor: pointer;
 }
+.bloc-btn-notif {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  padding-top: 30px;
+}
+.bloc-btn-notif .btn-notification-game {
+  background-color: var(--white-sec);
+  padding: 8px;
+  border-radius: 15px;
+  cursor: pointer;
+}
 /****************************************************************************
  * FIN Modale de notification
  ***************************************************************************/

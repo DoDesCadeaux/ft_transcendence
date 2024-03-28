@@ -100,8 +100,6 @@ class CreateFinishMatchAPIView(generics.GenericAPIView):
     def post(self, request, *args, **kwargs):
         current_player = self.request.user
         action = kwargs.get('action')
-        print(request.data.get('opponent'))
-        
         
         if action == 'create':
             try:
@@ -113,7 +111,6 @@ class CreateFinishMatchAPIView(generics.GenericAPIView):
                 player2=player2,
                 tournament_id=request.data.get('tournament')  # Assurez-vous de récupérer ou de passer l'ID du tournoi
             )
-            print("fin de création")
             response = {
                 "match_id" : new_match.id,
                 "player1" : {
@@ -465,7 +462,9 @@ class CheckNotifAPIView(generics.GenericAPIView):
                     "from": notification.user_from.username,
                     "to": notification.user_to.username,
                 }
-                return Response(response, status=status.HTTP_200_OK)
+                if current_user.state == 'online':
+                    return Response(response, status=status.HTTP_200_OK)
+                return Response({"detail": "Pas disponible."}, status=status.HTTP_200_OK)
             except Notification.DoesNotExist:
                 return Response({"detail": "Pas de notification en attente."}, status=status.HTTP_404_NOT_FOUND)    
         if action == 'sent':

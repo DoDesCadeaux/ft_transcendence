@@ -75,6 +75,7 @@ document.body.addEventListener("DOMNodeInserted", function (event) {
         fetch("tournament_fragment/")
           .then((response) => response.text())
           .then((data) => {
+            console.log(dataTournament[i])
             let li = document.createElement("li");
             setLi(li, data, element, i);
             tournament.appendChild(li);
@@ -90,6 +91,8 @@ document.body.addEventListener("DOMNodeInserted", function (event) {
 
             let btnGo = li.querySelectorAll(".btn-gomatch");
             displayGoBtn(btnGo, element);
+
+            manageGoBtn(btnGo, element);
           })
           .catch((error) => {
             console.error("Error loading page:", error);
@@ -154,6 +157,19 @@ function displayGoBtn(btnGo, element) {
     }
   }
 }
+
+function manageGoBtn(btnGo, element){
+  if (btnGo[0].style.display != "none" && element.players[1]){
+    console.log(`le bouton est actif pour les joueurs ${element.players[0].username} et ${element.players[1].username} dans le tournois ${element.name}`)
+    btnGo[0].style.cursor = "pointer";
+    btnGo[0].onclick = ()=> sentNotification(element.players[1].username, element.id)
+    // window.location.href = "/game";
+  }
+  if (btnGo[1].style.display != "none" && element.players[3])
+    console.log(`le bouton est actif pour les joueurs ${element.players[2].username} et ${element.players[3].username} dans le tournois ${element.name}`)
+  if (btnGo[2].style.display != "none" && element.winners[1])
+    console.log(`le bouton est actif pour les joueurs ${element.winners[0].username} et ${element.winners[1].username} dans le tournois ${element.name}`)
+  }
 
 function manageSlide() {
   const buttons = document.querySelectorAll(".btn");

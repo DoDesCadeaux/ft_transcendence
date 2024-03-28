@@ -135,11 +135,11 @@ async function fetchNotifications() {
 	if (isFetching){
 		setTimeout(() => {
 		  closeAndUpdate(3, data.id);
-		  isFetching = false; // Définir le drapeau comme faux après la fermeture du modal
+		  isFetching = false; 
 		}, 6000);
 	}
   } else 
-    isFetching = false; // Définir le drapeau comme faux si la réponse n'est pas ok
+    isFetching = false; 
   
 }
 
