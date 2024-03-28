@@ -78,7 +78,7 @@ function printWaiting(opponent, notifId, tournament_id) {
         if (data[0] != 0) {
           clearInterval(interval); // Arrêter l'intervalle une fois que l'état n'est plus 0
           console.log("L'état de la notification est :", data[0]);
-          if (data[0] == 1) playGame(opponent, tournament_id);
+          if (data[0] == 1) playPong(opponent, tournament_id);
           else if (data[0] == 2) oupsRejected(opponent);
           else oupsUnreachable(opponent);
         }
@@ -91,7 +91,7 @@ function printWaiting(opponent, notifId, tournament_id) {
   }, 6000); // 6 secondes
 }
 
-function playGame(opponent, tournament_id) {
+function playPong(opponent, tournament_id) {
   //Mettre a jour les photos
   const photos = document.querySelectorAll(".opponents-img");
   console.log(photos);

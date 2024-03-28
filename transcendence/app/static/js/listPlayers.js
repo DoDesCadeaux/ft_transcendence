@@ -31,8 +31,22 @@ function createUserLi(userList, userData) {
     pseudo.classList.add("name");
     pseudo.textContent = userData.username;
 
+    const followBtn = document.createElement('label')
+    followBtn.classList.add("custom-checkbox");
+    
+    const inputFollow = document.createElement('input');
+    inputFollow.type="checkbox";
+    inputFollow.id = userData.id;
+    inputFollow.classList.add("following");
+    followBtn.appendChild(inputFollow);
+
+    const checkboxSVG =  document.createElement('span');
+    checkboxSVG.classList.add("checkbox-svg");
+    followBtn.appendChild(checkboxSVG);
+
     userLi.appendChild(status);
     userLi.appendChild(pseudo);
+    userLi.appendChild(followBtn);
 
     userList.appendChild(userLi);
 }
