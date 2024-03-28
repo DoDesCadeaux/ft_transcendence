@@ -26,7 +26,7 @@ contract PongTournament {
     }
 
     // Function to retrieve a Tournament's info
-    function getTournamentInfo(address tournamentAddress) public view returns (uint256, string memory, string memory) {
+    function getTournamentResult(address tournamentAddress) public view returns (uint256, string memory, string memory) {
         // Return the tournament's info, mapping returns 0 if Tournament doesn't exist
         if (tournament[tournamentAddress].id != 0) {
             uint id = tournament[tournamentAddress].id;
