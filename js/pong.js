@@ -4,7 +4,7 @@ const ctx = canvas.getContext("2d");
 
 // Set up initial vars
 let gamePaused = false;
-let countdownInProgress = false;
+let countdownInProgress = true;
 const padding = 10;
 const paddleWidth = 10;
 const paddleHeight = 80;
@@ -70,7 +70,6 @@ function gameLoop() {
         return;
     }
     if ((startGame % 2) != 0) {
-        countdownInProgress = true;
 		countdown(3);
 	}
     // Déplacer les barres des joueurs en fonction des touches enfoncées
