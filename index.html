@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <div class="top-banner">
+        <img class="logo pointer" src="img/logo.svg" alt="logo 42Transcendence" onclick="openDash()">
+        <div class="user">
+            <img class=photo src="img/pamartin.jpg" alt="user">
+            <div class="name">Pamartin</div>
+            <img class='banner-icon pointer' src="img/settings.svg" alt="" onclick="openProfile()">
+            <img class='banner-icon pointer' src="img/exit.svg" alt="">
+        </div>
+    </div>
+
+    <div class="page">
+        <div class="content">
+            <div class="dash">
+                <div class="card new-game">
+                    <div class="card--title">Nouveau match</div>
+                    <!--<div class="card--content new-game--content">
+                        <div class="invitation-received">Invitation(s) recue(s)
+                            <!-- <ul>
+                                <li class='pointer' onclick="">dduraku</li>
+                                <li class='pointer' onclick="">dduraku</li>
+                                <li class='pointer' onclick="">dduraku</li>
+                            </ul>
+                            <div class="navigation">
+                                <div class="previous pointer"><</div>
+                                <div class="next pointer">></div>
+                            </div> -->
+                    <!--</div>
+                        <div class="invitation-sent">Invitation(s) envoyee(s)
+                            <!-- <ul>
+                                <li class='pointer' onclick="">dduraku</li>
+                                <li class='pointer' onclick="">dduraku</li>
+                                <li class='pointer' onclick="">dduraku</li>
+                            </ul>
+                            <div class="navigation">
+                                <div class="previous pointer"><</div>
+                                <div class="next pointer">></div>
+                            </div> -->
+                    <!--</div>
+                        <div class="invitation-send">Invite un ami
+                            <div id="search">
+                                <div class="bar">
+                                    <input type="text" id="search-input" placeholder="Rechercher...">
+                                    <img class="pointer search" onclick="select()" src="img/send.svg" alt="">
+                                </div>
+                                <ul class="autocomplete">
+                                    <!-- <li>dfsdff</li>
+                                    <li>sdfsdf</li>
+                                    <li>sdfsdf</li>
+                                    <li>sdfsdf</li>
+                                    <li>sdfsdf</li> -->
+                    <!--</ul>
+                            </div>
+                        </div>
+                    </div> -->
+                    <img class="new-game--icon" src="img/playGame.svg" alt="" onclick="newGame()">
+                </div>
+
+                <div class="card stats">
+                    <div class="hello item-card">
+                        <img class="icon" src="img/presentation.svg" alt="">
+                        <div class="text-title">Bonjour</div>
+                        <div class="text-content">Pamartin</div>
+                    </div>
+                    <div class="time item-card">
+                        <img class="icon" src="img/time.svg" alt="">
+                        <div class="text-title">Temps de jeu</div>
+                        <div class="text-content">20 min</div>
+                    </div>
+                    <div class="oneVSone item-card">
+                        <img class="icon" src="img/play.svg" alt="">
+                        <div class="text-title">1 VS 1</div>
+                        <div class="text-content">10 sur 30 de gagnes</div>
+                    </div>
+                    <div class="tournois item-card">
+                        <img class="icon" src="img/tournament.svg" alt="">
+                        <div class="text-title">Tournois</div>
+                        <div class="text-content">10 sur 30 de gagnes</div>
+                    </div>
+                </div>
+                <div class="card new-tournament">
+                    <div class="card--title">Tournoi(s) en cours</div>
+                    <div class="graph-tournament">
+                        <div class="player un">
+                            <img src="img/tverdood.jpg" alt="">
+                        </div>
+                        <div class="graph-bar quart-bar team1"></div>
+                        <div class="go quart team1">go</div>
+                        <div class="player deux">
+                            <img src="img/pamartin.jpg" alt="">
+                        </div>
+                        <div class="player trois">
+                            <img src="img/adevos.png" alt="">
+                        </div>
+                        <div class="graph-bar quart-bar team2"></div>
+                        <div class="go quart team2">go</div>
+                        <div class="player quatre">
+                            <img src="img/dduraku.png" alt="">
+                        </div>
+                        <div class="player cinq">
+                            <img src="img/pamartin.jpg" alt="">
+                        </div>
+                        <div class="graph-bar demi-bar"></div>
+                        <div class="go demi">go</div>
+                        <div class="player six">
+                            <img src="img/anonymous.png" alt="">
+                        </div>
+                        <div class="player sept">
+                            <img src="img/anonymous.png" alt="">
+                        </div>
+                    </div>
+                    <div class="navigation tournament">
+                        <div class="previous pointer">></div>
+                        <div class="next pointer">></div>
+                    </div>
+                    <div class="create-join">
+                        <div class="create">Nouveau</div>
+                        <div class="join">Rejoindre</div>
+                    </div>
+                </div>
+                <div class="card match">
+                    <div class="card--title">Matchs</div>
+                </div>
+                <div class="card tournament">
+                    <div class="card--title">Tournois</div>
+                </div>
+            </div>
+            <div class="profile displayNone">
+                <div class="profile-content">
+                    <div class="preview">
+                        <div class="preview-card">
+                            <div class="preview-top">
+                                <img src="img/pamartin.jpg" alt="" class="preview-img">
+                            </div>
+                            <div class="preview-bottom">
+                                <div class="preview-name">
+                                    Prenom
+                                    <span id="preview-name">Pamartin</span>
+                                </div>
+                                <div class="preview-username">
+                                    Nom d'utilisateur
+                                    <span id="preview-username">Pamartin</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <form action="" class="form-profile">
+                        <div class="form-presentation">
+                            Hello Pamartin, <br>Tu peux modifier ton nom d'utilisateur et ta photo de profil. Attention
+                            ils seront visible par tous les utilisateurs, fait un choix judicieux et respectueux !
+                        </div>
+
+                        <div id="form-profile">
+                            <label for="username">Nom d'utilisateur:</label>
+                            <input type="text" id="username" name="username" oninput="previewProfile()" maxlength="20"
+                                value="Pamartin">
+
+                            <label for="profilePicture">Photo de profil:</label>
+                            <input type="file" id="profilePicture" name="profilePicture" accept="image/*"
+                                onchange="previewProfile()">
+                        </div>
+
+
+                        <div id="update-profile" onclick="updateProfile()">Sauvegarder</div>
+                    </form>
+                </div>
+            </div>
+            <div class="game displayNone">
+                <div class="game-content">
+                    <div class="pong displayNone">
+                        <div class="opponents">
+                            <img class="opponents-img" src="img/dduraku.png" alt="">
+                            <img class="opponents-img" src="img/tverdood.jpg" alt="">
+                        </div>
+                        <canvas id="pongCanvas" width="900" height="450"></canvas>
+                    </div>
+                    <div class="invit-game">
+                        <!-- vue avec la bar de recherche -->
+
+                        <div id="search">
+                            <div class="bar">
+                                <input type="text" id="search-input" placeholder="Rechercher...">
+                                <img class="pointer search" onclick="selectPlayer()" src="img/send.svg" alt="">
+                            </div>
+                            <ul class="autocomplete">
+                                <!-- <li>dfsdff</li>
+                                <li>sdfsdf</li>
+                                <li>sdfsdf</li>
+                                <li>sdfsdf</li>
+                                <li>sdfsdf</li> -->
+                            </ul>
+                        </div>
+                        <div class="waiting displayNone">
+                            <div class="waiting-msg"></div>
+                            <div class="wrap-ball">
+                                <div class="ball"></div>
+                                <div class="ball"></div>
+                                <div class="ball"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+        <div class="right-banner">
+            <div class="title">En ligne</div>
+            <ul>
+                <li>
+                    <div class="status online"></div>
+                    <div class="name">dduraku</div>
+                </li>
+            </ul>
+            <ul>
+                <li>
+                    <div class="status online"></div>
+                    <div class="name">tverdood</div>
+                </li>
+            </ul>
+            <ul>
+                <li>
+                    <div class="status"></div>
+                    <div class="name">adevos</div>
+                </li>
+            </ul>
+        </div>
+    </div>
+</body>
+<script src="./js/index.js"></script>
+
+</html>
