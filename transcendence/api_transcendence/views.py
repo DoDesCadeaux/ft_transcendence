@@ -108,7 +108,6 @@ class CreateFinishMatchAPIView(generics.GenericAPIView):
                 player2 = User.objects.get(username=request.data.get('opponent'))
             except User.DoesNotExist:
                 return Response({"detail": "User not found."}, status=status.HTTP_404_NOT_FOUND)
-            print("creation")
             new_match = Match.objects.create(
                 player1=current_player,
                 player2=player2,
@@ -139,23 +138,28 @@ class CreateFinishMatchAPIView(generics.GenericAPIView):
         
             match.player1_score = request.data.get('player1_score')
             match.player2_score = request.data.get('player2_score')
-            match.match_duration = request.data.get('match_duration')
+            timedelta_duration = timedelta(seconds=float(request.data.get('match_duration')))
+            match.match_duration = timedelta_duration
             match.winner_id = match.player1_id if match.player1_score > match.player2_score else match.player2_id
             
-            # Récupérer les durées actuelles des joueurs depuis la base de données
-            player1_duration = match.player1.match_duration if match.player1.match_duration else timedelta(seconds=0)
-            player2_duration = match.player2.match_duration if match.player2.match_duration else timedelta(seconds=0)
+            # Récupérer les time actuels des joueurs depuis la base de données
+            player1_duration = match.player1.play_time if match.player1.play_time else timedelta(seconds=0)
+            player2_duration = match.player2.play_time if match.player2.play_time else timedelta(seconds=0)
             
             # Ajouter la durée du match aux durées des joueurs
-            match.player1.match_duration = player1_duration + match.match_duration
-            match.player2.match_duration = player2_duration + match.match_duration
+            match.player1.play_time = player1_duration + match.match_duration
+            match.player2.play_time = player2_duration + match.match_duration
+            
+            #Mise a jour du status
+            match.player1.state = 'online'
+            match.player2.state = 'online'
             
             # Enregistrer les modifications
             match.player1.save()
             match.player2.save()
             match.save()
 
-            return Response({"message": "Le match a été mis à jour"}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"message": "Le match a été mis à jour"}, status=status.HTTP_200_OK)
         return Response({"detail": "Invalid action."}, status=status.HTTP_404_NOT_FOUND)
 
 class CreateJoinTournamentAPIView(generics.GenericAPIView):
@@ -443,9 +447,9 @@ class ManageNotifAPIView(generics.GenericAPIView):
         
             if notification.state == 0:
                 notification.state = request.data.get('state')
-                notification.save()
+                notification.save ()
 
-            return Response({"message": "L'état de la notification a été mis a jour"}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"message": "L'état de la notification a été mis a jour"}, status=status.HTTP_200_OK)
         return Response({"detail": "Invalid action."}, status=status.HTTP_404_NOT_FOUND)
 
 class CheckNotifAPIView(generics.GenericAPIView):
