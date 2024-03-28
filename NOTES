@@ -9,3 +9,93 @@ Makefile :
 - launch Ganache local blockchain --> ???
 - compile & migrate the contract to the blockchain --> "truffle migrate"
 - create a file (erase old one if already exists) and store the contracts address
+
+
+<script src="./js/index.js"></script>
+<script src="./js/web3.min.js"></script> <!-- Load web3 library -->
+<script>
+    // Initialize Web3
+    window.addEventListener('load', async () => {
+        if (window.ethereum) {
+            window.web3 = new Web3(window.ethereum);
+            try {
+                // Request account access if needed
+                await window.ethereum.enable();
+                // Access the contract
+
+                // Automate fetching contract ABI
+                const contractABI = await fetchContractABI();
+
+                // Specify contract address
+                const contractAddress = './ContractAddress.js'; // Replace with your contract address
+
+                // Create contract instance
+                // const contract = new web3.eth.Contract(contractABI, contractAddress);
+
+                // // Example: Call the getScore function
+                // const playerAddress = 'PLAYER_ADDRESS'; // Replace with the player's address
+                // const score = await contract.methods.getScore(playerAddress).call();
+                // console.log('Player score:', score);
+                
+                // // Example: Update the score
+                // const newScore = 42; // Replace with the new score
+                // await contract.methods.updateScore(newScore).send({ from: playerAddress });
+                // console.log('Score updated successfully.');
+            } catch (error) {
+                // User denied account access...
+                console.error('User denied account access:', error);
+            }
+        } else {
+            // Web3 provider not detected...
+            console.error('Web3 provider not detected. Please install MetaMask.');
+        }
+    });
+
+    async function fetchContractABI() {
+        try {
+            const response = await fetch('./blockchain_test/build/PongScoreboard.json'); // Modify if needed
+            const json = await response.json();
+            return json.abi;
+        } catch (error) {
+            console.error('Error fetching contract ABI:', error);
+        }
+    }
+
+    //Configure web3 ad interact with cotracts
+    // window.addEventListener('load', async () => {
+    //     if (window.ethereum) {
+    //         window.web3 = new Web3(window.ethereum);
+    //         try {
+    //             await window.ethereum.enable(); //requset user to grat permissionn to the web app to access 
+    //                                             //their Eth account managed by the provider (like MetaMask)
+    //             interactWithContract();
+    //         } catch (error) {
+    //             console.error("User denied account access or error occured:", error);
+    //         }
+    //     } else if (window.web3) {
+    //         window.web3 = new Web3(web3.currentProvider);
+    //         interactWithContract();
+    //     } else {
+    //         console.error("No Ethereum provider detected. Install MetaMask or use a browser with Ethereum support.");
+    //     }
+    // });
+
+    // const Web3 = require('web3');
+    // const interactWithContract = require('./contractInteractions');
+    // const abi = require('./PongScoreboardABI.json');
+
+    // // Set up web3 with Ganache provider
+    // const web3 = new Web3('http://localhost:7545');
+
+    // // Define your contract address
+    // const contractAddress = 'YOUR_CONTRACT_ADDRESS';
+
+    // // Load the contract
+    // const pongContract = new web3.eth.Contract(abi, contractAddress);
+
+    // // Call the interactWithContract() function
+    // interactWithContract(web3, pongContract, 100);
+
+</script>
+
+<script src="./blockchain/contractInteractions.js"></script>
