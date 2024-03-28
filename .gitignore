@@ -10,7 +10,7 @@ a.out.dSYM
 *.sqlite3
 **/__pycache__/
 *.pyc
-package-lock.json
+transcendence/blockchain/package-lock.json
 .env
 note.txt
 user_photos/
