@@ -1,3 +1,4 @@
+const { execSync } = require('child_process');
 const PongTournament = artifacts.require("PongTournament");
 
 module.exports = function(deployer) {
@@ -6,7 +7,7 @@ module.exports = function(deployer) {
       console.log("PongTournament deployed");
       PongTournament.deployed().then((instance) => {
         console.log("Contract address:", instance.address);
-        execSync(`node write_contract_address.js "${instance.address}"`);
+        execSync(`node GetContractAddress.js "${instance.address}"`);
       });
     });
   };
