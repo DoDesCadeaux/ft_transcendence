@@ -265,6 +265,24 @@ function endGame() {
     console.log(getGameDuration());
     console.log(scoreLeft);
     console.log(scoreRight);
+    const formData = new FormData();
+    formData.append("id", data.match_id);
+    formData.append("player1_score", scoreLeft);
+    formData.append("player2_score", scoreRight);
+    formData.append("match_duration", getGameDuration());
+
+    fetch(`/api/match/finish/`, {
+        method: "POST",
+        body: formData,
+        headers: {
+          "X-CSRFToken": csrftoken,
+        },
+      })
+    .then((response) => { return response.json(); })
+    .then((data) => { console.log(data); })
+    .catch((error) => {
+        console.error("Erreur lors la mise a jour du match :", error);
+    });
 
 	// Afficher le score final et proposer de relancer la partie
     winner = scoreLeft > scoreRight ? data.player1.username : data.player2.username
@@ -275,8 +293,10 @@ function endGame() {
     ctx.fillText(`${winner} a gagne`, canvas.width / 2, canvas.height / 2 - 30);
     ctx.fillText(`${scoreLeft} - ${scoreRight}`, canvas.width / 2 - 1, canvas.height / 2 + 10);
 
-    document.removeEventListener('keydown', keyPressHandler);
-    // ctx.fillText("Appuyez sur espace pour relancer une partie", canvas.width / 2, canvas.height / 2 + 45);
+    // document.removeEventListener('keydown', keyPressHandler);
+    setTimeout(function () {
+        window.location.href = "/";
+    }, 3000);
 }
 
 function resetGame() {

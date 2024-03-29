@@ -37,7 +37,7 @@ function updateProfile(element) {
     const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
 
     const formData = new FormData();
-    var photoName =''
+    var photoName = '';
     formData.append('username', inputUsername);
     if (file) {
         photoName = `${user_id}.jpg`;

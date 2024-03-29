@@ -98,6 +98,9 @@ var optionsRadialBar = {
           fontSize: "30px",
           offsetY: 10,
           show: true,
+          formatter: function(val) {
+            return parseInt(val) + "%"; // Convertir en entier
+          }
         }
       }
     }
@@ -169,5 +172,3 @@ var optionsBarChart = {
   },
 
 }
-
-  
