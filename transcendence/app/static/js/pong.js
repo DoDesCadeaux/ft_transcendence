@@ -289,11 +289,10 @@ function endGame() {
     ctx.fillText(`${winner} a gagne`, canvas.width / 2, canvas.height / 2 - 30);
     ctx.fillText(`${scoreLeft} - ${scoreRight}`, canvas.width / 2 - 1, canvas.height / 2 + 10);
 
-    document.removeEventListener('keydown', keyboardEvent);
-        
     setTimeout(function () {
         window.location.href = "/";
     }, 3000);
+    document.removeEventListener('keydown', keyboardEvent);
 }
 
 function resetGame() {

@@ -107,7 +107,7 @@ async function fetchNotifications() {
     const data = await response.json();
 
     text = document.createElement("p");
-    text.textContent = `Hey ${data.to}, ${data.from} t'attends pour jouer`;
+    text.textContent = `Hey ${data.to}, ${data.from} t'attends pour jouer une partie de ${data.type}`;
     contentNotification.appendChild(text);
     div = document.createElement("div");
     div.classList.add("bloc-btn-notif");

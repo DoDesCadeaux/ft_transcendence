@@ -162,8 +162,7 @@ function manageGoBtn(btnGo, element){
   if (btnGo[0].style.display != "none" && element.players[1]){
     console.log(`le bouton est actif pour les joueurs ${element.players[0].username} et ${element.players[1].username} dans le tournois ${element.name}`)
     btnGo[0].style.cursor = "pointer";
-    btnGo[0].onclick = ()=> sentNotification(element.players[1].username, element.id)
-    // window.location.href = "/game";
+    btnGo[0].onclick = ()=> sentNotification(element.players[1].username, element.id, 0)
   }
   if (btnGo[1].style.display != "none" && element.players[3])
     console.log(`le bouton est actif pour les joueurs ${element.players[2].username} et ${element.players[3].username} dans le tournois ${element.name}`)

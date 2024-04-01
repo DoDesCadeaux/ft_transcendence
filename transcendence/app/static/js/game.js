@@ -12,45 +12,43 @@ let searchBar,
 
 
 
-function handleInputSearchEvent(users) {
+function handleInputSearchEvent(users, searchInputT, autoCompleteT, searchT, btn_searchT) {
   return function () {
-    const searchTerm = searchInput.value.trim();
+    const searchTerm = searchInputT.value.trim();
 
-    autoComplete.innerHTML = "";
+    autoCompleteT.innerHTML = "";
 
     if (searchTerm === "") {
       return;
     }
 
     document.addEventListener("click", function (event) {
-      const isAutocompleteClick = autoComplete.contains(event.target);
+      const isAutocompleteClick = autoCompleteT.contains(event.target);
 
-      if (!isAutocompleteClick) autoComplete.innerHTML = "";
+      if (!isAutocompleteClick) autoCompleteT.innerHTML = "";
     });
 
     if (users.length == 0) {
       const listItem = document.createElement("li");
       listItem.textContent =
         "Aucun joueur n'est disponible, tente ta chance plus tard !";
-      autoComplete.appendChild(listItem);
+      autoCompleteT.appendChild(listItem);
     }
-
-    const btn_search = document.querySelector("#search .bar .search");
 
     users.forEach((user) => {
       if (user.state == "online") {
         const listItem = document.createElement("li");
         listItem.textContent = user.username;
-        autoComplete.appendChild(listItem);
+        autoCompleteT.appendChild(listItem);
 
         listItem.addEventListener("click", function () {
-          if (btn_search.className.includes("notAllowed")) {
-            btn_search.classList.remove("notAllowed");
-            btn_search.classList.add("pointer");
+          if (btn_searchT.className.includes("notAllowed")) {
+            btn_searchT.classList.remove("notAllowed");
+            btn_searchT.classList.add("pointer");
           }
-          searchInput.value = user.username;
-          autoComplete.innerHTML = "";
-          search.id = user.username;
+          searchInputT.value = user.username;
+          autoCompleteT.innerHTML = "";
+          searchT.id = user.username;
         });
       }
     });
@@ -58,16 +56,26 @@ function handleInputSearchEvent(users) {
 }
 
 function selectPlayer() {
-  const btn_search = document.querySelector("#search .bar .search");
-  if (btn_search.className.includes("pointer")) {
-    sentNotification(search.id, null)
-    search.id = "";
-    searchInput.value = "";
+  const pong_btn_search = document.querySelector(".Pong #search .bar .search");
+  if (pong_btn_search.className.includes("pointer")) {
+    sentNotification(search[0].id, null, 0)
+    search[0].id = "";
+    searchInput[0].value = "";
+  }
+  const oxo_btn_search = document.querySelector(".Oxo #search .bar .search");
+  if (oxo_btn_search.className.includes("pointer")) {
+    sentNotification(search[1].id, null, 1)
+    search[1].id = "";
+    searchInput[1].value = "";
   }
 }
 
 function printWaiting(opponent, notifId, tournament_id) {
-  searchBar.classList.add("displayNone");
+  const pong = document.querySelector(".Pong");
+  const oxo = document.querySelector(".Oxo");
+  pong.classList.add("displayNone");
+  oxo.classList.add("displayNone");
+
   waitingBloc.classList.remove("displayNone");
   waitingMsg.textContent = `En attente de la reponse de ${opponent}`;
 
@@ -117,7 +125,7 @@ function playPong(opponent, tournament_id) {
     })
     .catch((error) => {
       console.error("Erreur lors de la création du tournoi :", error);
-      contentNotification.textContent = `La création du tournoi a échouée`;
+      contentNotification.textContent = `La création du match a échouée`;
     });
 
   invit.classList.add("displayNone");
@@ -145,10 +153,10 @@ function oupsUnreachable(opponent) {
 }
 
 function setupDynamicElements() {
-  searchBar = document.querySelector("#search");
+  searchBar = document.querySelectorAll("#search");
   waitingBloc = document.querySelector(".waiting");
-  searchInput = document.querySelector("#search-input");
-  autoComplete = document.querySelector(".autocomplete");
+  searchInput = document.querySelectorAll("#search-input");
+  autoComplete = document.querySelectorAll(".autocomplete");
   search = document.querySelectorAll(".search");
   waitingMsg = document.querySelector(".waiting-msg");
   invit = document.querySelector(".invit-game");
@@ -160,7 +168,20 @@ function setupDynamicElements() {
     const usersOnline = dataUsers.users.filter(
       (user) => user.state !== "offline" && user.state !== "in-game"
     );
-    searchInput.addEventListener("input", handleInputSearchEvent(usersOnline));
+    const btn_search = document.querySelectorAll("#search .bar .search");
+    searchInput.forEach(function(input, index) {
+      input.addEventListener(
+        "input",
+        handleInputSearchEvent(
+          usersOnline,
+          searchInput[index],
+          autoComplete[index],
+          search[index],
+          btn_search[index]
+        )
+      );
+    });
+    
   })();
 }
 
@@ -183,10 +204,12 @@ document.body.addEventListener("DOMNodeInserted", function (event) {
   if (!document.querySelector("#search-input")){ check = 0; }
 });
 
-function sentNotification(player2, tournament_id) {
+function sentNotification(player2, tournament_id, type) {
   const formData = new FormData();
   const opponent = player2;
   formData.append("opponent", opponent);
+  formData.append("type", type);
+
   fetch(`/api/notif/create/`, {
     method: "POST",
     body: formData,

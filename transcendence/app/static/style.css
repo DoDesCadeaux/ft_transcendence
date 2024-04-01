@@ -702,10 +702,23 @@ color: var(--white);
         margin: 0 auto;
       }
 
+      .Pong, .Oxo{
+        width: 100%;
+        height: 50%;
+        display: flex;
+        justify-content: center;
+      }
+      .Pong .title, .Oxo .title{
+        color: var(--orange);
+      }
+
+
       .invit-game {
         width: 80%;
         height: 80%;
         display: flex;
+        justify-content: center;
+        flex-direction: column;
         justify-content: center;
         position: relative;
 
@@ -715,7 +728,6 @@ color: var(--white);
           width: 30%;
           border-radius: 10px;
           position: absolute;
-          top: 5%;
           z-index: 5;
           background: var(--bg);
           margin-top: 10px;
@@ -755,6 +767,14 @@ color: var(--white);
           }
         }
 
+        .Pong #search {
+          /* Styles pour le deuxième élément #search */
+          top: 5%; /* Par exemple, déplacer le deuxième élément vers le bas de 50% de la hauteur de son conteneur parent */
+        }
+        .Oxo #search {
+          /* Styles pour le deuxième élément #search */
+          top: 55%; /* Par exemple, déplacer le deuxième élément vers le bas de 50% de la hauteur de son conteneur parent */
+        }
         .waiting {
           display: flex;
           align-items: center;

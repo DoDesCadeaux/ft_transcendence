@@ -3,7 +3,7 @@ from rest_framework import generics
 from rest_framework.response import Response
 from rest_framework import status
 from django.db import models
-from app.models import User, Match, Tournament, Notification
+from app.models import User, Match, Tournament, Notifications
 from app.serializer import *
 from django.shortcuts import get_object_or_404
 import ast
@@ -430,16 +430,17 @@ class ManageNotifAPIView(generics.GenericAPIView):
                 player2 = User.objects.get(username=request.data.get('opponent'))
             except User.DoesNotExist:
                 return Response({"detail": "User not found."}, status=status.HTTP_404_NOT_FOUND)
-            new_notification = Notification.objects.create(
+            new_notification = Notifications.objects.create(
                 user_from=current_player,
                 user_to=player2,
-                state=0
+                state=0,
+                type=request.data.get('type')
             )
             return Response({"notification_id": new_notification.id}, status=status.HTTP_201_CREATED)
         elif action == 'update':
             try:
-                notification = Notification.objects.get(id=request.data.get('id'))
-            except Notification.DoesNotExist:
+                notification = Notifications.objects.get(id=request.data.get('id'))
+            except Notifications.DoesNotExist:
                 return Response({"detail": "Notification not found."}, status=status.HTTP_404_NOT_FOUND)
         
             if notification.state == 0:
@@ -456,23 +457,24 @@ class CheckNotifAPIView(generics.GenericAPIView):
         
         if action == 'received':
             try:
-                notification = Notification.objects.get(user_to=current_user, state=0)
+                notification = Notifications.objects.get(user_to=current_user, state=0)
                 response = {
                     "id": notification.id,
                     "from": notification.user_from.username,
                     "to": notification.user_to.username,
+                    "type" : "Pong" if notification.type == 0 else "Oxo"
                 }
                 if current_user.state == 'online':
                     return Response(response, status=status.HTTP_200_OK)
                 return Response({"detail": "Pas disponible."}, status=status.HTTP_200_OK)
-            except Notification.DoesNotExist:
+            except Notifications.DoesNotExist:
                 return Response({"detail": "Pas de notification en attente."}, status=status.HTTP_404_NOT_FOUND)    
         if action == 'sent':
             try:
                 idNotif = request.GET.get('id')
-                notification = Notification.objects.get(id=idNotif)
+                notification = Notifications.objects.get(id=idNotif)
                 return Response({notification.state}, status=status.HTTP_200_OK)
-            except Notification.DoesNotExist:
+            except Notifications.DoesNotExist:
                 return Response({"detail": "La notification n'a pas été trouvée."}, status=status.HTTP_404_NOT_FOUND)
         return Response({"detail": "Action invalide."}, status=status.HTTP_400_BAD_REQUEST) 
         

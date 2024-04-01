@@ -8,14 +8,27 @@
             <canvas id="pongCanvas" width="900" height="450"></canvas>
         </div>
         <div class="invit-game">
-
-            <div id="search">
-                <div class="bar">
-                    <input type="text" id="search-input" placeholder="Rechercher...">
-                    <img class="search notAllowed" onclick="selectPlayer()" src="../static/img/send.svg" alt="">
+            <div class="Pong">
+                <div class="title">Nouvelle partie de Pong</div>
+                <div id="search">
+                    <div class="bar">
+                        <input type="text" id="search-input" placeholder="Rechercher...">
+                        <img class="search notAllowed" onclick="selectPlayer()" src="../static/img/send.svg" alt="">
+                    </div>
+                    <ul class="autocomplete">
+                    </ul>
                 </div>
-                <ul class="autocomplete">
-                </ul>
+            </div>
+            <div class="Oxo">
+                <div class="title">Nouvelle partie de Oxo</div>
+                <div id="search">
+                    <div class="bar">
+                        <input type="text" id="search-input" placeholder="Rechercher...">
+                        <img class="search notAllowed" onclick="selectPlayer()" src="../static/img/send.svg" alt="">
+                    </div>
+                    <ul class="autocomplete">
+                    </ul>
+                </div>
             </div>
             <div class="waiting displayNone">
                 <div class="waiting-msg"></div>

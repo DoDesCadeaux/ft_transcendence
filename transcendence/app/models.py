@@ -74,9 +74,9 @@ class Match(models.Model):
     def __str__(self):
         return f"{self.pk} : {self.player1} VS {self.player2}"
 
-class Notification(models.Model):
+class Notifications(models.Model):
     user_from = models.ForeignKey(User, on_delete=models.CASCADE, related_name='sent_notifications')
     user_to = models.ForeignKey(User, on_delete=models.CASCADE, related_name='received_notifications')
     state = models.PositiveSmallIntegerField(choices=((0, 'waiting'), (1, 'accepted'), (2, 'declined'), (3, 'timeout')), default=0)
-
+    type = models.PositiveSmallIntegerField(choices=((0, 'pong'), (1, 'oxo')), default=0)
 
