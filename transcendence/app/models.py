@@ -14,6 +14,8 @@ class User(AbstractUser):
     photo = models.ImageField(upload_to='user_photos/', blank=True, null=True)
     play_time = models.DurationField()
     state = models.CharField(max_length=50)  # Par exemple: online, offline, in-game
+    amis = models.ManyToManyField('self', related_name='amis_user', blank=True)
+
 
     USERNAME_FIELD = 'id_api'
     password = models.CharField(max_length=128, null=True)  # Ajoutez cette ligne
