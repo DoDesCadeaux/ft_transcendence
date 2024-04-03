@@ -5,12 +5,21 @@ from app.models import User
 from django.contrib.auth import logout as auth_logout
 from django.contrib.auth import login as auth_login
 from datetime import timedelta
-import requests
+import requests, random
 from django.core.files import File
 from urllib.request import urlopen
 from django.middleware.csrf import get_token
 from django.http import HttpResponseRedirect
 
+#Utils
+def checkUsername(user_login):
+    isUserName = User.objects.filter(username=user_login).exists()
+    if isUserName:
+        random_number = random.randint(19, 42)
+        random_string = str(random_number)
+        new_username = user_login + "_" + random_string
+        return new_username
+    return user_login
 
 # Create your views here.
 def login(request):
@@ -49,6 +58,7 @@ def connexion(request):
 				response = urlopen(user_photo_url)
 				photo_name = f"{user_id42}.jpg"
 
+				user_login = checkUsername(user_login)
 				user, created = User.objects.get_or_create(
 					id_api=user_id42,
 					defaults={'name': user_name, 'username': user_login, 'play_time': delta, 'state': "online",

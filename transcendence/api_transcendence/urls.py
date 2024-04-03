@@ -14,5 +14,4 @@ urlpatterns = [
     path('checkNotif/<str:action>/', CheckNotifAPIView.as_view(), name='check_notif'),
     path('checkUsername/', UsernameAlreadyExist.as_view(), name='username_exist'),
     path('friends/<str:action>/', ManageFriends.as_view(), name='friends_list'),
-    
 ]
