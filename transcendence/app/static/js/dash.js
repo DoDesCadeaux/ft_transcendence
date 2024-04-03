@@ -64,7 +64,7 @@ document.body.addEventListener("DOMNodeInserted", function (event) {
         const empty = document.createElement("p");
         empty.classList.add("no-tournament");
         empty.textContent =
-          "Il n'y a aucun tournois, tu peux en toujours en créer un nouveau si tu le souhaites en appuyant sur le bouton plus";
+          "Il n'y a aucun tournois, tu peux en toujours en créer un nouveau si tu le souhaites en appuyant sur le bouton plus.";
         tournament.appendChild(empty);
         return;
       }
@@ -169,20 +169,24 @@ function manageGoBtn(btnGo, element){
 
 function manageSlide() {
   const buttons = document.querySelectorAll(".btn");
-  const slides = document.getElementsByClassName("slide");
-  buttons.forEach((button) => {
-    button.addEventListener("click", (e) => {
-      const calcNextSlide = e.target.id === "next" ? 1 : -1;
-      const slideActive = document.querySelector(".active");
-
-      newIndex = calcNextSlide + [...slides].indexOf(slideActive);
-
-      if (newIndex < 0) newIndex = [...slides].length - 1;
-      if (newIndex >= [...slides].length) newIndex = 0;
-      slides[newIndex].classList.add("active");
-      slideActive.classList.remove("active");
-    });
-  });
+  setTimeout(function() {
+    const slides = document.querySelectorAll(".slide");
+    if (slides.length > 1){
+      buttons.forEach((button) => {
+        button.addEventListener("click", (e) => {
+          const calcNextSlide = e.target.id === "next" ? 1 : -1;
+          const slideActive = document.querySelector(".active");
+    
+          newIndex = calcNextSlide + [...slides].indexOf(slideActive);
+    
+          if (newIndex < 0) newIndex = [...slides].length - 1;
+          if (newIndex >= [...slides].length) newIndex = 0;
+          slides[newIndex].classList.add("active");
+          slideActive.classList.remove("active");
+        });
+      });
+    }
+  }, 1000);
 }
 /****************************************************************************
  * FIN GESTION TOURNOIS
