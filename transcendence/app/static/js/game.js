@@ -165,7 +165,7 @@ function setupDynamicElements() {
 
   (async () => {
     const dataUsers = await fetchGET(URI.USERS);
-    const usersOnline = dataUsers.users.filter(
+    const usersOnline = dataUsers.filter(
       (user) => user.state !== "offline" && user.state !== "in-game"
     );
     const btn_search = document.querySelectorAll("#search .bar .search");

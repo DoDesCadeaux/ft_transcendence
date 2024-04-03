@@ -3,7 +3,7 @@ from rest_framework import generics
 from rest_framework.response import Response
 from rest_framework import status
 from django.db import models
-from app.models import User, Match, Tournament, Notifications
+from app.models import User, Match, Tournament, Notifications, Friendship
 from app.serializer import *
 from django.shortcuts import get_object_or_404
 import ast
@@ -22,16 +22,21 @@ class UserListAPIView(generics.ListAPIView):
     serializer_class = UserListSerializer
 
     def list(self, request, *args, **kwargs):
+        serialized_users = []
         current_user = self.request.user
         queryset = User.objects.exclude(id=current_user.id)
-        serializer = self.get_serializer(queryset, many=True)
+        
+        for user in queryset:
+            serializer = self.get_serializer(user)
+            serialized_data = serializer.data
+            serialized_data['is_friend'] = False
+            
+            if Friendship.objects.filter(user=current_user, friend=user).exists():
+                serialized_data['is_friend'] = True
+                
+            serialized_users.append(serialized_data)
 
-        # Logique personnalisée pour la liste des utilisateurs
-        data = {
-            'users': serializer.data
-        }
-
-        return Response(data)
+        return Response(serialized_users)
 
 class UserUpdateAPIView(generics.UpdateAPIView):
     queryset = User.objects.all()
@@ -478,11 +483,48 @@ class CheckNotifAPIView(generics.GenericAPIView):
                 return Response({"detail": "La notification n'a pas été trouvée."}, status=status.HTTP_404_NOT_FOUND)
         return Response({"detail": "Action invalide."}, status=status.HTTP_400_BAD_REQUEST) 
         
-      
+class UsernameAlreadyExist(generics.GenericAPIView):
+    def get(self, request, *args, **kwargs):
+        current_user = self.request.user
+        new_username = request.GET.get('username')
+        isUserName = User.objects.exclude(id=current_user.id).filter(username=new_username).exists()
+    
+    
+class ManageFriends(generics.GenericAPIView):
+    serializer_class = UserListSerializer
+    def get(self, request, *args, **kwargs):
+        current_user = self.request.user
+        action = kwargs.get('action')
         
+        if action == "update":
+            params = request.GET.get('list')
+            friends = ast.literal_eval(params)
+            Friendship.objects.filter(user=current_user).delete()
+            liste = []
+            
+            for friend in friends:
+                new_friend = get_object_or_404(User, id=friend)
+                new_friendship = Friendship(user=current_user, friend=new_friend)
+                new_friendship.save()
+                liste.append(new_friend.username) 
+                
+            response = {"friendList" : liste}
+            return Response(response, status=status.HTTP_200_OK)
+        if action == "get":
+            liste = []
+            # serializer = self.serializer_class(current_user)
+            # liste.append(serializer.data)
+            user_friends = Friendship.objects.filter(user=current_user)
+            for user_friend in user_friends:
+                serializer = self.serializer_class(user_friend.friend)
+                liste.append(serializer.data)
+                
+            return Response({"users" : liste}, status=status.HTTP_200_OK)
+        return Response({"detail": "Action invalide."}, status=status.HTTP_400_BAD_REQUEST) 
+                    
+    
         
-        
-        
+  
         
 
         

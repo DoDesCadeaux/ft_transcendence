@@ -21,10 +21,8 @@ document.body.addEventListener("DOMNodeInserted", function (event) {
       globalStatMatch.textContent = msg;
     })();
     globalStatTournament = document.querySelector("#glabalStatTournament");
-    // globalStatTournament.textContent = "Zéro tournoi a ton actif";
     (async () => {
       const data = await fetchGET(URI.TOURNAMENTWON);
-      console.log(data)
       var msg =
         data.total == 0
           ? "Zéro tournoi a ton actif"
@@ -75,7 +73,6 @@ document.body.addEventListener("DOMNodeInserted", function (event) {
         fetch("tournament_fragment/")
           .then((response) => response.text())
           .then((data) => {
-            console.log(dataTournament[i])
             let li = document.createElement("li");
             setLi(li, data, element, i);
             tournament.appendChild(li);
@@ -160,7 +157,6 @@ function displayGoBtn(btnGo, element) {
 
 function manageGoBtn(btnGo, element){
   if (btnGo[0].style.display != "none" && element.players[1]){
-    console.log(`le bouton est actif pour les joueurs ${element.players[0].username} et ${element.players[1].username} dans le tournois ${element.name}`)
     btnGo[0].style.cursor = "pointer";
     btnGo[0].onclick = ()=> sentNotification(element.players[1].username, element.id, 0)
   }
@@ -281,7 +277,6 @@ function handleCreateTournament(input, warning) {
     })
       .then((response) => {
         response.json();
-        console.log(response);
         nameClear = decodeURIComponent(name);
         contentNotification.textContent = `Le tournoi ${nameClear} a bien été créé !`;
       })
@@ -355,13 +350,9 @@ document.body.addEventListener("DOMNodeInserted", function (event) {
 function getAndUpdateData(){
 
   const params = JSON.stringify(toggleList);
-  console.log(toggleList)
 
-// URL de l'API
   const url = `http://localhost:8000/api/stats/?list=${params}`;
-  console.log(url)
 
-// Effectuer la requête en utilisant fetch avec la méthode GET
   fetch(url)
     .then(response => response.json())
     .then(data => updateGraph(data))
@@ -369,19 +360,29 @@ function getAndUpdateData(){
 
 }
 
-function fillParams() {
+function fillParams(data) {
   toggles = document.querySelectorAll(".toggle");
   toggles.forEach((toggle) => {
     toggle.parentNode.removeChild(toggle);
   });
   const boxes = [];
-  (async () => {
-    const data = await fetchGET(URI.USERS);
-    addToggle(true, CURRENT_USER, boxes);
-    data.users.forEach((user) => {
+  addToggle(true, CURRENT_USER, boxes);
+  if (data){
+    data.forEach((user) => {
       addToggle(false, user, boxes);
     });
-  })();
+  }
+  else {
+    (async () => {
+      const data = await fetchGET(URI.USERS);
+      data.forEach((user) => {
+        addToggle(false, user, boxes);
+      });
+    })();
+
+  }
+
+
 }
 
 function handleChange(event) {
@@ -394,12 +395,10 @@ function handleChange(event) {
   else if (!isChecked && index !== -1) toggleList.splice(index, 1);
 
   getAndUpdateData();
-
-  // console.log(toggleList)
-  // updateGraph();
 }
 
 function addToggle(state, player, boxes) {
+  if (player.is_friend == false) return ;
   const panel = document.querySelector(".comp-panel");
 
   const label = document.createElement("label");

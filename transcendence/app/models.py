@@ -14,7 +14,8 @@ class User(AbstractUser):
     photo = models.ImageField(upload_to='user_photos/', blank=True, null=True)
     play_time = models.DurationField()
     state = models.CharField(max_length=50)  # Par exemple: online, offline, in-game
-    amis = models.ManyToManyField('self', related_name='amis_user', blank=True)
+    amis = models.ManyToManyField('self', blank=True)
+    
 
 
     USERNAME_FIELD = 'id_api'
@@ -82,3 +83,7 @@ class Notifications(models.Model):
     state = models.PositiveSmallIntegerField(choices=((0, 'waiting'), (1, 'accepted'), (2, 'declined'), (3, 'timeout')), default=0)
     type = models.PositiveSmallIntegerField(choices=((0, 'pong'), (1, 'oxo')), default=0)
 
+
+class Friendship(models.Model):
+    user = models.ForeignKey(User, related_name='user_friendships', on_delete=models.CASCADE)
+    friend = models.ForeignKey(User, related_name='friend_friendships', on_delete=models.CASCADE)
