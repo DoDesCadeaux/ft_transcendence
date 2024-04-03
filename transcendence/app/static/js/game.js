@@ -130,7 +130,6 @@ function playPong(opponent, tournament_id) {
 
   invit.classList.add("displayNone");
   pong.classList.remove("displayNone");
-  searchBar.classList.remove("displayNone");
   waitingBloc.classList.add("displayNone");
 
   gameLoop();
