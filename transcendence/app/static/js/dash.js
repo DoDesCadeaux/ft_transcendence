@@ -62,6 +62,7 @@ document.body.addEventListener("DOMNodeInserted", function (event) {
       const dataTournament = await fetchGET(URI.DATA_TOURNAMENT);
       if (dataTournament.length < 1) {
         const empty = document.createElement("p");
+        empty.classList.add("no-tournament");
         empty.textContent =
           "Il n'y a aucun tournois, tu peux en toujours en créer un nouveau si tu le souhaites en appuyant sur le bouton plus";
         tournament.appendChild(empty);

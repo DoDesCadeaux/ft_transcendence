@@ -126,13 +126,13 @@ cursor: pointer;
 /****************************************************************************
  * Page
  *
- * Style de la page et se son content 
+ * Style de la page + right banner et se son content 
  * c'est dans le content que les différents blocs suivant vont etre injectés
  *      - Dashboard
  *      - Profile
  *      - Game
  ***************************************************************************/
- .page {
+.page {
     width: 100%;
     height: calc(100vh - 125px);
     display: flex;
@@ -186,11 +186,9 @@ color: var(--white);
   cursor: pointer;
   position: relative;
 }
-
 .custom-checkbox input {
   display: none;
 }
-
 .checkbox-svg {
   position: absolute;
   top: 0;
@@ -200,29 +198,86 @@ color: var(--white);
   background-image: url("./img/unfollow.svg"); /* Chemin vers le SVG non coché */
   background-size: contain;
 }
-
-
 .custom-checkbox input:checked + .checkbox-svg {
   background-image: url("./img/follow.svg"); /* Chemin vers le SVG coché */
 }
 /****************************************************************************
- * FIN Page
+ * FIN Page et Right banner
  ***************************************************************************/
 /****************************************************************************
  * DASHBOARD
  *
  * Style du dashboard et de tous ces components
  ***************************************************************************/
-
-
+ .dash {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  grid-template-rows: repeat(6, 1fr);
+  gap: 25px;
+ }
+ .dash .card {
+    background-color: var(--bg);
+    display: flex;
+    flex-direction: column;
+    border-radius: 15px;
+ }
+ .card .card--title {
+    color: var(--orange);
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-top: 15px;
+ }
         /****************************************************************************
-         * VIGNETTES
+         * VIGNETTES de stats globales
          *
          * Contenu
          ***************************************************************************/
-        
-        
-        
+        .card.stats {
+          grid-row: 1 / 3;
+          grid-column: 2/6;
+          display: grid;
+          align-items: center;
+          grid-template-columns: repeat(4, 1fr);
+          padding: 0 10px 0 10px;
+          gap: 25px;
+        }
+        .stats .item-card {
+          margin: 30px 5px 5px 5px;
+          border-radius: 15px;
+          background-color: var(--bg-body);
+          position: relative;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          height: 55%;
+        }
+        .stats .item-card .icon {
+          width: 75%;
+          height: 75%;
+          margin-top: -23%;
+        }
+        .stats .item-card .text-title {
+          width: 100%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: var(--white);
+          font-size: medium;
+        }
+        .stats .item-card .text-content {
+          width: 100%;
+          /* height: 40%; */
+          padding-top: 20px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: var(--orange);
+          font-size: larger;
+        }
         /****************************************************************************
          * FIN VIGNETTES
          ***************************************************************************/
@@ -232,9 +287,20 @@ color: var(--white);
          *
          * Contenu
          ***************************************************************************/
-        
-        
-        
+         .card.new-game {
+          grid-row: 1 / 4;
+          grid-column: 1;
+          /* padding-left: 15px; */
+          display: flex;
+          align-items: center;
+          justify-content: space-around;
+          flex-direction: column;
+         }
+         .new-game .new-game--icon {
+            width: 280px;
+            padding: 50px 0 50px 0;
+            cursor: pointer;
+         }
         /****************************************************************************
          * FIN NOUVEAU MATCH
          ***************************************************************************/
@@ -244,9 +310,95 @@ color: var(--white);
          *
          * Contenu
          ***************************************************************************/
-        
-        
-        
+         .card.new-tournament {
+          grid-row: 4 /7;
+          grid-column: 1;
+         }
+         .new-tournament .card--title .create {
+          font-size: xx-large;
+          margin: 0 0 0 20px;
+          /* margin-left: 20px; */
+          background: var(--orange);
+          padding: 0 3px 0 3px;
+          border-radius: 15px;
+          width: 30px;
+          height: 30px;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          color: var(--bg);
+          cursor: pointer;
+        }
+        .include-tournament .no-tournament{
+          padding: 20px ;
+          text-align: justify;
+          line-height: 1.5;
+          color: var(--white);
+        }
+              /****************************************************************************
+               * graphique-tournament
+               *
+               * Contenu
+               ***************************************************************************/
+               .tournament-name {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                padding: 15px 0;
+                font-size: medium;
+                color: var(--orange);
+              }
+              .tournament-name .join {
+                margin-left: 15%;
+              }
+              .graph-tournament {
+                width: 100%;
+                display: flex;
+                justify-content: center;
+                padding: 20px 0;
+              }
+              /****************************************************************************
+               * FIN graphique-tournament
+               ***************************************************************************/
+              /****************************************************************************
+              * Carousel des tournois
+              *
+              * Gestion du carousel
+              ***************************************************************************/
+              .new-tournament {
+                position: relative;
+              }
+              .new-tournament button.btn {
+                position: absolute;
+                background: none;
+                border: none;
+                outline: none;
+                font-size: 2rem;
+                z-index: 2;
+                cursor: pointer;
+                color: var(--orange);
+                transform: translateY(-50%);
+                top: 88%;
+              }
+              #prev {
+                left: 50px;
+              }
+              #next {
+                right: 50px;
+              }
+              .slide {
+                position: absolute;
+                height: 100%;
+                width: 100%;
+                transition: 0.4s ease-in-out;
+                display: none;
+              }
+              .slide.active {
+                display: block;
+              }
+              /****************************************************************************
+              * FIN Carousel des tournois
+              ***************************************************************************/
         /****************************************************************************
          * FIN TOURNOIS
          ***************************************************************************/
@@ -257,13 +409,13 @@ color: var(--white);
          * Contenu
          ***************************************************************************/
         
-        .advencedStats {
+        .card.advencedStats {
             grid-row: 3/7;
             grid-column: 2 /6;
             display: flex;
             flex-direction: column;
          }
-        .advencedStats .statistics {
+        .card.advencedStats .statistics {
             flex: 1;
             width: 100%;
             display: flex;
@@ -370,288 +522,119 @@ color: var(--white);
 /****************************************************************************
  * FIN DASHBOARD
  ***************************************************************************/
-    .dash {
-      width: 100%;
-      height: 100%;
-      display: grid;
-      grid-template-columns: repeat(5, 1fr);
-      grid-template-rows: repeat(6, 1fr);
-      gap: 25px;
 
-      .card {
-        background-color: var(--bg);
-        display: flex;
-        flex-direction: column;
-        border-radius: 15px;
-
-        .card--title {
-          color: var(--orange);
-          height: 30px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          padding-top: 15px;
-
-          .create {
-            font-size: xx-large;
-            margin: 0 0 0 20px;
-            /* margin-left: 20px; */
-            background: var(--orange);
-            padding: 0 3px 0 3px;
-            border-radius: 15px;
-            width: 30px;
-            height: 30px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            color: var(--bg);
-            cursor: pointer;
-          }
-        }
-
-        .card--content {
-          flex: 1;
-          color: var(--white);
-          width: 100%;
-        }
-      }
-
-      .new-game {
-        grid-row: 1 / 4;
-        grid-column: 1;
-        /* padding-left: 15px; */
-        display: flex;
-        align-items: center;
-        justify-content: space-around;
-        flex-direction: column;
-
-        .new-game--content {
-          display: grid;
-          grid-template-rows: repeat(3, 1fr);
-          justify-items: center;
-          width: 100%;
-          /* position: relative; */
-
-          ul {
-            color: var(--white-sec);
-            margin: 10px 0 0 20px;
-            width: 100%;
-            height: 3.5rem;
-          }
-
-          .invitation-sent,
-          .invitation-received,
-          .invitation-send {
-            width: 100%;
-            padding-left: 10px;
-            padding-top: 10px;
-          }
-        }
-
-        .new-game--icon {
-          width: 280px;
-          padding: 50px 0 50px 0;
-          cursor: pointer;
-        }
-      }
-
-      .stats {
-        grid-row: 1 / 3;
-        grid-column: 2/6;
-        display: grid;
-        align-items: center;
-        grid-template-columns: repeat(4, 1fr);
-        padding: 0 10px 0 10px;
-        gap: 25px;
-
-        .item-card {
-          margin: 30px 5px 5px 5px;
-          border-radius: 15px;
-          background-color: var(--bg-body);
-          position: relative;
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          height: 55%;
-
-          .icon {
-            width: 75%;
-            height: 75%;
-            margin-top: -23%;
-          }
-
-          .text-title {
-            width: 100%;
-            /* height: 40%; */
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--white);
-            font-size: medium;
-          }
-
-          .text-content {
-            width: 100%;
-            /* height: 40%; */
-            padding-top: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--orange);
-            font-size: larger;
-          }
-        }
-      }
-
-      .new-tournament {
-        grid-row: 4 /7;
-        grid-column: 1;
-
-        .join {
-          margin-left: 15%;
-        }
-
-        .tournament-name {
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          padding: 15px 0;
-          font-size: medium;
-          color: var(--orange);
-        }
-        .graph-tournament {
-          width: 100%;
-          display: flex;
-          justify-content: center;
-          padding: 20px 0;
-        }
-      }
-
-      
-    }
-
-
-  .profile {
-    width: 100%;
-    height: 100%;
-    background-color: var(--bg);
+/****************************************************************************
+ * Profil
+ *
+ * Profil avec preview et formulaire
+ ***************************************************************************/
+ .profile {
+  width: 100%;
+  height: 100%;
+  background-color: var(--bg);
+  border-radius: 15px;
+  display: flex;
+  justify-content: center;
+ }
+  .profile-content {
+    margin-top: 5rem;
+    width: 50%;
+    height: 70%;
+    background-color: var(--bg-body);
     border-radius: 15px;
     display: flex;
-    /* align-items: center; */
+    align-items: center;
     justify-content: center;
-
-    .profile-content {
-      margin-top: 5rem;
-      width: 50%;
-      height: 70%;
-      background-color: var(--bg-body);
-      border-radius: 15px;
+  }
+  .profile-content .preview,
+  .profile-content .form-profile {
+    height: 100%;
+  }
+  .profile-content .preview {
+      width: 45%;
       display: flex;
       align-items: center;
       justify-content: center;
-
-      .preview,
-      .form-profile {
-        height: 100%;
-      }
-
-      .preview {
-        width: 45%;
-        /* background: red; */
-        display: flex;
-        align-items: center;
-        justify-content: center;
-
-        .preview-card {
-          width: 70%;
-          height: 70%;
-          /* background-color: pink; */
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          justify-content: center;
-
-          .preview-top {
-            background-color: var(--orange);
-            width: 100%;
-            height: 30%;
-            border-top-right-radius: 15px;
-            border-top-left-radius: 15px;
-            position: relative;
-            display: flex;
-            /* align-items: center; */
-            justify-content: center;
-
-            .preview-img {
-              width: 150px;
-              height: 150px;
-              border-radius: 100%;
-              position: absolute;
-              object-fit: cover;
-              top: 50%;
-            }
-          }
-
-          .preview-bottom {
-            width: 100%;
-            flex: 1;
-            background-color: rgba(247, 138, 80, 0.8);
-            border-bottom-right-radius: 15px;
-            border-bottom-left-radius: 15px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            color: var(--white-sec);
-
-            .preview-name,
-            .preview-username {
-              display: flex;
-              flex-direction: column;
-              align-items: center;
-              padding-top: 25px;
-            }
-
-            .preview-name span,
-            .preview-username span {
-              font-size: larger;
-              font-weight: bolder;
-            }
-          }
-        }
-      }
-
-      .form-profile {
-        flex: 1;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        flex-direction: column;
-        border-left: 15px solid var(--bg);
-        color: var(--white);
-        gap: 50px;
-        padding: 50px;
-
-        #form-profile {
-          display: flex;
-          flex-direction: column;
-          gap: 10px;
-
-          input:focus {
-            outline: none;
-          }
-        }
-
-        .update-profile {
-          background-color: var(--orange);
-          color: var(--white-sec);
-          padding: 5px;
-          border-radius: 10px;
-          cursor: pointer;
-        }
-      }
-    }
   }
+  .preview .preview-card {
+    width: 70%;
+    height: 70%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  .preview-card .preview-top {
+    background-color: var(--orange);
+    width: 100%;
+    height: 30%;
+    border-top-right-radius: 15px;
+    border-top-left-radius: 15px;
+    position: relative;
+    display: flex;
+    justify-content: center;
+  }
+  .preview-top .preview-img {
+    width: 150px;
+    height: 150px;
+    border-radius: 100%;
+    position: absolute;
+    object-fit: cover;
+    top: 50%;
+  }
+  .preview-card .preview-bottom {
+    width: 100%;
+    flex: 1;
+    background-color: rgba(247, 138, 80, 0.8);
+    border-bottom-right-radius: 15px;
+    border-bottom-left-radius: 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: var(--white-sec);
+  }
+  .preview-bottom .preview-name,
+  .preview-bottom .preview-username {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 25px;
+  }
+  .preview-bottom .preview-name span,
+  .preview-bottom .preview-username span {
+    font-size: larger;
+    font-weight: bolder;
+  }
+  .profile-content .form-profile {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      border-left: 15px solid var(--bg);
+      color: var(--white);
+      gap: 50px;
+      padding: 50px;
+  }
+  .form-profile #form-profile {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .form-profile #form-profile input:focus {
+      outline: none;
+    }
+  .form-profile .update-profile {
+    background-color: var(--orange);
+    color: var(--white-sec);
+    padding: 5px;
+    border-radius: 10px;
+    cursor: pointer;
+  }
+/****************************************************************************
+ * FIN Profil
+ ***************************************************************************/
 
   .game {
     width: 100%;
@@ -779,7 +762,6 @@ color: var(--white);
           display: flex;
           align-items: center;
           flex-direction: column;
-          /* background: red; */
           margin-top: 150px;
           color: var(--orange);
 
@@ -931,8 +913,6 @@ color: var(--white);
   }
 }
 
-
-
 /****************************************************************************
  * Modale de notification
  *
@@ -986,42 +966,40 @@ color: var(--white);
  * FIN Modale de notification
  ***************************************************************************/
 
+
+
 /****************************************************************************
-* Carousel des tournois
-*
-* Gestion du carousel
-***************************************************************************/
-.new-tournament {
-  position: relative;
-}
-.new-tournament button.btn {
-  position: absolute;
-  background: none;
-  border: none;
-  outline: none;
-  font-size: 2rem;
-  z-index: 2;
-  cursor: pointer;
-  color: var(--orange);
-  transform: translateY(-50%);
-  top: 88%;
-}
-#prev {
-  left: 50px;
-}
-#next {
-  right: 50px;
-}
-.slide {
-  position: absolute;
-  height: 100%;
+ * QUID ???
+ *
+ * Pas sure que ce soit toujours util
+ ***************************************************************************/
+.card--content {
+  flex: 1;
+  color: var(--white);
   width: 100%;
-  transition: 0.4s ease-in-out;
-  display: none;
 }
-.slide.active {
-  display: block;
+.new-game--content {
+  display: grid;
+  grid-template-rows: repeat(3, 1fr);
+  justify-items: center;
+  width: 100%;
+
+  ul {
+    color: var(--white-sec);
+    margin: 10px 0 0 20px;
+    width: 100%;
+    height: 3.5rem;
+  }
+
+  .invitation-sent,
+  .invitation-received,
+  .invitation-send {
+    width: 100%;
+    padding-left: 10px;
+    padding-top: 10px;
+  }
 }
+
 /****************************************************************************
-* FIN Carousel des tournois
-***************************************************************************/
+ * FIN QUID ???
+ ***************************************************************************/
