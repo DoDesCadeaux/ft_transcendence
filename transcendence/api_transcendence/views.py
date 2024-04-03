@@ -488,6 +488,8 @@ class UsernameAlreadyExist(generics.GenericAPIView):
         current_user = self.request.user
         new_username = request.GET.get('username')
         isUserName = User.objects.exclude(id=current_user.id).filter(username=new_username).exists()
+        return Response({"result": isUserName}, status=status.HTTP_200_OK) 
+        
     
     
 class ManageFriends(generics.GenericAPIView):
@@ -510,16 +512,6 @@ class ManageFriends(generics.GenericAPIView):
                 
             response = {"friendList" : liste}
             return Response(response, status=status.HTTP_200_OK)
-        if action == "get":
-            liste = []
-            # serializer = self.serializer_class(current_user)
-            # liste.append(serializer.data)
-            user_friends = Friendship.objects.filter(user=current_user)
-            for user_friend in user_friends:
-                serializer = self.serializer_class(user_friend.friend)
-                liste.append(serializer.data)
-                
-            return Response({"users" : liste}, status=status.HTTP_200_OK)
         return Response({"detail": "Action invalide."}, status=status.HTTP_400_BAD_REQUEST) 
                     
     
