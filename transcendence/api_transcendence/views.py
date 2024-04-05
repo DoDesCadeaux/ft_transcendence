@@ -76,50 +76,38 @@ class Blockchain(generics.GenericAPIView):
         return self.web3.eth.contract(address=contract_address, abi=contract_abi)
 
     def getResult(self, id):
-        self.get(id, action='get')
+        self.getMethod(id)
 
     def getMethod(self, id, *args, **kwargs):
-        action = kwargs.get('action')
         contract = self.get_contract()
 
-        if action == 'get':
-            tournament_id = id
+        # Call the smart contract function to retrieve tournament info
+        result = contract.functions.getTournamentResult(id).call({'from': self.web3.eth.accounts[0]})
 
-            # Call the smart contract function to retrieve tournament info
-            result = contract.functions.getTournamentResult(tournament_id).call({'from': self.web3.eth.accounts[0]})
-
-            response = {
-                "detail": "Informations récupérés avec succès.",
-                "tournament_id": tournament_id,
-            }
-            return Response(response, status=status.HTTP_200_OK)
-
-        else:
-            return Response({"detail": "Action invalide."}, status=status.HTTP_400_BAD_REQUEST)
+        response = {
+            "detail": "Informations récupérés avec succès.",
+            "tournament_id": result,
+        }
+        return Response(response, status=status.HTTP_200_OK)
 
     def update(self, id, tournament_name, winner_name):
-        self.put(id, tournament_name, winner_name, action='update')
+        self.putMethod(id, tournament_name, winner_name)
 
     def putMethod(self, id, tournament_name, winner_name, *args, **kwargs):
-        action = kwargs.get('action')
         contract = self.get_contract()
+        
+        # Call the smart contract function to update tournament info
+        tx_hash = contract.functions.updateResult(id, tournament_name, winner_name).transact({'from': self.web3.eth.accounts[0]})
+        # Wait for transaction to be mined
+        self.web3.eth.wait_for_transaction_receipt(tx_hash)
 
-        if action == 'update':
-            # Call the smart contract function to update tournament info
-            tx_hash = contract.functions.updateResult(id, tournament_name, winner_name).transact({'from': self.web3.eth.accounts[0]})
-            # Wait for transaction to be mined
-            self.web3.eth.wait_for_transaction_receipt(tx_hash)
-
-            response = {
-                "detail": "Mis à jour avec succès.",
-                "id": id,
-                "tournament_name": tournament_name,
-                "winner_name": winner_name,
-            }
-            return Response(response, status=status.HTTP_200_OK)
-
-        else:
-            return Response({"detail": "Action invalide."}, status=status.HTTP_400_BAD_REQUEST)
+        response = {
+            "detail": "Mis à jour avec succès.",
+            "id": id,
+            "tournament_name": tournament_name,
+            "winner_name": winner_name,
+        }
+        return Response(response, status=status.HTTP_200_OK)
 
 from .views import Blockchain
 blockchain = Blockchain()
