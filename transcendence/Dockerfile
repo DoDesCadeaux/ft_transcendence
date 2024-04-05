@@ -13,6 +13,7 @@ RUN apt-get install -y nodejs
 RUN npm install -g truffle
 RUN npm install -g ganache-cli
 RUN npm install --save ethers
+RUN pip install web3
 
 
 COPY requirements.txt /transcendence/

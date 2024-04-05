@@ -1,6 +1,7 @@
 # api/views.py
 from rest_framework import generics
 from rest_framework.response import Response
+from rest_framework.request import Request
 from rest_framework import status
 from django.db import models
 from app.models import User, Match, Tournament, Notifications, Friendship
@@ -9,6 +10,119 @@ from django.shortcuts import get_object_or_404
 import ast
 from django.db.models import Avg, ExpressionWrapper, F, fields, Sum
 from datetime import timedelta
+
+from django.http import JsonResponse
+from web3 import Web3
+import json
+import urllib.request
+from django.http import QueryDict
+
+# def updateTournament(request):
+#     if request.method == 'POST':
+#         id = int(request.POST.get('id'))
+#         tournament_name = request.POST.get('tournament_name')
+#         winner_name = request.POST.get('winner_name')
+
+#         # Call the smart contract function to update tournament info
+#         tx_hash = contract.functions.updateResult(id, tournament_name, winner_name).transact()
+
+#         # Wait for transaction to be mined
+#         web3.eth.waitForTransactionReceipt(tx_hash)
+
+#         return JsonResponse({'message': 'Tournament result updated successfully'})
+
+#     else:
+#         return JsonResponse({'error': 'Only POST requests are allowed'})
+
+# def getTournament(request):
+#     if request.method == 'GET':
+#         tournament_address = request.GET.get('tournament_address')
+
+#         # Call the smart contract function to retrieve tournament info
+#         result = contract.functions.getTournamentResult(tournament_address).call()
+
+#         tournament_id, tournament_name, winner_name = result
+#         return JsonResponse({'tournament_id': tournament_id, 'tournament_name': tournament_name, 'winner_name': winner_name})
+#     else:
+#         return JsonResponse({'error': 'Only GET requests are allowed'})
+
+
+class Blockchain(generics.GenericAPIView):
+    web3 = Web3(Web3.HTTPProvider('http://host.docker.internal:7545'))
+
+    @staticmethod
+    def fetchContractABI():
+        try:
+            with open('./blockchain/build/contracts/PongTournament.json', 'r') as file:
+                contract_data = json.load(file)
+                abi = contract_data.get('abi')
+                if abi:
+                    return abi
+                else:
+                    raise ValueError("ABI not found in contract JSON file")
+        except FileNotFoundError:
+            print("Contract JSON file not found")
+        except json.JSONDecodeError:
+            print("Error decoding JSON file")
+        except Exception as e:
+            print("Error:", e)
+
+    def get_contract(self):
+        contract_abi = self.fetchContractABI()
+
+        with open('./blockchain/tempContractAddress.txt', 'r') as file:
+            contract_address = file.read().strip()
+
+        return self.web3.eth.contract(address=contract_address, abi=contract_abi)
+
+    def getResult(self, id):
+        self.get(id, action='get')
+
+    def getMethod(self, id, *args, **kwargs):
+        action = kwargs.get('action')
+        contract = self.get_contract()
+
+        if action == 'get':
+            tournament_id = id
+
+            # Call the smart contract function to retrieve tournament info
+            result = contract.functions.getTournamentResult(tournament_id).call({'from': self.web3.eth.accounts[0]})
+
+            response = {
+                "detail": "Informations récupérés avec succès.",
+                "tournament_id": tournament_id,
+            }
+            return Response(response, status=status.HTTP_200_OK)
+
+        else:
+            return Response({"detail": "Action invalide."}, status=status.HTTP_400_BAD_REQUEST)
+
+    def update(self, id, tournament_name, winner_name):
+        self.put(id, tournament_name, winner_name, action='update')
+
+    def putMethod(self, id, tournament_name, winner_name, *args, **kwargs):
+        action = kwargs.get('action')
+        contract = self.get_contract()
+
+        if action == 'update':
+            # Call the smart contract function to update tournament info
+            tx_hash = contract.functions.updateResult(id, tournament_name, winner_name).transact({'from': self.web3.eth.accounts[0]})
+            # Wait for transaction to be mined
+            self.web3.eth.wait_for_transaction_receipt(tx_hash)
+
+            response = {
+                "detail": "Mis à jour avec succès.",
+                "id": id,
+                "tournament_name": tournament_name,
+                "winner_name": winner_name,
+            }
+            return Response(response, status=status.HTTP_200_OK)
+
+        else:
+            return Response({"detail": "Action invalide."}, status=status.HTTP_400_BAD_REQUEST)
+
+from .views import Blockchain
+blockchain = Blockchain()
 
 class UserInfoAPIView(generics.ListAPIView):
     serializer_class = UserListSerializer
@@ -112,9 +226,9 @@ class CreateFinishMatchAPIView(generics.GenericAPIView):
             except User.DoesNotExist:
                 return Response({"detail": "User not found."}, status=status.HTTP_404_NOT_FOUND)
             new_match = Match.objects.create(
-                player1=current_player,
-                player2=player2,
-                tournament_id=request.data.get('tournament')  # Assurez-vous de récupérer ou de passer l'ID du tournoi
+                player1 = current_player,
+                player2 = player2,
+                tournament_id = request.data.get('tournament')  # Assurez-vous de récupérer ou de passer l'ID du tournoi
             )
             response = {
                 "match_id" : new_match.id,
@@ -160,6 +274,22 @@ class CreateFinishMatchAPIView(generics.GenericAPIView):
             match.player1.save()
             match.player2.save()
             match.save()
+            
+            tournament_id = request.data.get('id')
+            if tournament_id is None:
+                # Handle the case when tournament_id is None
+                # For example, return an error response
+                return Response({"detail": "Tournament ID is missing."}, status=status.HTTP_400_BAD_REQUEST)
+
+            # If tournament_id is not None, convert it to an integer
+            tournament_id_int = int(tournament_id)
+            tournament_id_str = str(tournament_id)
+            winner_id_str = str(match.winner_id)
+            print("tournament_id_str = ", tournament_id_str, "\ntournament_id_int = ", tournament_id_int, "\nwinnner_str = ", winner_id_str) 
+            try:
+                blockchain.update(tournament_id_int, tournament_id_str, winner_id_str) #Change arguments!
+            except Match.DoesNotExist:
+                return Response({"detail": "Match not found. blockchain !!!"}, status=status.HTTP_404_NOT_FOUND)
 
             return Response({"message": "Le match a été mis à jour"}, status=status.HTTP_200_OK)
         return Response({"detail": "Invalid action."}, status=status.HTTP_404_NOT_FOUND)
