@@ -104,7 +104,7 @@ class Match(models.Model):
 class OxoMatch(models.Model):
     player1 = models.ForeignKey(User, on_delete=models.CASCADE, related_name='oxo_matches_as_player1')
     player2 = models.ForeignKey(User, on_delete=models.CASCADE, related_name='oxo_matches_as_player2')
-    winner = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='oxo_matches_won')
+    winner = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name='oxo_matches_won')
     match_duration = models.DurationField(null=True)
     time_date = models.DateTimeField(default=timezone.now)
 

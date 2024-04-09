@@ -22,35 +22,37 @@ const combinaisonsWin = [
 
 var cellules, dataOxo;
 
-startGameOxo();
 
 function setAsyncVariablesOxo(dataMatch){
     cellules = document.querySelectorAll('.cell');
+    console.log(cellules)
     dataOxo = dataMatch;
+    console.log(dataOxo);
+    startGameOxo()
 }
 
-function bouttonAI()
-{
-    matchIA = true;
-    for (var i = 0; i < cellules.length; i++) 
-    {
-        cellules[i].removeEventListener('click', turnClick, false);
-        cellules[i].removeEventListener('click', turnClickPlayer, false);
-    }
-    startGameOxo();
+// function bouttonAI()
+// {
+//     matchIA = true;
+//     for (var i = 0; i < cellules.length; i++) 
+//     {
+//         cellules[i].removeEventListener('click', turnClick, false);
+//         cellules[i].removeEventListener('click', turnClickPlayer, false);
+//     }
+//     startGameOxo();
 
-}
+// }
 
-function bouttonPlayer()
-{
-    matchIA = false;
-    for (var i = 0; i < cellules.length; i++) 
-    {
-        cellules[i].removeEventListener('click', turnClick, false);
-        cellules[i].removeEventListener('click', turnClickPlayer, false);
-    }
-    startGameOxo();
-}
+// function bouttonPlayer()
+// {
+//     matchIA = false;
+//     for (var i = 0; i < cellules.length; i++) 
+//     {
+//         cellules[i].removeEventListener('click', turnClick, false);
+//         cellules[i].removeEventListener('click', turnClickPlayer, false);
+//     }
+//     startGameOxo();
+// }
 
 /*
     Agit comme un point d'entrée pour démarrer le jeu, en choisissant le bon type de jeu en 
@@ -58,7 +60,9 @@ function bouttonPlayer()
 */
 function startGameOxo() 
 {
-    setAsyncVariablesOxo(null);
+    console.log(dataOxo)
+    console.log(cellules)
+    startTimer();
     if (matchIA)
         startMatchIA();
     else
@@ -154,6 +158,7 @@ function turnClickPlayer(square) {
             // Vérifie s'il y a un gagnant après chaque coup joué
             let gameWon = checkWin(baseTableau, player1Turn ? oPlayer : xPlayer);
             if (gameWon) {
+                console.log("turnClickPlayer")
                 // Si un joueur gagne, appelle endGame() pour terminer la partie
                 endGameOxo(gameWon);
                 return; // Sort de la fonction pour éviter de passer au tour suivant
@@ -176,9 +181,11 @@ function tour_suivant(caseId, objectPlayer)
 {
     baseTableau[caseId] = objectPlayer;
     document.getElementById(caseId).innerText = objectPlayer;
-    let gameWon = checkWin(baseTableau, objectPlayer);
-    if (gameWon) 
-        endGameOxo(gameWon)
+    // let gameWon = checkWin(baseTableau, objectPlayer);
+    // if (gameWon){
+    //     console.log("tour_suivqnt")
+    //     endGameOxo(gameWon)
+    // }
 }
 
 /*
@@ -223,9 +230,31 @@ function endGameOxo(gameWon)
     }
     if (matchIA)
         getWinner(gameWon.player == oPlayer ? "Gagné!" : "Perdu!");
-    else
-        getWinner(gameWon.player == oPlayer ? "Player 1 WIN!" : "Player 2 WIN!");
+    else{
+        winner = gameWon.player == oPlayer ? dataOxo.player1 : dataOxo.player2;
+        getWinner(winner);
+    }
     
+        stopTimer();
+    //     console.log(getGameDuration());
+    //     const formData = new FormData();
+    // formData.append("id", dataOxo.match_id);
+    // const winner  = gameWon.player == oPlayer ? dataOxo.player1.id  : dataOxo.player2.id
+    // formData.append("winner", winner);
+    // formData.append("match_duration", getGameDuration());
+
+    // fetch(`/api/oxo/finish/`, {
+    //     method: "POST",
+    //     body: formData,
+    //     headers: {
+    //       "X-CSRFToken": csrftoken,
+    //     },
+    //   })
+    // .then((response) => { return response.json(); })
+    // .then((data) => { console.log(data); })
+    // .catch((error) => {
+    //     console.error("Erreur lors la mise a jour du match :", error);
+    // });
     
 }
 
@@ -235,7 +264,35 @@ function endGameOxo(gameWon)
 function getWinner(whoWin) 
 {
     document.querySelector(".endgame").style.display = "flex";
-    document.querySelector(".endgame .text").innerText = whoWin;
+    var winner = null;
+    if (whoWin){
+        winner = whoWin.id
+        console.log(whoWin.id)
+        document.querySelector(".endgame .text").innerText = `${whoWin.username} a gagné`;
+    }
+    else
+        document.querySelector(".endgame .text").innerText = `Match null`;
+    
+        stopTimer();
+        console.log(getGameDuration());
+        const formData = new FormData();
+    formData.append("id", dataOxo.match_id);
+    if (winner)
+        formData.append("winner", winner);
+    formData.append("match_duration", getGameDuration());
+
+    fetch(`/api/oxo/finish/`, {
+        method: "POST",
+        body: formData,
+        headers: {
+          "X-CSRFToken": csrftoken,
+        },
+      })
+    .then((response) => { return response.json(); })
+    .then((data) => { console.log(data); })
+    .catch((error) => {
+        console.error("Erreur lors la mise a jour du match :", error);
+    });
 
     setTimeout(function () {
         window.location.href = "/";
@@ -274,7 +331,7 @@ function checkEgalite()
             cellules[i].removeEventListener('click', turnClick, false);
             cellules[i].removeEventListener('click', turnClickPlayer, false);
         }
-        getWinner("Egalité")
+        getWinner(null)
         return true;
     }
     return false;

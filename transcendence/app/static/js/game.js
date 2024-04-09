@@ -139,9 +139,29 @@ function playGame(opponent, tournament_id, game) {
       gameLoop();
   }
   else {
-    console.log("on lance le oxo")
-    oxoGame.classList.remove("displayNone");
-    startGameOxo();
+    fetch(`/api/oxo/create/`, {
+      method: "POST",
+      body: formData,
+      headers: {
+        "X-CSRFToken": csrftoken,
+      },
+    })
+      .then((response) => {
+        return response.json();
+      })
+      .then((data) => {
+        console.log(data);
+        photos[0].src = data.player1.photo;
+        photos[1].src = data.player2.photo;
+        setAsyncVariablesOxo(data);
+      })
+      .catch((error) => {
+        console.error("Erreur lors de la création du tournoi :", error);
+        contentNotification.textContent = `La création du match a échouée`;
+      });
+      console.log("on lance le oxo")
+      oxoGame.classList.remove("displayNone");
+      // startGameOxo();
   }
 
   invit.classList.add("displayNone");

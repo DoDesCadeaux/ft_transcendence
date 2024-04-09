@@ -3,7 +3,7 @@ from rest_framework import generics
 from rest_framework.response import Response
 from rest_framework import status
 from django.db import models
-from app.models import User, Match, Tournament, Notifications, Friendship
+from app.models import User, Match, Tournament, Notifications, Friendship, OxoMatch
 from app.serializer import *
 from django.shortcuts import get_object_or_404
 import ast
@@ -492,9 +492,7 @@ class UsernameAlreadyExist(generics.GenericAPIView):
         new_username = request.GET.get('username')
         isUserName = User.objects.exclude(id=current_user.id).filter(username=new_username).exists()
         return Response({"result": isUserName}, status=status.HTTP_200_OK) 
-        
-    
-    
+           
 class ManageFriends(generics.GenericAPIView):
     serializer_class = UserListSerializer
     def get(self, request, *args, **kwargs):
@@ -517,7 +515,95 @@ class ManageFriends(generics.GenericAPIView):
             return Response(response, status=status.HTTP_200_OK)
         return Response({"detail": "Action invalide."}, status=status.HTTP_400_BAD_REQUEST) 
                     
-    
+class CreateFinishOxoAPIView(generics.GenericAPIView):
+    #                                               DATA DOIT CONTENIR :
+    #               action = create                         |               action = finish
+    # {                                                     |  {
+    #     opponent : [opponent_id],                         |       id : [id du match],
+    #                                                       |       player1_score : [score du joueur 1]
+    # }                                                     |       player2_score : [score du joueur 2]
+    #                                                       |       match_duration: [durée du match format : 00:00:00] 
+    #                                                       |  }      
+    def post(self, request, *args, **kwargs):
+        current_player = self.request.user
+        action = kwargs.get('action')
+        
+        if action == 'create':
+            try:
+                player2 = User.objects.get(username=request.data.get('opponent'))
+            except User.DoesNotExist:
+                return Response({"detail": "User not found."}, status=status.HTTP_404_NOT_FOUND)
+            new_match = OxoMatch.objects.create(
+                player1=current_player,
+                player2=player2,
+            )
+            response = {
+                "match_id" : new_match.id,
+                "player1" : {
+                    "username" : new_match.player1.username,
+                    "photo" : new_match.player1.photo.url,
+                    "id": new_match.player1.pk,
+                },
+                "player2" : {
+                    "username" : new_match.player2.username,
+                    "photo" : new_match.player2.photo.url,
+                    "id": new_match.player2.pk,
+                    
+                }
+            }
+            player2.state = 'in-game'
+            current_player.state = 'in-game'
+            player2.save()
+            current_player.save()
+            return Response(response, status=status.HTTP_201_CREATED)
+        elif action == 'finish':
+            try:
+                match = OxoMatch.objects.get(id=request.data.get('id'))
+            except OxoMatch.DoesNotExist:
+                return Response({"detail": "Match not found."}, status=status.HTTP_404_NOT_FOUND)
+        
+            # match.player1_score = request.data.get('player1_score')
+            # match.player2_score = request.data.get('player2_score')
+            timedelta_duration = timedelta(seconds=float(request.data.get('match_duration')))
+            match.match_duration = timedelta_duration
+            winner_id = request.data.get('winner')
+            
+            
+            
+            
+            
+            print(winner_id)
+            if winner_id:
+                winner_id = int(winner_id)
+                if winner_id == match.player1_id:
+                    winner = match.player1_id
+                elif winner_id == match.player2_id:
+                    winner = match.player2_id
+                match.winner_id = winner
+            else:
+                match.winner_id = None
+            # match.winner_id = match.player1_id if match.player1_score > match.player2_score else match.player2_id
+            
+            # Récupérer les time actuels des joueurs depuis la base de données
+            player1_duration = match.player1.play_time if match.player1.play_time else timedelta(seconds=0)
+            player2_duration = match.player2.play_time if match.player2.play_time else timedelta(seconds=0)
+            
+            # Ajouter la durée du match aux durées des joueurs
+            match.player1.play_time = player1_duration + match.match_duration
+            match.player2.play_time = player2_duration + match.match_duration
+            
+            #Mise a jour du status
+            match.player1.state = 'online'
+            match.player2.state = 'online'
+            
+            # Enregistrer les modifications
+            match.player1.save()
+            match.player2.save()
+            match.save()
+
+            return Response({"message": "Le match a été mis à jour"}, status=status.HTTP_200_OK)
+        return Response({"detail": "Invalid action."}, status=status.HTTP_404_NOT_FOUND)
+
         
   
         

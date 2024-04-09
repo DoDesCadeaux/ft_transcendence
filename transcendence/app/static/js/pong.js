@@ -258,9 +258,6 @@ function countdown(seconds) {
 function endGame() {
     ballInPlay = false;
     stopTimer();
-    console.log(getGameDuration());
-    console.log(scoreLeft);
-    console.log(scoreRight);
     const formData = new FormData();
     formData.append("id", data.match_id);
     formData.append("player1_score", scoreLeft);
