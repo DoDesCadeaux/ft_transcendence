@@ -95,76 +95,76 @@ document.addEventListener("DOMContentLoaded", function () {
 
 let isFetching = false; 
 
-async function fetchNotifications() {
-  if (isFetching) {
-	console.log("fetch en cours ...")
-    return;
-  }
-  isFetching = true;
+// async function fetchNotifications() {
+//   if (isFetching) {
+// 	console.log("fetch en cours ...")
+//     return;
+//   }
+//   isFetching = true;
 
-  const response = await fetch(URI.CHECK_NOTIF_RECEIVED);
-  if (response.ok) {
-    const data = await response.json();
+//   const response = await fetch(URI.CHECK_NOTIF_RECEIVED);
+//   if (response.ok) {
+//     const data = await response.json();
 
-    text = document.createElement("p");
-    text.textContent = `Hey ${data.to}, ${data.from} t'attends pour jouer une partie de ${data.type}`;
-    contentNotification.appendChild(text);
-    div = document.createElement("div");
-    div.classList.add("bloc-btn-notif");
-    btn1 = document.createElement("div");
-    btn1.classList.add("btn-notification-game");
-    btn1.textContent = "Accepter";
-    btn2 = document.createElement("div");
-    btn2.classList.add("btn-notification-game");
-    btn2.textContent = "Refuser";
+//     text = document.createElement("p");
+//     text.textContent = `Hey ${data.to}, ${data.from} t'attends pour jouer une partie de ${data.type}`;
+//     contentNotification.appendChild(text);
+//     div = document.createElement("div");
+//     div.classList.add("bloc-btn-notif");
+//     btn1 = document.createElement("div");
+//     btn1.classList.add("btn-notification-game");
+//     btn1.textContent = "Accepter";
+//     btn2 = document.createElement("div");
+//     btn2.classList.add("btn-notification-game");
+//     btn2.textContent = "Refuser";
 
-    btn1.addEventListener("click", () => {
-      closeAndUpdate(1, data.id);
-	  isFetching = false;
-    });
+//     btn1.addEventListener("click", () => {
+//       closeAndUpdate(1, data.id);
+// 	  isFetching = false;
+//     });
 
-    btn2.addEventListener("click", () => {
-      closeAndUpdate(2, data.id);
-	  isFetching = false;
-    });
-    div.appendChild(btn1);
-    div.appendChild(btn2);
-    contentNotification.appendChild(div);
+//     btn2.addEventListener("click", () => {
+//       closeAndUpdate(2, data.id);
+// 	  isFetching = false;
+//     });
+//     div.appendChild(btn1);
+//     div.appendChild(btn2);
+//     contentNotification.appendChild(div);
 
-    modal.style.display = "block";
-	if (isFetching){
-		setTimeout(() => {
-		  closeAndUpdate(3, data.id);
-		  isFetching = false; 
-		}, 6000);
-	}
-  } else 
-    isFetching = false; 
+//     modal.style.display = "block";
+// 	if (isFetching){
+// 		setTimeout(() => {
+// 		  closeAndUpdate(3, data.id);
+// 		  isFetching = false; 
+// 		}, 6000);
+// 	}
+//   } else 
+//     isFetching = false; 
   
-}
+// }
 
-setInterval(fetchNotifications, 1000);
+// setInterval(fetchNotifications, 1000);
 
-function closeAndUpdate(state, id) {
-  modal.style.display = "none";
-  contentNotification.innerHTML = "";
-  window.onclick = null;
+// function closeAndUpdate(state, id) {
+//   modal.style.display = "none";
+//   contentNotification.innerHTML = "";
+//   window.onclick = null;
 
-  const formData = new FormData();
-  formData.append("id", id);
-  formData.append("state", state);
-  fetch(`/api/notif/update/`, {
-    method: "POST",
-    body: formData,
-    headers: {
-      "X-CSRFToken": csrftoken,
-    },
-  })
-    .then((response) => {
-      response.json();
-      console.log(response);
-    })
-    .catch((error) => {
-      console.error("Erreur lors d'update de la notif' :", error);
-    });
-}
+//   const formData = new FormData();
+//   formData.append("id", id);
+//   formData.append("state", state);
+//   fetch(`/api/notif/update/`, {
+//     method: "POST",
+//     body: formData,
+//     headers: {
+//       "X-CSRFToken": csrftoken,
+//     },
+//   })
+//     .then((response) => {
+//       response.json();
+//       console.log(response);
+//     })
+//     .catch((error) => {
+//       console.error("Erreur lors d'update de la notif' :", error);
+//     });
+// }

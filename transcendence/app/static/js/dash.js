@@ -348,9 +348,7 @@ document.body.addEventListener("DOMNodeInserted", function (event) {
     barCharts.push(chartDuration);
 
     getAndUpdateData()
-  }
-  if (!document.querySelector(".advencedStats")) advencedStats = null;
-  const statsPannel = document.querySelector(".advencedStats");
+    const statsPannel = document.querySelector(".advencedStats");
   const hystoricPannel = document.querySelector(".historic-game");
   const statsBtn = document.querySelector(".btn-satistics");
   const hystoricBtn = document.querySelector(".btn-hystoric")
@@ -360,8 +358,12 @@ document.body.addEventListener("DOMNodeInserted", function (event) {
   })
   hystoricBtn.addEventListener("click", () => {
     statsPannel.classList.add("displayNone");
+    fillDataHistoric()
     hystoricPannel.classList.remove("displayNone");
   })
+  }
+  if (!document.querySelector(".advencedStats")) advencedStats = null;
+  
 
 });
 
@@ -399,8 +401,6 @@ function fillParams(data) {
     })();
 
   }
-
-
 }
 
 function handleChange(event) {
@@ -484,6 +484,37 @@ function updateGraph(fetchData) {
   });
 }
 
+function fillDataHistoric(){
+  const table = document.querySelector(".historic-game-table tbody")
+  table.innerHTML = "";
+  fakeData.data.forEach((match) => {
+    const tr = document.createElement("tr");
+
+    const matchDate = document.createElement("td");
+    matchDate.textContent = match.date;
+    tr.appendChild(matchDate);
+
+    const matchGame = document.createElement("td");
+    matchGame.textContent = match.game;
+    tr.appendChild(matchGame);
+
+    const matchOpponent = document.createElement("td");
+    matchOpponent.textContent = match.opponent;
+    tr.appendChild(matchOpponent);
+
+    const matchResult = document.createElement("td");
+    matchResult.textContent = match.result;
+    tr.appendChild(matchResult);
+
+    const matchDuration = document.createElement("td");
+    matchDuration.textContent = match.duration;
+    tr.appendChild(matchDuration);
+
+    table.appendChild(tr);
+  })
+
+}
+
 /****************************************************************************
  * FIN Graph stats
  ***************************************************************************/
@@ -511,4 +542,35 @@ const superData = {
   ],
 };
 
-
+const fakeData = {
+  data :[
+    {
+      date : "7 Avril",
+      game : "Pong",
+      opponent : "dduraku",
+      result : "Gagné",
+      duration : "2 min",
+    },
+    {
+      date : "7 Avril",
+      game : "Oxo",
+      opponent : "dduraku",
+      result : "Perdu",
+      duration : "1 min",
+    },
+    {
+      date : "7 Avril",
+      game : "Oxo",
+      opponent : "dduraku",
+      result : "Egalité",
+      duration : "4 min",
+    },
+    {
+      date : "7 Avril",
+      game : "Pong",
+      opponent : "dduraku",
+      result : "Gagné",
+      duration : "2 min",
+    }
+  ]
+}

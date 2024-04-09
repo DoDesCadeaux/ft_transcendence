@@ -800,12 +800,13 @@ color: var(--white);
           display: flex;
           align-items: center;
           flex-direction: column;
-          margin-top: 150px;
+          /* margin-top: 100px; */
           color: var(--orange);
 
           .waiting-msg {
             font-size: xx-large;
             font-weight: bolder;
+            margin-bottom: 150px;
           }
 
           .wrap-ball {
