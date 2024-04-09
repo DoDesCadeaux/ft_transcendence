@@ -350,6 +350,19 @@ document.body.addEventListener("DOMNodeInserted", function (event) {
     getAndUpdateData()
   }
   if (!document.querySelector(".advencedStats")) advencedStats = null;
+  const statsPannel = document.querySelector(".advencedStats");
+  const hystoricPannel = document.querySelector(".historic-game");
+  const statsBtn = document.querySelector(".btn-satistics");
+  const hystoricBtn = document.querySelector(".btn-hystoric")
+  statsBtn.addEventListener("click", () => {
+    statsPannel.classList.remove("displayNone");
+    hystoricPannel.classList.add("displayNone");
+  })
+  hystoricBtn.addEventListener("click", () => {
+    statsPannel.classList.add("displayNone");
+    hystoricPannel.classList.remove("displayNone");
+  })
+
 });
 
 function getAndUpdateData(){

@@ -244,8 +244,7 @@ class DataMatchTournamentAPIView(generics.GenericAPIView):
                         winner_demi_user = get_object_or_404(User, id=winner_demi_first['winner'])
 
                     # Utilisez le serializer pour convertir l'utilisateur en données JSON
-                    winner_demi_serializer = UserSerializer(winner_demi_user)
-                    tournament_info['winners'][0] = winner_demi_serializer.data if winner_demi_first else None
+                    tournament_info['winners'][0] = UserSerializer(winner_demi_user).data if winner_demi_first else None
 
                 # Vérifiez si vous avez au moins 4 joueurs
                 if len(players) >= 4:
