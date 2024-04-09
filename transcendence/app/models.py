@@ -2,6 +2,9 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.conf import settings
 from django.utils import timezone
+from django.core.files import File
+from django.core.files.images import ImageFile
+import os
 
 
 #kwargs = keywords arguments -> permet de passer des variable en plus des arguments dans une fonction
@@ -17,9 +20,28 @@ class User(AbstractUser):
     state = models.CharField(max_length=50)  # Par exemple: online, offline, in-game
     amis = models.ManyToManyField('self', blank=True)
 
-
     USERNAME_FIELD = 'id_api'
     password = models.CharField(max_length=128, null=True)  # Ajoutez cette ligne
+
+    @classmethod
+    def create_ia_user(cls):
+        image_file = ImageFile(open("app/static/img/ia.png", 'rb'))
+
+        user, created = cls.objects.get_or_create(
+            id_api='IA',
+            defaults={
+                'name': 'IA',
+                'username': 'IA',
+                'photo': image_file,
+                'play_time': models.DurationField().to_python('0'),
+                'state': 'online',
+                'password': None,
+            }
+        )
+
+        if created:
+            user.photo.save('ia.png', image_file, save=True)
+
 
     def __str__(self):
         return f"{self.name} - {self.username} -  {self.state}"
@@ -38,7 +60,7 @@ class User(AbstractUser):
             return f"{int(seconds)}sec"
         else:
             return "0min"
-    
+
     def save(self, *args, **kwargs):
         # Vérifier s'il y a une photo existante
         try:
@@ -87,7 +109,7 @@ class OxoMatch(models.Model):
     time_date = models.DateTimeField(default=timezone.now)
 
     def __str__(self):
-        return f"{self.pk} : {self.player1} VS {self.player2 or 'IA'}" #
+        return f"{self.pk} : {self.player1} VS {self.player2 or 'IA'}"
 
 
 

@@ -19,7 +19,11 @@ def checkUsername(user_login):
         random_string = str(random_number)
         new_username = user_login + "_" + random_string
         return new_username
+
     return user_login
+
+def test():
+	isUserName = User.objects.filter(username="IA").exists()
 
 # Create your views here.
 def login(request):
