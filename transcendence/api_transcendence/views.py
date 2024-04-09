@@ -25,6 +25,7 @@ class UserListAPIView(generics.ListAPIView):
         serialized_users = []
         current_user = self.request.user
         queryset = User.objects.exclude(id=current_user.id)
+        queryset = User.objects.exclude(username='IA')
         
         for user in queryset:
             serializer = self.get_serializer(user)
