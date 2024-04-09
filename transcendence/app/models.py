@@ -73,6 +73,7 @@ class Match(models.Model):
     player2_score = models.IntegerField(null=True)
     match_duration = models.DurationField(null=True)
     winner = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='matches_won')
+    time_date = models.DateTimeField(default=timezone.now)
 
     def __str__(self):
         return f"{self.pk} : {self.player1} VS {self.player2}"
