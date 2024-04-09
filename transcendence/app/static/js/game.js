@@ -84,7 +84,6 @@ function printWaiting(opponent, notifId, tournament_id) {
     fetch(`http://localhost:8000/api/checkNotif/sent/?id=${notifId}`)
       .then((response) => response.json())
       .then((data) => {
-        console.log(data)
         if (data.state != 0) {
           clearInterval(interval); // Arrêter l'intervalle une fois que l'état n'est plus 0
           if (data.state == 1){
@@ -150,7 +149,6 @@ function playGame(opponent, tournament_id, game) {
         return response.json();
       })
       .then((data) => {
-        console.log(data);
         photos[0].src = data.player1.photo;
         photos[1].src = data.player2.photo;
         setAsyncVariablesOxo(data);
@@ -159,7 +157,6 @@ function playGame(opponent, tournament_id, game) {
         console.error("Erreur lors de la création du tournoi :", error);
         contentNotification.textContent = `La création du match a échouée`;
       });
-      console.log("on lance le oxo")
       oxoGame.classList.remove("displayNone");
       // startGameOxo();
   }
@@ -218,10 +215,6 @@ function setupDynamicElements() {
     
   })();
 
-  const botParty = document.querySelector(".vsComputeur")
-  botParty.addEventListener("click", () => {
-    console.log("nouvelle partie avec un bot")
-  })
 }
 
 let is_tournament_ID = null;
@@ -276,4 +269,13 @@ function sentNotification(player2, tournament_id, type) {
     .catch((error) => {
       console.error("Erreur lors de la création de la notif :", error);
     });
+}
+
+function playVScomputer(){
+  const pong = document.querySelector(".Pong");
+  const oxo = document.querySelector(".Oxo");
+  pong.classList.add("displayNone");
+  oxo.classList.add("displayNone");
+
+  playGame("IA", null, "oxo");
 }

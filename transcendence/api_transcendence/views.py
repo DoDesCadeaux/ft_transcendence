@@ -561,18 +561,11 @@ class CreateFinishOxoAPIView(generics.GenericAPIView):
                 match = OxoMatch.objects.get(id=request.data.get('id'))
             except OxoMatch.DoesNotExist:
                 return Response({"detail": "Match not found."}, status=status.HTTP_404_NOT_FOUND)
-        
-            # match.player1_score = request.data.get('player1_score')
-            # match.player2_score = request.data.get('player2_score')
+
             timedelta_duration = timedelta(seconds=float(request.data.get('match_duration')))
             match.match_duration = timedelta_duration
             winner_id = request.data.get('winner')
             
-            
-            
-            
-            
-            print(winner_id)
             if winner_id:
                 winner_id = int(winner_id)
                 if winner_id == match.player1_id:
