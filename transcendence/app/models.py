@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.conf import settings
+from django.utils import timezone
 
 
 #kwargs = keywords arguments -> permet de passer des variable en plus des arguments dans une fonction
@@ -15,7 +16,6 @@ class User(AbstractUser):
     play_time = models.DurationField()
     state = models.CharField(max_length=50)  # Par exemple: online, offline, in-game
     amis = models.ManyToManyField('self', blank=True)
-    
 
 
     USERNAME_FIELD = 'id_api'
@@ -76,6 +76,19 @@ class Match(models.Model):
 
     def __str__(self):
         return f"{self.pk} : {self.player1} VS {self.player2}"
+
+
+class OxoMatch(models.Model):
+    player1 = models.ForeignKey(User, on_delete=models.CASCADE, related_name='oxo_matches_as_player1')
+    player2 = models.ForeignKey(User, on_delete=models.CASCADE, related_name='oxo_matches_as_player2')
+    winner = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='oxo_matches_won')
+    match_duration = models.DurationField(null=True)
+    time_date = models.DateTimeField(default=timezone.now)
+
+    def __str__(self):
+        return f"{self.pk} : {self.player1} VS {self.player2 or 'IA'}" #
+
+
 
 class Notifications(models.Model):
     user_from = models.ForeignKey(User, on_delete=models.CASCADE, related_name='sent_notifications')
