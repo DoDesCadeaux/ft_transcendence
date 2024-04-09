@@ -477,7 +477,11 @@ class CheckNotifAPIView(generics.GenericAPIView):
             try:
                 idNotif = request.GET.get('id')
                 notification = Notifications.objects.get(id=idNotif)
-                return Response({notification.state}, status=status.HTTP_200_OK)
+                response = {
+                    "state" : notification.state,
+                    "game" : notification.type
+                }
+                return Response(response, status=status.HTTP_200_OK)
             except Notifications.DoesNotExist:
                 return Response({"detail": "La notification n'a pas été trouvée."}, status=status.HTTP_404_NOT_FOUND)
         return Response({"detail": "Action invalide."}, status=status.HTTP_400_BAD_REQUEST) 

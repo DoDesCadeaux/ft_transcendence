@@ -8,6 +8,7 @@ let searchBar,
   waitingMsg,
   invit,
   pong,
+  oxoGame,
   ball;
 
 
@@ -83,11 +84,16 @@ function printWaiting(opponent, notifId, tournament_id) {
     fetch(`http://localhost:8000/api/checkNotif/sent/?id=${notifId}`)
       .then((response) => response.json())
       .then((data) => {
-        if (data[0] != 0) {
+        console.log(data)
+        if (data.state != 0) {
           clearInterval(interval); // Arrêter l'intervalle une fois que l'état n'est plus 0
-          console.log("L'état de la notification est :", data[0]);
-          if (data[0] == 1) playPong(opponent, tournament_id);
-          else if (data[0] == 2) oupsRejected(opponent);
+          if (data.state == 1){
+            if (data.game == 0)
+              playGame(opponent, tournament_id, "pong");
+            else
+              playGame(opponent, tournament_id, "oxo");
+          } 
+          else if (data.state == 2) oupsRejected(opponent);
           else oupsUnreachable(opponent);
         }
       })
@@ -99,40 +105,48 @@ function printWaiting(opponent, notifId, tournament_id) {
   }, 6000); // 6 secondes
 }
 
-function playPong(opponent, tournament_id) {
+function playGame(opponent, tournament_id, game) {
   //Mettre a jour les photos
   const photos = document.querySelectorAll(".opponents-img");
-  console.log(photos);
+  const opponents = document.querySelector(".opponents");
   const formData = new FormData();
   formData.append("opponent", opponent);
-  if (tournament_id)
-    formData.append("tournament", tournament_id);
-  fetch(`/api/match/create/`, {
-    method: "POST",
-    body: formData,
-    headers: {
-      "X-CSRFToken": csrftoken,
-    },
-  })
-    .then((response) => {
-      return response.json();
+  opponents.classList.remove("displayNone")
+  if (game == "pong"){
+    if (tournament_id)
+      formData.append("tournament", tournament_id);
+    fetch(`/api/match/create/`, {
+      method: "POST",
+      body: formData,
+      headers: {
+        "X-CSRFToken": csrftoken,
+      },
     })
-    .then((data) => {
-      console.log(data);
-      photos[0].src = data.player1.photo;
-      photos[1].src = data.player2.photo;
-      setAsyncVariables(data);
-    })
-    .catch((error) => {
-      console.error("Erreur lors de la création du tournoi :", error);
-      contentNotification.textContent = `La création du match a échouée`;
-    });
+      .then((response) => {
+        return response.json();
+      })
+      .then((data) => {
+        photos[0].src = data.player1.photo;
+        photos[1].src = data.player2.photo;
+        setAsyncVariables(data);
+      })
+      .catch((error) => {
+        console.error("Erreur lors de la création du tournoi :", error);
+        contentNotification.textContent = `La création du match a échouée`;
+      });
+
+      pong.classList.remove("displayNone");
+      gameLoop();
+  }
+  else {
+    console.log("on lance le oxo")
+    oxoGame.classList.remove("displayNone");
+    startGameOxo();
+  }
 
   invit.classList.add("displayNone");
-  pong.classList.remove("displayNone");
   waitingBloc.classList.add("displayNone");
 
-  gameLoop();
 }
 
 function oupsRejected(opponent) {
@@ -159,8 +173,9 @@ function setupDynamicElements() {
   search = document.querySelectorAll(".search");
   waitingMsg = document.querySelector(".waiting-msg");
   invit = document.querySelector(".invit-game");
-  pong = document.querySelector(".pong");
+  pong = document.querySelector("#pongCanvas");
   ball = document.querySelector(".wrap-ball");
+  oxoGame = document.querySelector(".game-container");
 
   (async () => {
     const dataUsers = await fetchGET(URI.USERS);
@@ -182,6 +197,11 @@ function setupDynamicElements() {
     });
     
   })();
+
+  const botParty = document.querySelector(".vsComputeur")
+  botParty.addEventListener("click", () => {
+    console.log("nouvelle partie avec un bot")
+  })
 }
 
 let is_tournament_ID = null;

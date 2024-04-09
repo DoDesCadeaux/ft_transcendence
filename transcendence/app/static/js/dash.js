@@ -487,6 +487,7 @@ function updateGraph(fetchData) {
 function fillDataHistoric(){
   const table = document.querySelector(".historic-game-table tbody")
   table.innerHTML = "";
+  
   fakeData.data.forEach((match) => {
     const tr = document.createElement("tr");
 
