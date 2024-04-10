@@ -13,7 +13,7 @@ let searchBar,
 
 
 
-function handleInputSearchEvent(users, searchInputT, autoCompleteT, searchT, btn_searchT) {
+function handleInputSearchEvent(connectedUser, users, searchInputT, autoCompleteT, searchT, btn_searchT) {
   return function () {
     const searchTerm = searchInputT.value.trim();
 
@@ -37,7 +37,7 @@ function handleInputSearchEvent(users, searchInputT, autoCompleteT, searchT, btn
     }
 
     users.forEach((user) => {
-      if (user.state == "online") {
+      if (user.state == "online" && user.id != connectedUser.id) {
         const listItem = document.createElement("li");
         listItem.textContent = user.username;
         autoCompleteT.appendChild(listItem);
@@ -196,6 +196,7 @@ function setupDynamicElements() {
 
   (async () => {
     const dataUsers = await fetchGET(URI.USERS);
+    const connectedUser = await fetchGET(URI.USER);
     const usersOnline = dataUsers.filter(
       (user) => user.state !== "offline" && user.state !== "in-game"
     );
@@ -204,6 +205,7 @@ function setupDynamicElements() {
       input.addEventListener(
         "input",
         handleInputSearchEvent(
+          connectedUser,
           usersOnline,
           searchInput[index],
           autoComplete[index],
