@@ -64,6 +64,37 @@ document.addEventListener("keydown", function (event) {
         gamePaused = 0;
 });
 
+let aiPaddleSpeed = 10; // Vitesse de la raquette de l'IA
+
+function aiPlayer() {
+    // Si la balle est plus haute que la raquette de l'IA, elle monte
+    if (ballY < paddleRightY) {
+        paddleRightY -= aiPaddleSpeed;
+    }
+    // Si la balle est plus basse que la raquette de l'IA, elle descend
+    else if (ballY > paddleRightY + paddleHeight) {
+        paddleRightY += aiPaddleSpeed;
+    }
+
+    // Ajoute un certain degré d'incertitude dans les mouvements de l'IA
+    if (Math.random() < 0.1) {
+        paddleRightY += Math.random() > 0.5 ? 10 : -10;
+    }
+
+    // Anticipe la trajectoire de la balle
+    if (ballSpeedX > 0) {
+        let futureBallY = ballY + ballSpeedY * ((canvas.width - ballSize - padding - paddleWidth - ballX) / ballSpeedX);
+        if (futureBallY < paddleRightY) {
+            paddleRightY -= aiPaddleSpeed;
+        } else if (futureBallY > paddleRightY + paddleHeight) {
+            paddleRightY += aiPaddleSpeed;
+        }
+    }
+
+    // Empêche la raquette de l'IA de sortir du canvas
+    paddleRightY = Math.max(Math.min(paddleRightY, canvas.height - paddleHeight), 0);
+}
+
 // Main loop
 function gameLoop() {
 
@@ -93,13 +124,15 @@ function gameLoop() {
             if (paddleRightY < canvas.height - paddleHeight) 
                 paddleRightY += 10;
     }
+    else
+        aiPlayer();
     
     if (ballInPlay) {
         move();
         draw();
     }
 
-    setTimeout(gameLoop, 1000 / 120); // Appel de gameLoop() environ toutes les 8.33 ms (120 FPS)
+    setTimeout(gameLoop, 1000 / 100); // Appel de gameLoop() environ toutes les 8.33 ms (120 FPS)
 }
 
 // Rules for ball movement
