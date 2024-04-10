@@ -15,20 +15,15 @@ RUN npm install -g ganache-cli
 RUN npm install --save ethers
 RUN pip install web3
 
-
 COPY requirements.txt /transcendence/
 RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . /transcendence/
 COPY ./blockchain/contracts /contracts
 
-# Truffle migrate happens in this script
-COPY ./blockchain/getContractAddress.js /getContractAddress.js
-RUN node /getContractAddress.js
-
-# RUN ganache-cli &
-# RUN cd blockchain && truffle migrate
+# Copy the Python script to the Docker container
+COPY ./blockchain/getContractAddress.py /getContractAddress.py
 
 EXPOSE 8000
 
-CMD ganache-cli -h 0.0.0.0 & sleep 5 && cd blockchain && truffle migrate && python /transcendence/manage.py makemigrations && python /transcendence/manage.py migrate && python /transcendence/manage.py runserver 0.0.0.0:8000
+CMD ganache-cli -h 0.0.0.0 & sleep 5 && cd blockchain && truffle migrate && python /blockchain/getContractAddress.py && python /transcendence/manage.py makemigrations && python /transcendence/manage.py migrate && python /transcendence/manage.py runserver 0.0.0.0:8000

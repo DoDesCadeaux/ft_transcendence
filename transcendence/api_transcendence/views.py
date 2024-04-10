@@ -19,7 +19,7 @@ from django.http import QueryDict
 from threading import Thread
 
 class Blockchain(generics.GenericAPIView):
-    web3 = Web3(Web3.HTTPProvider('http://localhost:8545'))
+    web3 = Web3(Web3.HTTPProvider('http://ganache:8545'))
 
     @staticmethod
     def fetchContractABI():
