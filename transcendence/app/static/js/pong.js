@@ -17,7 +17,7 @@ function setAsyncVariables(dataMatch){
 
 
 // Set up initial vars
-const paddleWidth = 10, paddleHeight = 80, ballSize = 10, ballSpeed = 4, pointsToScore = 5;
+const paddleWidth = 10, paddleHeight = 80, ballSize = 10, ballSpeed = 4, pointsToScore = 1;
 let ballSpeedX = Math.sin(ballSpeed) * ballSpeed;
 let ballSpeedY = Math.cos(ballSpeed) * ballSpeed;
 let startGame = 1, ballInPlay = false, scoreLeft = 0, scoreRight = 0, victoriesR = 0, victoriesL = 0, totalScoreR = 0, totalScoreL = 0;

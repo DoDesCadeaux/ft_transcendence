@@ -20,15 +20,15 @@ COPY requirements.txt /transcendence/
 RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . /transcendence/
+COPY ./blockchain/contracts /contracts
 
-# Run Ganache CLI in the background
-RUN ganache-cli &
+# Truffle migrate happens in this script
+COPY ./blockchain/getContractAddress.js /getContractAddress.js
+RUN node /getContractAddress.js
 
-# Check if the lock file exists, if not, migrate the contract
-#RUN if [ ! -f "blockchain/migration.lock" ]; then \
-#    cd blockchain && truffle migrate && touch migration.lock ; \
-#    fi
+# RUN ganache-cli &
+# RUN cd blockchain && truffle migrate
 
 EXPOSE 8000
 
-CMD python manage.py makemigrations && python manage.py migrate && python manage.py runserver 0.0.0.0:8000
+CMD ganache-cli -h 0.0.0.0 & sleep 5 && cd blockchain && truffle migrate && python /transcendence/manage.py makemigrations && python /transcendence/manage.py migrate && python /transcendence/manage.py runserver 0.0.0.0:8000

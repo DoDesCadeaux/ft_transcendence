@@ -8,6 +8,9 @@ services:
       POSTGRES_DB: ${DB_NAME} 
       POSTGRES_USER: ${DB_USER}
       POSTGRES_PASSWORD: ${DB_PASS}
+  ganache:
+    image: trufflesuite/ganache-cli
+    command: -h 0.0.0.0
   web:
     build: ./transcendence
     volumes:
@@ -27,5 +30,7 @@ services:
       - CLIENT_SECRET=${CLIENT_SECRET}
     depends_on:
       - db
+      - ganache
+    command: sh -c "sleep 5 && cd blockchain && truffle migrate && python /transcendence/manage.py makemigrations && python /transcendence/manage.py migrate && python /transcendence/manage.py runserver 0.0.0.0:8000"
 volumes:
   postgres_data:

@@ -1,0 +1,41 @@
+
+Compiling your contracts...
+===========================
+> Everything is up to date, there is nothing to compile.
+
+
+Starting migrations...
+======================
+> Network name:    'development'
+> Network id:      5777
+> Block gas limit: 6721975 (0x6691b7)
+
+
+1_PongScoreboard_migration.js
+=============================
+
+   Replacing 'PongTournament'
+   --------------------------
+   > transaction hash:    0x13342cadeb553d66257fd8715b84cc93fcea0089875528d22534ee5486bcf1ba
+   > Blocks: 0            Seconds: 0
+   > contract address:    0x88CC147Df310451F162bd39d259424DD750DFf43
+   > block number:        9
+   > block timestamp:     1712675327
+   > account:             0x9d200e6b4f98dE375E15683a228d1C077C81989b
+   > balance:             99.988759935683672455
+   > gas used:            452725 (0x6e875)
+   > gas price:           2.843892874 gwei
+   > value sent:          0 ETH
+   > total cost:          0.00128750140138165 ETH
+
+PongTournament deployed
+   > Saving artifacts
+   -------------------------------------
+   > Total cost:     0.00128750140138165 ETH
+
+Summary
+=======
+> Total deployments:   1
+> Final cost:          0.00128750140138165 ETH
+
+
