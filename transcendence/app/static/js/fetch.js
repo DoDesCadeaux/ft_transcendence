@@ -45,6 +45,12 @@ const URI = {
    * @returns id de la notif
    */
   CHECK_NOTIF_RECEIVED : "/api/checkNotif/received/" ,
+  /**
+   * Récupère toutes les données du tournois
+   * @type {string}
+   * @returns id de la notif
+   */
+  HISTORY : "/api/history/" ,
 };
 
 /**

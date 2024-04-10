@@ -487,32 +487,37 @@ function updateGraph(fetchData) {
 function fillDataHistoric(){
   const table = document.querySelector(".historic-game-table tbody")
   table.innerHTML = "";
+
+  (async () => {
+    const data = await fetchGET(URI.HISTORY);
+    console.log(data);
+    data.data.forEach((match) => {
+      const tr = document.createElement("tr");
   
-  fakeData.data.forEach((match) => {
-    const tr = document.createElement("tr");
-
-    const matchDate = document.createElement("td");
-    matchDate.textContent = match.date;
-    tr.appendChild(matchDate);
-
-    const matchGame = document.createElement("td");
-    matchGame.textContent = match.game;
-    tr.appendChild(matchGame);
-
-    const matchOpponent = document.createElement("td");
-    matchOpponent.textContent = match.opponent;
-    tr.appendChild(matchOpponent);
-
-    const matchResult = document.createElement("td");
-    matchResult.textContent = match.result;
-    tr.appendChild(matchResult);
-
-    const matchDuration = document.createElement("td");
-    matchDuration.textContent = match.duration;
-    tr.appendChild(matchDuration);
-
-    table.appendChild(tr);
-  })
+      const matchDate = document.createElement("td");
+      matchDate.textContent = match.formatted_date;
+      tr.appendChild(matchDate);
+  
+      const matchGame = document.createElement("td");
+      matchGame.textContent = match.game;
+      tr.appendChild(matchGame);
+  
+      const matchOpponent = document.createElement("td");
+      matchOpponent.textContent = match.opponent;
+      tr.appendChild(matchOpponent);
+  
+      const matchResult = document.createElement("td");
+      matchResult.textContent = match.result;
+      tr.appendChild(matchResult);
+  
+      const matchDuration = document.createElement("td");
+      matchDuration.textContent = match.duration;
+      tr.appendChild(matchDuration);
+  
+      table.appendChild(tr);
+    })
+  })();
+  
 
 }
 

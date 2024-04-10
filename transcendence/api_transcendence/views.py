@@ -8,7 +8,8 @@ from app.serializer import *
 from django.shortcuts import get_object_or_404
 import ast
 from django.db.models import Avg, ExpressionWrapper, F, fields, Sum
-from datetime import timedelta
+from datetime import timedelta, datetime
+from django.utils import timezone
 
 class UserInfoAPIView(generics.ListAPIView):
     serializer_class = UserListSerializer
@@ -24,8 +25,7 @@ class UserListAPIView(generics.ListAPIView):
     def list(self, request, *args, **kwargs):
         serialized_users = []
         current_user = self.request.user
-        queryset = User.objects.exclude(id=current_user.id)
-        queryset = User.objects.exclude(username='IA')
+        queryset = User.objects.exclude(id=current_user.id).exclude(username='IA')
         
         for user in queryset:
             serializer = self.get_serializer(user)
@@ -473,7 +473,7 @@ class CheckNotifAPIView(generics.GenericAPIView):
                     return Response(response, status=status.HTTP_200_OK)
                 return Response({"detail": "Pas disponible."}, status=status.HTTP_200_OK)
             except Notifications.DoesNotExist:
-                return Response({"detail": "Pas de notification en attente."}, status=status.HTTP_404_NOT_FOUND)    
+                return Response({"detail": "Not found."}, status=status.HTTP_404_NOT_FOUND)    
         if action == 'sent':
             try:
                 idNotif = request.GET.get('id')
@@ -598,8 +598,60 @@ class CreateFinishOxoAPIView(generics.GenericAPIView):
             return Response({"message": "Le match a été mis à jour"}, status=status.HTTP_200_OK)
         return Response({"detail": "Invalid action."}, status=status.HTTP_404_NOT_FOUND)
 
+class getPlayerMatchesData(generics.GenericAPIView):
+    def get(self, request, *args, **kwargs):
+        current_user = self.request.user
         
-  
+        matches = Match.objects.filter(models.Q(player1=current_user) | models.Q(player2=current_user))
+        oxo_matches = OxoMatch.objects.filter(models.Q(player1=current_user) | models.Q(player2=current_user))
         
+        data = []
+        
+        for match in matches:
+            game_date = match.time_date.strftime("%d %B %H %M")
+            opponent = match.player2.username if match.player1 == current_user else match.player1.username
+            result = "Gagné" if match.winner == current_user else "Perdu"
+            duration = self.format_time(match.match_duration)
+            data.append({
+                "date": game_date,
+                "formatted_date" : match.time_date.strftime("%d %B"),
+                "game": "Pong",
+                "opponent": opponent,
+                "result": result,
+                "duration": duration
+            })
+        
+        for oxo_match in oxo_matches:
+            game_date = oxo_match.time_date.strftime("%d %B %H %M")
+            opponent = oxo_match.player2.username if oxo_match.player1 == current_user else oxo_match.player1.username
+            result = "Gagné" if oxo_match.winner == current_user else "Perdu" if oxo_match.winner else "Égalité"
+            duration = self.format_time(oxo_match.match_duration)
+            data.append({
+                "date": game_date,
+                "formatted_date" : match.time_date.strftime("%d %B"),
+                "game": "Oxo",
+                "opponent": opponent,
+                "result": result,
+                "duration": duration
+            })
+        
+        data.sort(key=lambda x: datetime.strptime(x['date'], "%d %B %H %M"), reverse=True)
+        
+        return Response({"data": data}, status=status.HTTP_200_OK)
+    
+    def format_time(self, duration):
+        total_seconds = duration.total_seconds()
+        hours, remainder = divmod(total_seconds, 3600)
+        minutes, seconds = divmod(remainder, 60)
+
+        if hours > 0:
+            return f"{int(hours)} h {int(minutes)} min"
+        elif minutes > 0:
+            return f"{int(minutes)} min"
+        elif seconds > 0:
+            return f"{int(seconds)} sec"
+        else:
+            return "< 1 min"
+    
 
         
