@@ -17,4 +17,4 @@ contract_address = receipt['contractAddress']
 
 # Write the contract address to a file
 with open('tempContractAddress.txt', 'w') as file:
-    file.write(contract_address)
+    file.write(contract_address).strip()

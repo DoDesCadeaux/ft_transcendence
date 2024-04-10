@@ -24,7 +24,7 @@ class Blockchain(generics.GenericAPIView):
     @staticmethod
     def fetchContractABI():
         try:
-            with open('./blockchain/build/contracts/PongTournament.json', 'r') as file:
+            with open('../blockchain/build/contracts/PongTournament.json', 'r') as file:
                 contract_data = json.load(file)
                 abi = contract_data.get('abi')
                 if abi:
@@ -41,7 +41,7 @@ class Blockchain(generics.GenericAPIView):
     def get_contract(self):
         contract_abi = self.fetchContractABI()
 
-        with open('./blockchain/tempContractAddress.txt', 'r') as file:
+        with open('../blockchain/tempContractAddress.txt', 'r') as file:
             contract_address = file.read().strip()
 
         return self.web3.eth.contract(address=contract_address, abi=contract_abi)
@@ -262,7 +262,6 @@ class CreateFinishMatchAPIView(generics.GenericAPIView):
             if tournament_id is None:
                 return Response({"detail": "Tournament ID is missing."}, status=status.HTTP_400_BAD_REQUEST)
 
-            # If tournament_id is not None, convert it to an integer
             # tournament_id_int = int(tournament_id)
             # tournament_id_str = str(tournament_id)
             # winner_id_str = str(match.winner_id)
@@ -271,7 +270,19 @@ class CreateFinishMatchAPIView(generics.GenericAPIView):
             tournament_id_str = "quarante deux"
             winner_id_str = "19"
             
-            blockchain.update(tournament_id_int, tournament_id_str, winner_id_str)
+            try:
+                print("Before calling blockchain.update")
+                print("tournament_id_int:", tournament_id_int)
+                print("tournament_id_str:", tournament_id_str)
+                print("winner_id_str:", winner_id_str)
+
+                blockchain.update(tournament_id_int, tournament_id_str, winner_id_str)
+
+                print("After calling blockchain.update")
+            except Exception as e:
+                print("An error occurred while calling blockchain.update:", e)
+            
+            # blockchain.update(tournament_id_int, tournament_id_str, winner_id_str)
 
             return Response({"message": "Le match a été mis à jour"}, status=status.HTTP_200_OK)
         return Response({"detail": "Invalid action."}, status=status.HTTP_404_NOT_FOUND)
