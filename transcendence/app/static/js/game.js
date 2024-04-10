@@ -273,11 +273,11 @@ function sentNotification(player2, tournament_id, type) {
     });
 }
 
-function playVScomputer(){
+function playVScomputer(game){
   const pong = document.querySelector(".Pong");
   const oxo = document.querySelector(".Oxo");
   pong.classList.add("displayNone");
   oxo.classList.add("displayNone");
 
-  playGame("IA", null, "oxo");
+  playGame("IA", null, game);
 }
