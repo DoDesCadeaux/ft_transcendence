@@ -1,18 +1,17 @@
 // var winner = scoreLeft > scoreRight ? data.player1.username : data.player2.username
 
-let canvas, ctx, ballX, ballY, paddleLeftY, paddleRightY;
+let canvas, ctx, ballX, ballY, paddleLeftY, paddleRightY, ia;
 
 // get canvas & context
 function setAsyncVariables(dataMatch){
     canvas = document.getElementById("pongCanvas");
     ctx = canvas.getContext("2d");
-    console.log(canvas);
-    console.log(ctx);
     ballX = canvas.width / 2;
     ballY = canvas.height / 2;
     paddleLeftY = canvas.height / 2 - paddleHeight / 2;
     paddleRightY = canvas.height / 2 - paddleHeight / 2;
     data = dataMatch;
+    ia = data.player2.username == "IA" ? true : false;
 }
 
 
@@ -67,6 +66,7 @@ document.addEventListener("keydown", function (event) {
 
 // Main loop
 function gameLoop() {
+
     if (gamePaused) {
         setTimeout(gameLoop, 1000 / 120);
         return;
@@ -85,16 +85,15 @@ function gameLoop() {
             paddleLeftY += 10;
         }
     }
-    if (keysPressed["ArrowUp"]) {
-        if (paddleRightY > 0) {
-            paddleRightY -= 10;
-        }
+    if (!ia){
+        if (keysPressed["ArrowUp"])
+            if (paddleRightY > 0)
+                paddleRightY -= 10;
+        if (keysPressed["ArrowDown"]) 
+            if (paddleRightY < canvas.height - paddleHeight) 
+                paddleRightY += 10;
     }
-    if (keysPressed["ArrowDown"]) {
-        if (paddleRightY < canvas.height - paddleHeight) {
-            paddleRightY += 10;
-        }
-    }
+    
     if (ballInPlay) {
         move();
         draw();
