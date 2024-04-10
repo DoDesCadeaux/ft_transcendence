@@ -14,8 +14,16 @@
         </div>
         <div class="time item-card">
             <img class="icon" src="../static/img/time.svg" alt="">
-            <div class="text-title">Temps de jeu</div>
-            <div class="text-content">{{ user.formatted_play_time }}</div>
+            <div class="flexCard">
+                <div>
+                    <div class="text-title">Temps de jeu</div>
+                    <div class="text-content">{{ user.formatted_play_time }}</div>
+                </div>
+                <div>
+                    <div class="text-title">Game session</div>
+                    <div class="text-content">{{ user.formatted_game_session }}</div>
+                </div>
+            </div>
         </div>
         <div class="oneVSone item-card">
             <img class="icon" src="../static/img/play.svg" alt="">

@@ -107,6 +107,7 @@ def logout(request):
 
 	activeUser = request.user
 	activeUser.state = "offline"
+	activeUser.game_session = timedelta(seconds=0)
 	activeUser.save()
 
 	auth_logout(request)

@@ -149,9 +149,17 @@ class CreateFinishMatchAPIView(generics.GenericAPIView):
             player1_duration = match.player1.play_time if match.player1.play_time else timedelta(seconds=0)
             player2_duration = match.player2.play_time if match.player2.play_time else timedelta(seconds=0)
             
+            # Idem pour les game session
+            player1_gamesess = match.player1.game_session if match.player1.game_session else timedelta(seconds=0)
+            player2_gamesess = match.player2.game_session if match.player2.game_session else timedelta(seconds=0)
+            
             # Ajouter la durée du match aux durées des joueurs
             match.player1.play_time = player1_duration + match.match_duration
             match.player2.play_time = player2_duration + match.match_duration
+            
+            # Idem pour les games session
+            match.player1.game_session = player1_gamesess + match.match_duration
+            match.player2.game_session = player2_gamesess + match.match_duration
             
             #Mise a jour du status
             match.player1.state = 'online'
@@ -582,9 +590,17 @@ class CreateFinishOxoAPIView(generics.GenericAPIView):
             player1_duration = match.player1.play_time if match.player1.play_time else timedelta(seconds=0)
             player2_duration = match.player2.play_time if match.player2.play_time else timedelta(seconds=0)
             
+            # Idem pour les game session
+            player1_gamesess = match.player1.game_session if match.player1.game_session else timedelta(seconds=0)
+            player2_gamesess = match.player2.game_session if match.player2.game_session else timedelta(seconds=0)
+            
             # Ajouter la durée du match aux durées des joueurs
             match.player1.play_time = player1_duration + match.match_duration
             match.player2.play_time = player2_duration + match.match_duration
+            
+            # Idem pour les games session
+            match.player1.game_session = player1_gamesess + match.match_duration
+            match.player2.game_session = player2_gamesess + match.match_duration
             
             #Mise a jour du status
             match.player1.state = 'online'

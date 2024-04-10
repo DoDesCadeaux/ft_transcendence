@@ -5,6 +5,8 @@ from django.utils import timezone
 from django.core.files import File
 from django.core.files.images import ImageFile
 import os
+from datetime import timedelta
+
 
 
 #kwargs = keywords arguments -> permet de passer des variable en plus des arguments dans une fonction
@@ -19,6 +21,7 @@ class User(AbstractUser):
     play_time = models.DurationField()
     state = models.CharField(max_length=50)  # Par exemple: online, offline, in-game
     amis = models.ManyToManyField('self', blank=True)
+    game_session = models.DurationField(default=timedelta(minutes=0))
 
     USERNAME_FIELD = 'id_api'
     password = models.CharField(max_length=128, null=True)  # Ajoutez cette ligne
@@ -49,6 +52,20 @@ class User(AbstractUser):
 
     def formatted_play_time(self):
         total_seconds = self.play_time.total_seconds()
+        hours, remainder = divmod(total_seconds, 3600)
+        minutes, seconds = divmod(remainder, 60)
+
+        if hours > 0:
+            return f"{int(hours)}h {int(minutes)}min"
+        elif minutes > 0:
+            return f"{int(minutes)}min"
+        elif seconds > 0:
+            return f"{int(seconds)}sec"
+        else:
+            return "0min"
+    
+    def formatted_game_session(self):
+        total_seconds = self.game_session.total_seconds()
         hours, remainder = divmod(total_seconds, 3600)
         minutes, seconds = divmod(remainder, 60)
 

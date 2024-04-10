@@ -36,30 +36,30 @@ body {
  * Style page login et de ses elements
  ***************************************************************************/
 .login {
-    width: 45vh;
-    height: 50vh;
-    background-color: var(--bg);
-    margin: 20vh auto auto auto;
-    border-radius: 15px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: space-evenly;
-    font-size: xx-large;
-    color: var(--orange);
+  width: 45vh;
+  height: 50vh;
+  background-color: var(--bg);
+  margin: 20vh auto auto auto;
+  border-radius: 15px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
+  font-size: xx-large;
+  color: var(--orange);
 }
 .btn-connexion {
-background-color: var(--orange);
-color: var(--bg-body);
-padding: 8px;
-border-radius: 15px;
-cursor: pointer;
+  background-color: var(--orange);
+  color: var(--bg-body);
+  padding: 8px;
+  border-radius: 15px;
+  cursor: pointer;
 }
 /****************************************************************************
  * FIN Page login
  ***************************************************************************/
 
- /****************************************************************************
+/****************************************************************************
  * Utils
  *
  * global utils
@@ -74,7 +74,7 @@ cursor: pointer;
   display: none !important;
 }
 .notAllowed {
-    cursor: not-allowed;
+  cursor: not-allowed;
 }
 /****************************************************************************
  * FIN Utils
@@ -133,53 +133,53 @@ cursor: pointer;
  *      - Game
  ***************************************************************************/
 .page {
-    width: 100%;
-    height: calc(100vh - 125px);
-    display: flex;
-    margin-top: 25px;
+  width: 100%;
+  height: calc(100vh - 125px);
+  display: flex;
+  margin-top: 25px;
 }
 .page .content {
-      width: calc(100% - 250px);
-      margin-right: 35px;
+  width: calc(100% - 250px);
+  margin-right: 35px;
 }
 .page .right-banner {
-    width: 255px;
-    background-color: var(--bg);
-    border-radius: 15px;
-} 
+  width: 255px;
+  background-color: var(--bg);
+  border-radius: 15px;
+}
 .right-banner .title {
-      color: var(--orange);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding-top: 15px;
+  color: var(--orange);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-top: 15px;
 }
 .right-banner ul {
-    padding: 15px 15px 0 15px;
+  padding: 15px 15px 0 15px;
 }
 .right-banner li {
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    padding-top: 10px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding-top: 10px;
 }
 .right-banner li .status {
-    width: 8px;
-    height: 8px;
-    border-radius: 5px;
-    margin-left: 10px;
-    background: red;
+  width: 8px;
+  height: 8px;
+  border-radius: 5px;
+  margin-left: 10px;
+  background: red;
 }
 .right-banner li .online {
-background-color: var(--green);
+  background-color: var(--green);
 }
 .right-banner li .in-game {
-background-color: var(--orange);
+  background-color: var(--orange);
 }
 .right-banner li .name {
-color: var(--white);
+  color: var(--white);
 }
-.right-banner li .custom-checkbox{
+.right-banner li .custom-checkbox {
   width: 25px;
   height: 25px;
   margin-left: auto;
@@ -209,35 +209,35 @@ color: var(--white);
  *
  * Style du dashboard et de tous ces components
  ***************************************************************************/
- .dash {
+.dash {
   width: 100%;
   height: 100%;
   display: grid;
   grid-template-columns: repeat(5, 1fr);
   grid-template-rows: repeat(6, 1fr);
   gap: 25px;
- }
- .dash .card {
-    background-color: var(--bg);
-    display: flex;
-    flex-direction: column;
-    border-radius: 15px;
- }
- .card .card--title {
-    color: var(--orange);
-    height: 30px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+}
+.dash .card {
+  background-color: var(--bg);
+  display: flex;
+  flex-direction: column;
+  border-radius: 15px;
+}
+.card .card--title {
+  color: var(--orange);
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
-    /* margin-left: 45%;  Rajouter pour les stats avanc2e    */
-    padding-top: 15px;
- }
- .card.advencedStats .card--title{
+  /* margin-left: 45%;  Rajouter pour les stats avanc2e    */
+  padding-top: 15px;
+}
+.card.advencedStats .card--title {
   margin-left: 45%;
- }
- .card .card--title .btn-hystoric,
- .card .card--title .btn-satistics {
+}
+.card .card--title .btn-hystoric,
+.card .card--title .btn-satistics {
   margin-left: auto;
   color: var(--bg-body);
   margin-right: 20px;
@@ -245,315 +245,322 @@ color: var(--white);
   padding: 5px;
   border-radius: 5px;
   cursor: pointer;
- }
-        /****************************************************************************
+}
+/****************************************************************************
          * VIGNETTES de stats globales
          *
          * Contenu
          ***************************************************************************/
-        .card.stats {
-          grid-row: 1 / 3;
-          grid-column: 2/6;
-          display: grid;
-          align-items: center;
-          grid-template-columns: repeat(4, 1fr);
-          padding: 0 10px 0 10px;
-          gap: 25px;
-        }
-        .stats .item-card {
-          margin: 30px 5px 5px 5px;
-          border-radius: 15px;
-          background-color: var(--bg-body);
-          position: relative;
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          height: 55%;
-        }
-        .stats .item-card .icon {
-          width: 75%;
-          height: 75%;
-          margin-top: -23%;
-        }
-        .stats .item-card .text-title {
-          width: 100%;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          color: var(--white);
-          font-size: medium;
-        }
-        .stats .item-card .text-content {
-          width: 100%;
-          /* height: 40%; */
-          padding-top: 20px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          color: var(--orange);
-          font-size: larger;
-        }
-        /****************************************************************************
+.card.stats {
+  grid-row: 1 / 3;
+  grid-column: 2/6;
+  display: grid;
+  align-items: center;
+  grid-template-columns: repeat(4, 1fr);
+  padding: 0 10px 0 10px;
+  gap: 25px;
+}
+.stats .item-card {
+  margin: 30px 5px 5px 5px;
+  border-radius: 15px;
+  background-color: var(--bg-body);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 55%;
+}
+.stats .item-card .icon {
+  width: 75%;
+  height: 75%;
+  margin-top: -23%;
+}
+.stats .item-card .text-title {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--white);
+  font-size: medium;
+}
+.stats .item-card .text-content {
+  width: 100%;
+  /* height: 40%; */
+  padding-top: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--orange);
+  font-size: larger;
+}
+.flexCard {
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+/****************************************************************************
          * FIN VIGNETTES
          ***************************************************************************/
 
-        /****************************************************************************
+/****************************************************************************
          * NOUVEAU MATCH
          *
          * Contenu
          ***************************************************************************/
-         .card.new-game {
-          grid-row: 1 / 4;
-          grid-column: 1;
-          /* padding-left: 15px; */
-          display: flex;
-          align-items: center;
-          justify-content: space-around;
-          flex-direction: column;
-         }
-         .new-game .new-game--icon {
-            width: 280px;
-            padding: 50px 0 50px 0;
-            cursor: pointer;
-         }
-        /****************************************************************************
+.card.new-game {
+  grid-row: 1 / 4;
+  grid-column: 1;
+  /* padding-left: 15px; */
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  flex-direction: column;
+}
+.new-game .new-game--icon {
+  width: 280px;
+  padding: 50px 0 50px 0;
+  cursor: pointer;
+}
+/****************************************************************************
          * FIN NOUVEAU MATCH
          ***************************************************************************/
 
-        /****************************************************************************
+/****************************************************************************
          * TOURNOIS
          *
          * Contenu
          ***************************************************************************/
-         .card.new-tournament {
-          grid-row: 4 /7;
-          grid-column: 1;
-         }
-         .new-tournament .card--title .create {
-          font-size: xx-large;
-          margin: 0 0 0 20px;
-          /* margin-left: 20px; */
-          background: var(--orange);
-          padding: 0 3px 0 3px;
-          border-radius: 15px;
-          width: 30px;
-          height: 30px;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          color: var(--bg);
-          cursor: pointer;
-        }
-        .include-tournament .no-tournament{
-          padding: 20px ;
-          text-align: justify;
-          line-height: 1.5;
-          color: var(--white);
-        }
-              /****************************************************************************
+.card.new-tournament {
+  grid-row: 4 /7;
+  grid-column: 1;
+}
+.new-tournament .card--title .create {
+  font-size: xx-large;
+  margin: 0 0 0 20px;
+  /* margin-left: 20px; */
+  background: var(--orange);
+  padding: 0 3px 0 3px;
+  border-radius: 15px;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: var(--bg);
+  cursor: pointer;
+}
+.include-tournament .no-tournament {
+  padding: 20px;
+  text-align: justify;
+  line-height: 1.5;
+  color: var(--white);
+}
+/****************************************************************************
                * graphique-tournament
                *
                * Contenu
                ***************************************************************************/
-               .tournament-name {
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                padding: 15px 0;
-                font-size: medium;
-                color: var(--orange);
-              }
-              .tournament-name .join {
-                margin-left: 15%;
-              }
-              .graph-tournament {
-                width: 100%;
-                display: flex;
-                justify-content: center;
-                padding: 20px 0;
-              }
-              /****************************************************************************
+.tournament-name {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 15px 0;
+  font-size: medium;
+  color: var(--orange);
+}
+.tournament-name .join {
+  margin-left: 15%;
+}
+.graph-tournament {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  padding: 20px 0;
+}
+/****************************************************************************
                * FIN graphique-tournament
                ***************************************************************************/
-              /****************************************************************************
+/****************************************************************************
               * Carousel des tournois
               *
               * Gestion du carousel
               ***************************************************************************/
-              .new-tournament {
-                position: relative;
-              }
-              .new-tournament button.btn {
-                position: absolute;
-                background: none;
-                border: none;
-                outline: none;
-                font-size: 2rem;
-                z-index: 2;
-                cursor: pointer;
-                color: var(--orange);
-                transform: translateY(-50%);
-                top: 88%;
-              }
-              #prev {
-                left: 50px;
-              }
-              #next {
-                right: 50px;
-              }
-              .slide {
-                position: absolute;
-                height: 100%;
-                width: 100%;
-                transition: 0.4s ease-in-out;
-                display: none;
-              }
-              .slide.active {
-                display: block;
-              }
-              /****************************************************************************
+.new-tournament {
+  position: relative;
+}
+.new-tournament button.btn {
+  position: absolute;
+  background: none;
+  border: none;
+  outline: none;
+  font-size: 2rem;
+  z-index: 2;
+  cursor: pointer;
+  color: var(--orange);
+  transform: translateY(-50%);
+  top: 88%;
+}
+#prev {
+  left: 50px;
+}
+#next {
+  right: 50px;
+}
+.slide {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  transition: 0.4s ease-in-out;
+  display: none;
+}
+.slide.active {
+  display: block;
+}
+/****************************************************************************
               * FIN Carousel des tournois
               ***************************************************************************/
-        /****************************************************************************
+/****************************************************************************
          * FIN TOURNOIS
          ***************************************************************************/
 
-        /****************************************************************************
+/****************************************************************************
          * STATISTIQUES
          *
          * Contenu
          ***************************************************************************/
-        
-        .card.advencedStats, .card.historic-game {
-            grid-row: 3/7;
-            grid-column: 2 /6;
-            display: flex;
-            flex-direction: column;
-         }
-        .card.advencedStats .statistics {
-            flex: 1;
-            width: 100%;
-            display: flex;
-        }
-        .statistics .comp-panel {
-            height: 95%;
-            width: 15%;
-            border-top: 2px solid var(--orange);
-            border-right: 2px solid var(--orange);
-            border-bottom: 2px solid var(--orange);
-            border-top-right-radius: 10px;
-            border-bottom-right-radius: 10px;
-            margin-right: 3%;
-            display: flex;
-            flex-direction: column;
-        }
-        .comp-panel .title{
-            color: #ccc;
-            width: 100%;
-            text-align: center;
-            padding: 5% 0;
-        }
-        .toggle{
-            display: flex;
-            align-items: center;
-            margin-left: 5%;
-        }
-        .toggle .toggle-name{
-            margin-left: 5%;
-            color: var(--white);
-        }
-        /* Style de base pour le bouton de basculement */
-        .toggle input[type="checkbox"] {
-            display: none;
-        }
-        /* Style du curseur du bouton de basculement en position activée */
-        .toggle input[type="checkbox"]:checked + .slider {
-            background-color: var(--orange);
-        }
-        /* Style du curseur du bouton de basculement */
-        .toggle .slider {
-        position: relative;
-        display: inline-block;
-        width: 40px;
-        height: 24px;
-        background-color: #ccc;
-        border-radius: 34px;
-        transition: background-color 0.3s;
-        }
-        /* Style du bouton de basculement */
-        .toggle .slider:before {
-        position: absolute;
-        content: "";
-        height: 20px;
-        width: 20px;
-        left: 2px;
-        bottom: 2px;
-        background-color: white;
-        border-radius: 50%;
-        transition: transform 0.3s;
-        }
-        /* Style du curseur du bouton de basculement en position activée */
-        .toggle input[type="checkbox"]:checked + .slider:before {
-        transform: translateX(15px);
-        }
-        .statistics .match-panel {
-        height: 100%;
-        width: 35%;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        }
-        .statistics .match-panel .stats_buts,
-        .statistics .match-panel .stats_percent_match_won {
-        width: 100%;
-        }
-        .statistics .tourny-panel {
-        height: 100%;
-        flex: 1;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        }
-        .tourny-panel .tourny-bloc {
-        width: 100%;
-        height: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        }
-        .tourny-panel .stats_duration {
-        width: 100%;
-        flex: 1;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        }
 
-        /* Historique  */
-        .historic-game-table{
-          width: 100%;
-          height: 90%;
-          overflow-y: auto;
-          
-        }
-        .historic-game-table table{
-          width: 100%;
-          color: var(--white);
-        }
-        caption {
-          color: var(--orange);
-          margin-bottom: 30px;
-        }
-        tbody tr{
-          text-align: center;
-          color: var(--white-sec);
-        }
-        tbody tr:nth-child(2n+1){
-          background-color: var(--bg-body);
-        }
-        /****************************************************************************
+.card.advencedStats,
+.card.historic-game {
+  grid-row: 3/7;
+  grid-column: 2 /6;
+  display: flex;
+  flex-direction: column;
+}
+.card.advencedStats .statistics {
+  flex: 1;
+  width: 100%;
+  display: flex;
+}
+.statistics .comp-panel {
+  height: 95%;
+  width: 15%;
+  border-top: 2px solid var(--orange);
+  border-right: 2px solid var(--orange);
+  border-bottom: 2px solid var(--orange);
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
+  margin-right: 3%;
+  display: flex;
+  flex-direction: column;
+}
+.comp-panel .title {
+  color: #ccc;
+  width: 100%;
+  text-align: center;
+  padding: 5% 0;
+}
+.toggle {
+  display: flex;
+  align-items: center;
+  margin-left: 5%;
+}
+.toggle .toggle-name {
+  margin-left: 5%;
+  color: var(--white);
+}
+/* Style de base pour le bouton de basculement */
+.toggle input[type="checkbox"] {
+  display: none;
+}
+/* Style du curseur du bouton de basculement en position activée */
+.toggle input[type="checkbox"]:checked + .slider {
+  background-color: var(--orange);
+}
+/* Style du curseur du bouton de basculement */
+.toggle .slider {
+  position: relative;
+  display: inline-block;
+  width: 40px;
+  height: 24px;
+  background-color: #ccc;
+  border-radius: 34px;
+  transition: background-color 0.3s;
+}
+/* Style du bouton de basculement */
+.toggle .slider:before {
+  position: absolute;
+  content: "";
+  height: 20px;
+  width: 20px;
+  left: 2px;
+  bottom: 2px;
+  background-color: white;
+  border-radius: 50%;
+  transition: transform 0.3s;
+}
+/* Style du curseur du bouton de basculement en position activée */
+.toggle input[type="checkbox"]:checked + .slider:before {
+  transform: translateX(15px);
+}
+.statistics .match-panel {
+  height: 100%;
+  width: 35%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.statistics .match-panel .stats_buts,
+.statistics .match-panel .stats_percent_match_won {
+  width: 100%;
+}
+.statistics .tourny-panel {
+  height: 100%;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.tourny-panel .tourny-bloc {
+  width: 100%;
+  height: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.tourny-panel .stats_duration {
+  width: 100%;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Historique  */
+.historic-game-table {
+  width: 100%;
+  height: 90%;
+  overflow-y: auto;
+}
+.historic-game-table table {
+  width: 100%;
+  color: var(--white);
+}
+caption {
+  color: var(--orange);
+  margin-bottom: 30px;
+}
+tbody tr {
+  text-align: center;
+  color: var(--white-sec);
+}
+tbody tr:nth-child(2n + 1) {
+  background-color: var(--bg-body);
+}
+/****************************************************************************
          * FIN STATISTIQUES
          ***************************************************************************/
 
@@ -566,303 +573,303 @@ color: var(--white);
  *
  * Profil avec preview et formulaire
  ***************************************************************************/
- .profile {
+.profile {
   width: 100%;
   height: 100%;
   background-color: var(--bg);
   border-radius: 15px;
   display: flex;
   justify-content: center;
- }
-  .profile-content {
-    margin-top: 5rem;
-    width: 50%;
-    height: 70%;
+}
+.profile-content {
+  margin-top: 5rem;
+  width: 50%;
+  height: 70%;
+  background-color: var(--bg-body);
+  border-radius: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.profile-content .preview,
+.profile-content .form-profile {
+  height: 100%;
+}
+.profile-content .preview {
+  width: 45%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.preview .preview-card {
+  width: 70%;
+  height: 70%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.preview-card .preview-top {
+  background-color: var(--orange);
+  width: 100%;
+  height: 30%;
+  border-top-right-radius: 15px;
+  border-top-left-radius: 15px;
+  position: relative;
+  display: flex;
+  justify-content: center;
+}
+.preview-top .preview-img {
+  width: 150px;
+  height: 150px;
+  border-radius: 100%;
+  position: absolute;
+  object-fit: cover;
+  top: 50%;
+}
+.preview-card .preview-bottom {
+  width: 100%;
+  flex: 1;
+  background-color: rgba(247, 138, 80, 0.8);
+  border-bottom-right-radius: 15px;
+  border-bottom-left-radius: 15px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: var(--white-sec);
+}
+.preview-bottom .preview-name,
+.preview-bottom .preview-username {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 25px;
+}
+.preview-bottom .preview-name span,
+.preview-bottom .preview-username span {
+  font-size: larger;
+  font-weight: bolder;
+}
+.profile-content .form-profile {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  border-left: 15px solid var(--bg);
+  color: var(--white);
+  gap: 50px;
+  padding: 50px;
+}
+.form-profile #form-profile {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.form-profile #form-profile input:focus {
+  outline: none;
+}
+.form-profile .update-profile {
+  background-color: var(--orange);
+  color: var(--white-sec);
+  padding: 5px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+/****************************************************************************
+ * FIN Profil
+ ***************************************************************************/
+
+.game {
+  width: 100%;
+  height: 100%;
+  background-color: var(--bg);
+  border-radius: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .game-content {
+    width: 80%;
+    height: 80%;
     background-color: var(--bg-body);
     border-radius: 15px;
     display: flex;
     align-items: center;
     justify-content: center;
-  }
-  .profile-content .preview,
-  .profile-content .form-profile {
-    height: 100%;
-  }
-  .profile-content .preview {
-      width: 45%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-  }
-  .preview .preview-card {
-    width: 70%;
-    height: 70%;
-    display: flex;
     flex-direction: column;
-    align-items: center;
-    justify-content: center;
-  }
-  .preview-card .preview-top {
-    background-color: var(--orange);
-    width: 100%;
-    height: 30%;
-    border-top-right-radius: 15px;
-    border-top-left-radius: 15px;
-    position: relative;
-    display: flex;
-    justify-content: center;
-  }
-  .preview-top .preview-img {
-    width: 150px;
-    height: 150px;
-    border-radius: 100%;
-    position: absolute;
-    object-fit: cover;
-    top: 50%;
-  }
-  .preview-card .preview-bottom {
-    width: 100%;
-    flex: 1;
-    background-color: rgba(247, 138, 80, 0.8);
-    border-bottom-right-radius: 15px;
-    border-bottom-left-radius: 15px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    color: var(--white-sec);
-  }
-  .preview-bottom .preview-name,
-  .preview-bottom .preview-username {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding-top: 25px;
-  }
-  .preview-bottom .preview-name span,
-  .preview-bottom .preview-username span {
-    font-size: larger;
-    font-weight: bolder;
-  }
-  .profile-content .form-profile {
-      flex: 1;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-direction: column;
-      border-left: 15px solid var(--bg);
-      color: var(--white);
-      gap: 50px;
-      padding: 50px;
-  }
-  .form-profile #form-profile {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-  }
-  .form-profile #form-profile input:focus {
-      outline: none;
-    }
-  .form-profile .update-profile {
-    background-color: var(--orange);
-    color: var(--white-sec);
-    padding: 5px;
-    border-radius: 10px;
-    cursor: pointer;
-  }
-/****************************************************************************
- * FIN Profil
- ***************************************************************************/
 
-  .game {
-    width: 100%;
-    height: 100%;
-    background-color: var(--bg);
-    border-radius: 15px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    .game-content {
-      width: 80%;
-      height: 80%;
-      background-color: var(--bg-body);
-      border-radius: 15px;
+    .pong {
+      width: 100%;
       display: flex;
       align-items: center;
       justify-content: center;
       flex-direction: column;
 
-      .pong {
-        width: 100%;
+      .opponents {
         display: flex;
         align-items: center;
-        justify-content: center;
-        flex-direction: column;
+        justify-content: space-around;
+        height: 50px;
+        width: 200px;
 
-        .opponents {
+        .opponents-img {
+          width: 35px;
+          height: 35px;
+          border-radius: 50%;
+          object-fit: cover;
+        }
+      }
+    }
+
+    canvas {
+      border: 1px solid var(--orange);
+      /* border-radius: 15px; */
+      display: block;
+      margin: 0 auto;
+    }
+
+    .Pong,
+    .Oxo {
+      width: 100%;
+      height: 50%;
+      display: flex;
+      justify-content: center;
+      /* align-items: center; */
+    }
+    .Pong .title,
+    .Oxo .title {
+      color: var(--orange);
+      height: 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 5px;
+    }
+
+    .invit-game {
+      width: 80%;
+      height: 80%;
+      display: flex;
+      justify-content: center;
+      flex-direction: column;
+      justify-content: center;
+      position: relative;
+
+      #search {
+        display: flex;
+        flex-direction: column;
+        width: 30%;
+        border-radius: 10px;
+        position: absolute;
+        z-index: 5;
+        background: var(--bg);
+        margin-top: 10px;
+
+        .bar {
+          width: 100%;
+          height: 25px;
+          border-radius: 5px;
           display: flex;
           align-items: center;
-          justify-content: space-around;
-          height: 50px;
-          width: 200px;
+          padding: 5px;
 
-          .opponents-img {
-            width: 35px;
-            height: 35px;
-            border-radius: 50%;
-            object-fit: cover;
+          #search-input {
+            width: 85%;
+            background-color: transparent;
+            border: none;
+            color: var(--white);
           }
+
+          #search-input:focus {
+            outline: none;
+          }
+
+          .search {
+            width: 10%;
+          }
+        }
+
+        .autocomplete {
+          width: 85%;
+          height: auto;
+          font-size: smaller;
+          list-style: none;
+          margin: 0 0 0 0.5rem;
+          padding: 0;
+          color: var(--white);
         }
       }
 
-      canvas {
-        border: 1px solid var(--orange);
-        /* border-radius: 15px; */
-        display: block;
-        margin: 0 auto;
+      .Pong #search {
+        /* Styles pour le deuxième élément #search */
+        top: 5%; /* Par exemple, déplacer le deuxième élément vers le bas de 50% de la hauteur de son conteneur parent */
       }
-
-      .Pong, .Oxo{
-        width: 100%;
-        height: 50%;
-        display: flex;
-        justify-content: center;
-        /* align-items: center; */
+      .Oxo #search {
+        /* Styles pour le deuxième élément #search */
+        top: 55%; /* Par exemple, déplacer le deuxième élément vers le bas de 50% de la hauteur de son conteneur parent */
       }
-      .Pong .title, .Oxo .title{
-        color: var(--orange);
+      .vsComputeur {
+        background-color: var(--orange);
         height: 2rem;
         display: flex;
         align-items: center;
         justify-content: center;
-        margin: 0 5px;
+        margin-left: 30px;
+        padding: 0 5px;
+        border-radius: 5px;
+        cursor: pointer;
       }
-
-
-      .invit-game {
-        width: 80%;
-        height: 80%;
+      .waiting {
         display: flex;
-        justify-content: center;
+        align-items: center;
         flex-direction: column;
-        justify-content: center;
-        position: relative;
+        /* margin-top: 100px; */
+        color: var(--orange);
 
-        #search {
-          display: flex;
-          flex-direction: column;
-          width: 30%;
-          border-radius: 10px;
+        .waiting-msg {
+          font-size: xx-large;
+          font-weight: bolder;
+          margin-bottom: 150px;
+        }
+
+        .wrap-ball {
           position: absolute;
-          z-index: 5;
-          background: var(--bg);
-          margin-top: 10px;
-
-          .bar {
-            width: 100%;
-            height: 25px;
-            border-radius: 5px;
-            display: flex;
-            align-items: center;
-            padding: 5px;
-
-            #search-input {
-              width: 85%;
-              background-color: transparent;
-              border: none;
-              color: var(--white);
-            }
-
-            #search-input:focus {
-              outline: none;
-            }
-
-            .search {
-              width: 10%;
-            }
-          }
-
-          .autocomplete {
-            width: 85%;
-            height: auto;
-            font-size: smaller;
-            list-style: none;
-            margin: 0 0 0 0.5rem;
-            padding: 0;
-            color: var(--white);
-          }
+          margin: 15px 15px 15px 15px;
+          top: 45%;
+          height: 200px;
+          width: 265px;
         }
 
-        .Pong #search {
-          /* Styles pour le deuxième élément #search */
-          top: 5%; /* Par exemple, déplacer le deuxième élément vers le bas de 50% de la hauteur de son conteneur parent */
-        }
-        .Oxo #search {
-          /* Styles pour le deuxième élément #search */
-          top: 55%; /* Par exemple, déplacer le deuxième élément vers le bas de 50% de la hauteur de son conteneur parent */
-        }
-        .vsComputeur {
+        .ball {
+          width: 50px;
+          height: 50px;
           background-color: var(--orange);
-          height: 2rem;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          margin-left: 30px;
-          padding: 0 5px;
-          border-radius: 5px;
-          cursor: pointer;
+          border-radius: 100%;
+          top: 10px;
+          margin: 0 auto;
+          animation: ball 1s infinite;
+          position: absolute;
         }
-        .waiting {
-          display: flex;
-          align-items: center;
-          flex-direction: column;
-          /* margin-top: 100px; */
-          color: var(--orange);
 
-          .waiting-msg {
-            font-size: xx-large;
-            font-weight: bolder;
-            margin-bottom: 150px;
-          }
+        .ball:nth-child(1) {
+          left: 0;
+        }
 
-          .wrap-ball {
-            position: absolute;
-            margin: 15px 15px 15px 15px;
-            top: 45%;
-            height: 200px;
-            width: 265px;
-          }
+        .ball:nth-child(2) {
+          left: 100px;
+          animation-delay: 0.1s;
+        }
 
-          .ball {
-            width: 50px;
-            height: 50px;
-            background-color: var(--orange);
-            border-radius: 100%;
-            top: 10px;
-            margin: 0 auto;
-            animation: ball 1s infinite;
-            position: absolute;
-          }
-
-          .ball:nth-child(1) {
-            left: 0;
-          }
-
-          .ball:nth-child(2) {
-            left: 100px;
-            animation-delay: 0.1s;
-          }
-
-          .ball:nth-child(3) {
-            left: 200px;
-            animation-delay: 0.2s;
-          }
+        .ball:nth-child(3) {
+          left: 200px;
+          animation-delay: 0.2s;
         }
       }
     }
   }
-
+}
 
 .join {
   border: 1px solid var(--white-sec);
@@ -942,9 +949,8 @@ color: var(--white);
 
   70% {
     top: 72px;
-  }ƒ
-
-  75% {
+  }
+  ƒ 75% {
     top: 38px;
   }
 
@@ -1022,8 +1028,6 @@ color: var(--white);
  * FIN Modale de notification
  ***************************************************************************/
 
-
-
 /****************************************************************************
  * QUID ???
  *
@@ -1068,7 +1072,7 @@ color: var(--white);
   vertical-align: middle;
   font-size: 70px;
   cursor: pointer;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, .3);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
 }
 
 .oxo tr:first-child td {
@@ -1125,13 +1129,13 @@ color: var(--white);
   z-index: 1;
 } */
 
-.endgame{
-    width: 100%;
-    padding-top: 20px;
-    color: var(--white-sec);
-    align-items: center;
-    justify-content: center;
-    font-size: x-large;
+.endgame {
+  width: 100%;
+  padding-top: 20px;
+  color: var(--white-sec);
+  align-items: center;
+  justify-content: center;
+  font-size: x-large;
 }
 
 /* .custom-btn {
@@ -1168,4 +1172,3 @@ color: var(--white);
       inset -4px -4px 6px 0 rgba(255, 255, 255, .2),
       inset 4px 4px 6px 0 rgba(0, 0, 0, .4);
 } */
-
