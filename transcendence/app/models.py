@@ -22,6 +22,7 @@ class User(AbstractUser):
     state = models.CharField(max_length=50)  # Par exemple: online, offline, in-game
     amis = models.ManyToManyField('self', blank=True)
     game_session = models.DurationField(default=timedelta(minutes=0))
+    points = models.IntegerField(default=0)
 
     USERNAME_FIELD = 'id_api'
     password = models.CharField(max_length=128, null=True)  # Ajoutez cette ligne

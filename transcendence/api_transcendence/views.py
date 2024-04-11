@@ -164,7 +164,16 @@ class CreateFinishMatchAPIView(generics.GenericAPIView):
             #Mise a jour du status
             match.player1.state = 'online'
             match.player2.state = 'online'
-            
+
+            #Mise à jour des points de elo
+            if match.player2.name != 'IA':
+                if match.winner_id == match.player1_id:
+                    match.player1.points += 2
+                    match.player2.points -= 2
+                elif match.winner == match.player2_id:
+                    match.player2.points += 2
+                    match.player1.points -= 2
+
             # Enregistrer les modifications
             match.player1.save()
             match.player2.save()
