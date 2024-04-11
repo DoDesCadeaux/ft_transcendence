@@ -18,11 +18,15 @@ RUN pip install web3
 COPY requirements.txt /transcendence/
 RUN pip install --no-cache-dir -r requirements.txt
 
+# Set Python logging level
+ENV PYTHONWARNINGS=default
+
 COPY . /transcendence/
 COPY ./blockchain/contracts /contracts
 
 # Copy the Python script to the Docker container
 COPY ./blockchain/getContractAddress.py /getContractAddress.py
+RUN chmod +x /getContractAddress.py
 
 EXPOSE 8000
 
