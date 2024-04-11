@@ -301,7 +301,7 @@ class DataMatchTournamentAPIView(generics.GenericAPIView):
                         # Ajoutez le résultat au tableau winner_demi
                         tournament_info['winners'][1] = winner_demi_serializer.data if winner_demi_last else None
 
-                if tournament_info['winners'][0] and tournament_info['winners'][1]:
+                if tournament_info['winners'][0] and tournament_info['winners'][1] and not tournament_info['winners'][2]:
                     # if len(tournament_info['winner_demi']) == 2:
                     # Recherchez le gagnant du match final
                     winner_final_match = Match.objects.filter(
@@ -440,14 +440,14 @@ class FullStatsAPIView(generics.GenericAPIView):
         # Pour chaque tournoi, récupérer les matchs correspondants
         for tournament in tournaments_participated:
             matches = Match.objects.filter(tournament=tournament)
-            if (len(matches) < 3):
+            if len(matches) < 3:
                 for match_play in matches:
                     participed = match_play.player1 == user or match_play.player2 == user
                     if participed:
                         total_demi += 1
                     if match_play.winner == user:
                         won_demi += 1
-            if (len(matches) == 3):
+            if len(matches) == 3:
                 participed = matches[2].player1 == user or matches[2].player2 == user
                 if participed:
                     total_final += 1
