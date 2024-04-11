@@ -60,6 +60,7 @@ document.body.addEventListener("DOMNodeInserted", function (event) {
 
     (async () => {
       const dataTournament = await fetchGET(URI.DATA_TOURNAMENT);
+      console.log(dataTournament);
       if (dataTournament.length < 1) {
         const empty = document.createElement("p");
         empty.classList.add("no-tournament");
@@ -383,8 +384,8 @@ function getAndUpdateData() {
   fetch(url)
     .then(response => response.json())
     .then(data => updateGraph(data))
-    .catch(error => console.error('Erreur :', error));
-
+      .catch(error => console.error('Erreur :', error));
+  console.log(data)
 }
 
 function fillParams(data) {
@@ -461,7 +462,6 @@ function addToggle(state, player, boxes) {
 
 function updateGraph(fetchData) {
   const titles = ["Matchs gagnés (en %)", "Demies finales gagnées (en %)", "Finales gagnées (en %)"];
-
   radialCharts.forEach((chart, index) => {
     var data = index == 0 ? fetchData.percentWon : index == 1 ? fetchData.percentWonDemi : fetchData.percentWonFinal;
     var dataLen = data.map((item) => item.data).length;

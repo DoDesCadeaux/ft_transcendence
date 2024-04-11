@@ -19,8 +19,9 @@ class UserInfoAPIView(generics.ListAPIView):
 
     def get(self, request, *args, **kwargs):
         current_user = self.request.user
-        serializer = self.serializer_class(current_user) 
+        serializer = self.serializer_class(current_user)
         return Response(serializer.data)
+
 
 class UserListAPIView(generics.ListAPIView):
     serializer_class = UserListSerializer
@@ -51,8 +52,10 @@ class UserListAPIView(generics.ListAPIView):
 
         return Response(serialized_users)
 
+
 class UserUpdateAPIView(generics.UpdateAPIView):
     queryset = User.objects.all()
+
     # serializer_class = UserManagementSerializer
 
     def update(self, request, *args, **kwargs):
@@ -73,11 +76,12 @@ class UserUpdateAPIView(generics.UpdateAPIView):
             user.photo = new_photo
 
         user.save()
-      
+
         serializer = UserManagementSerializer(user)
         return Response(serializer.data)
 
-# Permet de récupérer les stats globales joués/gagnés pour les matchs et les tournois   
+
+# Permet de récupérer les stats globales joués/gagnés pour les matchs et les tournois
 class ResultsAPIView(generics.GenericAPIView):
     serializer_class = MatchSerializer
 
@@ -86,7 +90,8 @@ class ResultsAPIView(generics.GenericAPIView):
         current_player = self.request.user
 
         if game == 'matchs':
-            matches_played = Match.objects.filter(models.Q(player1=current_player.id) | models.Q(player2=current_player.id))
+            matches_played = Match.objects.filter(
+                models.Q(player1=current_player.id) | models.Q(player2=current_player.id))
 
             # Calculer le nombre de matchs gagnés par le joueur actuel
             matches_won = Match.objects.filter(winner=current_player.id)
@@ -105,7 +110,8 @@ class ResultsAPIView(generics.GenericAPIView):
         else:
             # Gérer d'autres cas ou renvoyer une réponse d'erreur
             return Response({'error': 'Opération non prise en charge'})
-        
+
+
 class CreateFinishMatchAPIView(generics.GenericAPIView):
     #                                               DATA DOIT CONTENIR :
     #               action = create                         |               action = finish
@@ -118,7 +124,7 @@ class CreateFinishMatchAPIView(generics.GenericAPIView):
     def post(self, request, *args, **kwargs):
         current_player = self.request.user
         action = kwargs.get('action')
-        
+
         if action == 'create':
             try:
                 player2 = User.objects.get(username=request.data.get('opponent'))
@@ -130,14 +136,14 @@ class CreateFinishMatchAPIView(generics.GenericAPIView):
                 tournament_id=request.data.get('tournament')  # Assurez-vous de récupérer ou de passer l'ID du tournoi
             )
             response = {
-                "match_id" : new_match.id,
-                "player1" : {
-                    "username" : new_match.player1.username,
-                    "photo" : new_match.player1.photo.url,
+                "match_id": new_match.id,
+                "player1": {
+                    "username": new_match.player1.username,
+                    "photo": new_match.player1.photo.url,
                 },
-                "player2" : {
-                    "username" : new_match.player2.username,
-                    "photo" : new_match.player2.photo.url,
+                "player2": {
+                    "username": new_match.player2.username,
+                    "photo": new_match.player2.photo.url,
                 }
             }
             player2.state = 'in-game'
@@ -150,34 +156,34 @@ class CreateFinishMatchAPIView(generics.GenericAPIView):
                 match = Match.objects.get(id=request.data.get('id'))
             except Match.DoesNotExist:
                 return Response({"detail": "Match not found."}, status=status.HTTP_404_NOT_FOUND)
-        
+
             match.player1_score = request.data.get('player1_score')
             match.player2_score = request.data.get('player2_score')
             timedelta_duration = timedelta(seconds=float(request.data.get('match_duration')))
             match.match_duration = timedelta_duration
             match.winner_id = match.player1_id if match.player1_score > match.player2_score else match.player2_id
-            
+
             # Récupérer les time actuels des joueurs depuis la base de données
             player1_duration = match.player1.play_time if match.player1.play_time else timedelta(seconds=0)
             player2_duration = match.player2.play_time if match.player2.play_time else timedelta(seconds=0)
-            
+
             # Idem pour les game session
             player1_gamesess = match.player1.game_session if match.player1.game_session else timedelta(seconds=0)
             player2_gamesess = match.player2.game_session if match.player2.game_session else timedelta(seconds=0)
-            
+
             # Ajouter la durée du match aux durées des joueurs
             match.player1.play_time = player1_duration + match.match_duration
             match.player2.play_time = player2_duration + match.match_duration
-            
+
             # Idem pour les games session
             match.player1.game_session = player1_gamesess + match.match_duration
             match.player2.game_session = player2_gamesess + match.match_duration
-            
-            #Mise a jour du status
+
+            # Mise a jour du status
             match.player1.state = 'online'
             match.player2.state = 'online'
 
-            #Mise à jour des points de elo
+            # Mise à jour des points de elo
             if match.player2.name != 'IA':
                 if match.winner_id == match.player1_id:
                     match.player1.points += 2
@@ -194,6 +200,7 @@ class CreateFinishMatchAPIView(generics.GenericAPIView):
             return Response({"message": "Le match a été mis à jour"}, status=status.HTTP_200_OK)
         return Response({"detail": "Invalid action."}, status=status.HTTP_404_NOT_FOUND)
 
+
 class CreateJoinTournamentAPIView(generics.GenericAPIView):
     #                                               DATA DOIT CONTENIR :
     #               action = create                         |               action = join
@@ -203,34 +210,33 @@ class CreateJoinTournamentAPIView(generics.GenericAPIView):
     def post(self, request, *args, **kwargs):
         current_player = self.request.user
         action = kwargs.get('action')
-        
+
         if action == 'create':
             newTournament = Tournament.objects.create(
-                name = request.data.get('name'),
+                name=request.data.get('name'),
             )
-            
+
             newTournament.players.add(current_player)
             newTournament.save()
-            
-            
+
             newTournament.players.add(current_player)
             newTournament.save()
 
             return Response({"message": "Tournoi créé avec succès"}, status=status.HTTP_201_CREATED)
-            
+
         elif action == 'join':
             tournament = get_object_or_404(Tournament, id=request.data.get('id'))
             # Récupérer l'ensemble des joueurs du tournoi
             players_set = tournament.players.all()
 
-
             # Vérifier si la longueur est supérieure à 4
             if len(players_set) >= 4:
-                return Response( "Le tournoi est complet. Il n'y a plus de place.", status=status.HTTP_400_BAD_REQUEST)
+                return Response("Le tournoi est complet. Il n'y a plus de place.", status=status.HTTP_400_BAD_REQUEST)
 
             # Vérifier si le joueur est déjà inscrit
             if current_player in players_set:
-                return Response(f"Vous êtes déjà inscrit au tournoi {tournament.name}.", status=status.HTTP_400_BAD_REQUEST)
+                return Response(f"Vous êtes déjà inscrit au tournoi {tournament.name}.",
+                                status=status.HTTP_400_BAD_REQUEST)
 
             # Ajouter le joueur actuel à la liste des joueurs du tournoi
             tournament.players.add(current_player)
@@ -238,8 +244,9 @@ class CreateJoinTournamentAPIView(generics.GenericAPIView):
             # Sauvegarder les modifications
             tournament.save()
 
-            return Response(f"Inscription réussie au tournoi {tournament.name} !",status=status.HTTP_200_OK)
-                
+            return Response(f"Inscription réussie au tournoi {tournament.name} !", status=status.HTTP_200_OK)
+
+
 # Permet de récupérer les infos globales d'un match ou d'un tournois 
 class DataMatchTournamentAPIView(generics.GenericAPIView):
     def get(self, request, *args, **kwargs):
@@ -247,14 +254,14 @@ class DataMatchTournamentAPIView(generics.GenericAPIView):
 
         # if game == 'matchs':
         #     print("coucou")
-            # return Response(response)
+        # return Response(response)
         if game == 'tournaments':
             tournaments = Tournament.objects.all()
 
             tournament_data = []
             for tournament in tournaments:
                 tournament_info = {
-                    'id' : tournament.id,
+                    'id': tournament.id,
                     'name': tournament.name,
                     'players': UserSerializer(tournament.players.all(), many=True).data,
                     'winners': [None, None, None]
@@ -270,7 +277,7 @@ class DataMatchTournamentAPIView(generics.GenericAPIView):
                         player1_id__in=[player['id'] for player in first_two_players],
                         player2_id__in=[player['id'] for player in first_two_players]
                     ).values('winner').first()
-                    if  winner_demi_first is not None:
+                    if winner_demi_first is not None:
                         winner_demi_user = get_object_or_404(User, id=winner_demi_first['winner'])
 
                     # Utilisez le serializer pour convertir l'utilisateur en données JSON
@@ -285,17 +292,18 @@ class DataMatchTournamentAPIView(generics.GenericAPIView):
                         player1_id__in=[player['id'] for player in last_two_players],
                         player2_id__in=[player['id'] for player in last_two_players]
                     ).values('winner').first()
-                    
+
                     if winner_demi_last is not None:
                         winner_demi_user = get_object_or_404(User, id=winner_demi_last['winner'])
 
-                    # Utilisez le serializer pour convertir l'utilisateur en données JSON
+                        # Utilisez le serializer pour convertir l'utilisateur en données JSON
                         winner_demi_serializer = UserSerializer(winner_demi_user)
                         # Ajoutez le résultat au tableau winner_demi
                         tournament_info['winners'][1] = winner_demi_serializer.data if winner_demi_last else None
-                
-                if tournament_info['winners'][0] is not None and tournament_info['winners'][1]  is not None:
-                # if len(tournament_info['winner_demi']) == 2:
+
+                if tournament_info['winners'][0] and tournament_info['winners'][1]:
+                    print("<======================================> ICICICICI <======================================>")
+                    # if len(tournament_info['winner_demi']) == 2:
                     # Recherchez le gagnant du match final
                     winner_final_match = Match.objects.filter(
                         tournament_id=tournament_info['id'],
@@ -303,37 +311,47 @@ class DataMatchTournamentAPIView(generics.GenericAPIView):
                         player2_id__in=[player['id'] for player in tournament_info['winners'][:2]],
                     ).values('winner').first()
 
-                    winner_demi_user = get_object_or_404(User, id=winner_demi_last['winner'])
+                    print(winner_final_match)
+
+                    winner_final_user = get_object_or_404(User, id=winner_final_match['winner'])
 
                     # Utilisez le serializer pour convertir l'utilisateur en données JSON
-                    winner_demi_serializer = UserSerializer(winner_demi_user)
+                    winner_final_serializer = UserSerializer(winner_final_user)
 
                     # Ajoutez le résultat au champ winner_final
-                    tournament_info['winners'][2] = winner_demi_serializer.data if winner_final_match else None
+                    tournament_info['winners'][2] = winner_final_serializer.data if winner_final_match else None
+
+                    # DORIAN MAISON : Le winner de la final est toujours le winner de la demi final (à cause de la ligne 321)
+                    # Il faut réussir à récuperer le gagnant de la finale correctement et l'envoyer dans tournament-info
+                    # Commencer par la ligne 307, vérifier aussi la condition ligne 304 si on rentre bien dedans.
+                    # Check toutes les variables existantes si elles sont bien prises en compte avec la bonne donnée.
+                    # Il est possible de fix cette merde ce soir courage fdp
+
                 tournament_data.append(tournament_info)
 
             return Response(tournament_data)
         else:
             return Response({'error': 'Opération non prise en charge'})
 
+
 class FullStatsAPIView(generics.GenericAPIView):
     def get(self, request, *args, **kwargs):
         params = request.GET.get('list')
         ids = ast.literal_eval(params)
-        
+
         if ids:
             buts_data = []
             duration_data = []
             percent_won_data = []
             percent_won_demi_data = []
             percent_won_final_data = []
-        
+
             for id in ids:
                 user = User.objects.get(id=id)
                 buts_data.append(self.getButsData(user))
                 duration_data.append(self.getDurationData(user))
                 percent_won_data.append(self.getPercentWonData(user))
-                won_demi , won_final = self.getPercentWonTournyData(user)
+                won_demi, won_final = self.getPercentWonTournyData(user)
                 percent_won_demi_data.append(won_demi)
                 percent_won_final_data.append(won_final)
             stats_data = {
@@ -346,7 +364,7 @@ class FullStatsAPIView(generics.GenericAPIView):
             return Response(stats_data)
         else:
             return Response({'error': 'Opération non prise en charge'})
-        
+
     def getPercentWonData(self, user):
         matches_played = Match.objects.filter(models.Q(player1=user.id) | models.Q(player2=user.id)).count()
         matches_won = Match.objects.filter(winner=user.id).count()
@@ -360,56 +378,68 @@ class FullStatsAPIView(generics.GenericAPIView):
             'label': user.username,
             'data': win_percentage
         }
-    
+
     def getButsData(self, user):
         # Calcul du nombre total de buts marqués par l'utilisateur
-        goals_for = Match.objects.filter(models.Q(player1=user) | models.Q(player2=user)).aggregate(total_goals=Sum(models.Case(
-            models.When(player1=user, then='player1_score'),
-            models.When(player2=user, then='player2_score'),
-            default=0
-        ))
-        )['total_goals'] or 0
+        goals_for = \
+            Match.objects.filter(models.Q(player1=user) | models.Q(player2=user)).aggregate(total_goals=Sum(models.Case(
+                models.When(player1=user, then='player1_score'),
+                models.When(player2=user, then='player2_score'),
+                default=0
+            ))
+            )['total_goals'] or 0
 
         # Calcul du nombre total de buts encaissés par l'utilisateur
-        goals_against = Match.objects.filter(models.Q(player1=user) | models.Q(player2=user)).aggregate(total_goals=Sum(models.Case(
-            models.When(player1=user, then='player2_score'),
-            models.When(player2=user, then='player1_score'),
-            default=0
-        ))
-        )['total_goals'] or 0
-        
+        goals_against = \
+            Match.objects.filter(models.Q(player1=user) | models.Q(player2=user)).aggregate(total_goals=Sum(models.Case(
+                models.When(player1=user, then='player2_score'),
+                models.When(player2=user, then='player1_score'),
+                default=0
+            ))
+            )['total_goals'] or 0
+
         return {
             'name': user.username,
             'data': [goals_for, goals_against]
         }
-    
+
     def getDurationData(self, user):
         # Filtrer les matchs où l'utilisateur est soit joueur 1 soit joueur 2
         matches_participated = Match.objects.filter(models.Q(player1=user) | models.Q(player2=user))
-        
+
         # Calculer le temps moyen des matchs auquel l'utilisateur a participé
-        average_duration_participated = matches_participated.aggregate(average_duration=Avg(ExpressionWrapper(F('match_duration'), output_field=fields.DurationField())))['average_duration']
-        average_duration_participated_minutes = int(average_duration_participated.total_seconds() / 60) if average_duration_participated else 0
-        
+        average_duration_participated = matches_participated.aggregate(
+            average_duration=Avg(ExpressionWrapper(F('match_duration'), output_field=fields.DurationField())))[
+            'average_duration']
+        average_duration_participated_minutes = int(
+            average_duration_participated.total_seconds() / 60) if average_duration_participated else 0
+
         # Filtrer les matchs sans ID de tournoi
         matches_without_tournament = matches_participated.filter(tournament=None)
-        
+
         # Calculer le temps moyen des matchs sans ID de tournoi
-        average_duration_without_tournament = matches_without_tournament.aggregate(average_duration=Avg(ExpressionWrapper(F('match_duration'), output_field=fields.DurationField())))['average_duration']
-        average_duration_without_tournament_minutes = int(average_duration_without_tournament.total_seconds() / 60) if average_duration_without_tournament else 0
-        
+        average_duration_without_tournament = matches_without_tournament.aggregate(
+            average_duration=Avg(ExpressionWrapper(F('match_duration'), output_field=fields.DurationField())))[
+            'average_duration']
+        average_duration_without_tournament_minutes = int(
+            average_duration_without_tournament.total_seconds() / 60) if average_duration_without_tournament else 0
+
         # Filtrer les matchs avec ID de tournoi
         matches_with_tournament = matches_participated.exclude(tournament=None)
-        
+
         # Calculer le temps moyen des matchs avec ID de tournoi
-        average_duration_with_tournament = matches_with_tournament.aggregate(average_duration=Avg(ExpressionWrapper(F('match_duration'), output_field=fields.DurationField())))['average_duration']
-        average_duration_with_tournament_minutes = int(average_duration_with_tournament.total_seconds() / 60) if average_duration_with_tournament else 0
-        
+        average_duration_with_tournament = matches_with_tournament.aggregate(
+            average_duration=Avg(ExpressionWrapper(F('match_duration'), output_field=fields.DurationField())))[
+            'average_duration']
+        average_duration_with_tournament_minutes = int(
+            average_duration_with_tournament.total_seconds() / 60) if average_duration_with_tournament else 0
+
         return {
             'name': user.username,
-            'data': [average_duration_participated_minutes, average_duration_without_tournament_minutes, average_duration_with_tournament_minutes]
+            'data': [average_duration_participated_minutes, average_duration_without_tournament_minutes,
+                     average_duration_with_tournament_minutes]
         }
-    
+
     def getPercentWonTournyData(self, user):
         tournaments_participated = Tournament.objects.filter(players=user)
         total_demi = 0
@@ -426,29 +456,29 @@ class FullStatsAPIView(generics.GenericAPIView):
                         total_demi += 1
                     if match_play.winner == user:
                         won_demi += 1
-            if(len(matches) == 3):
+            if (len(matches) == 3):
                 participed = matches[2].player1 == user or matches[2].player2 == user
                 if participed:
                     total_final += 1
                 if matches[2].winner == user:
                     won_final += 1
-        
+
         if total_demi != 0:
             res_demi = (won_demi * 100) / total_demi
         else:
             res_demi = 0
-            
+
         if total_final != 0:
             res_final = (won_final * 100) / total_final
         else:
             res_final = 0
 
         percent_demi = {'label': user.username, 'data': res_demi}
-        percent_final = {'label': user.username, 'data': res_final}  
-        
-        
+        percent_final = {'label': user.username, 'data': res_final}
+
         return percent_demi, percent_final
-            
+
+
 class ManageNotifAPIView(generics.GenericAPIView):
     #                                               DATA DOIT CONTENIR :
     #               action = create                         |               action = update
@@ -459,7 +489,7 @@ class ManageNotifAPIView(generics.GenericAPIView):
     def post(self, request, *args, **kwargs):
         current_player = self.request.user
         action = kwargs.get('action')
-    
+
         if action == 'create':
             try:
                 player2 = User.objects.get(username=request.data.get('opponent'))
@@ -477,19 +507,20 @@ class ManageNotifAPIView(generics.GenericAPIView):
                 notification = Notifications.objects.get(id=request.data.get('id'))
             except Notifications.DoesNotExist:
                 return Response({"detail": "Notification not found."}, status=status.HTTP_404_NOT_FOUND)
-        
+
             if notification.state == 0:
                 notification.state = request.data.get('state')
-                notification.save ()
+                notification.save()
 
             return Response({"message": "L'état de la notification a été mis a jour"}, status=status.HTTP_200_OK)
         return Response({"detail": "Invalid action."}, status=status.HTTP_404_NOT_FOUND)
+
 
 class CheckNotifAPIView(generics.GenericAPIView):
     def get(self, request, *args, **kwargs):
         current_user = self.request.user
         action = kwargs.get('action')
-        
+
         if action == 'received':
             try:
                 notification = Notifications.objects.get(user_to=current_user, state=0)
@@ -497,55 +528,59 @@ class CheckNotifAPIView(generics.GenericAPIView):
                     "id": notification.id,
                     "from": notification.user_from.username,
                     "to": notification.user_to.username,
-                    "type" : "Pong" if notification.type == 0 else "Oxo"
+                    "type": "Pong" if notification.type == 0 else "Oxo"
                 }
                 if current_user.state == 'online':
                     return Response(response, status=status.HTTP_200_OK)
                 return Response({"detail": "Pas disponible."}, status=status.HTTP_200_OK)
             except Notifications.DoesNotExist:
-                return Response({"detail": "Not found."}, status=status.HTTP_404_NOT_FOUND)    
+                return Response({"detail": "Not found."}, status=status.HTTP_404_NOT_FOUND)
         if action == 'sent':
             try:
                 idNotif = request.GET.get('id')
                 notification = Notifications.objects.get(id=idNotif)
                 response = {
-                    "state" : notification.state,
-                    "game" : notification.type
+                    "state": notification.state,
+                    "game": notification.type
                 }
                 return Response(response, status=status.HTTP_200_OK)
             except Notifications.DoesNotExist:
                 return Response({"detail": "La notification n'a pas été trouvée."}, status=status.HTTP_404_NOT_FOUND)
-        return Response({"detail": "Action invalide."}, status=status.HTTP_400_BAD_REQUEST) 
-        
+        return Response({"detail": "Action invalide."}, status=status.HTTP_400_BAD_REQUEST)
+
+
 class UsernameAlreadyExist(generics.GenericAPIView):
     def get(self, request, *args, **kwargs):
         current_user = self.request.user
         new_username = request.GET.get('username')
         isUserName = User.objects.exclude(id=current_user.id).filter(username=new_username).exists()
-        return Response({"result": isUserName}, status=status.HTTP_200_OK) 
-           
+        return Response({"result": isUserName}, status=status.HTTP_200_OK)
+
+
 class ManageFriends(generics.GenericAPIView):
     serializer_class = UserListSerializer
+
     def get(self, request, *args, **kwargs):
         current_user = self.request.user
         action = kwargs.get('action')
-        
+
         if action == "update":
             params = request.GET.get('list')
             friends = ast.literal_eval(params)
             Friendship.objects.filter(user=current_user).delete()
             liste = []
-            
+
             for friend in friends:
                 new_friend = get_object_or_404(User, id=friend)
                 new_friendship = Friendship(user=current_user, friend=new_friend)
                 new_friendship.save()
-                liste.append(new_friend.username) 
-                
-            response = {"friendList" : liste}
+                liste.append(new_friend.username)
+
+            response = {"friendList": liste}
             return Response(response, status=status.HTTP_200_OK)
-        return Response({"detail": "Action invalide."}, status=status.HTTP_400_BAD_REQUEST) 
-                    
+        return Response({"detail": "Action invalide."}, status=status.HTTP_400_BAD_REQUEST)
+
+
 class CreateFinishOxoAPIView(generics.GenericAPIView):
     #                                               DATA DOIT CONTENIR :
     #               action = create                         |               action = finish
@@ -558,7 +593,7 @@ class CreateFinishOxoAPIView(generics.GenericAPIView):
     def post(self, request, *args, **kwargs):
         current_player = self.request.user
         action = kwargs.get('action')
-        
+
         if action == 'create':
             try:
                 player2 = User.objects.get(username=request.data.get('opponent'))
@@ -569,17 +604,17 @@ class CreateFinishOxoAPIView(generics.GenericAPIView):
                 player2=player2,
             )
             response = {
-                "match_id" : new_match.id,
-                "player1" : {
-                    "username" : new_match.player1.username,
-                    "photo" : new_match.player1.photo.url,
+                "match_id": new_match.id,
+                "player1": {
+                    "username": new_match.player1.username,
+                    "photo": new_match.player1.photo.url,
                     "id": new_match.player1.pk,
                 },
-                "player2" : {
-                    "username" : new_match.player2.username,
-                    "photo" : new_match.player2.photo.url,
+                "player2": {
+                    "username": new_match.player2.username,
+                    "photo": new_match.player2.photo.url,
                     "id": new_match.player2.pk,
-                    
+
                 }
             }
             player2.state = 'in-game'
@@ -596,7 +631,7 @@ class CreateFinishOxoAPIView(generics.GenericAPIView):
             timedelta_duration = timedelta(seconds=float(request.data.get('match_duration')))
             match.match_duration = timedelta_duration
             winner_id = request.data.get('winner')
-            
+
             if winner_id:
                 winner_id = int(winner_id)
                 if winner_id == match.player1_id:
@@ -607,27 +642,27 @@ class CreateFinishOxoAPIView(generics.GenericAPIView):
             else:
                 match.winner_id = None
             # match.winner_id = match.player1_id if match.player1_score > match.player2_score else match.player2_id
-            
+
             # Récupérer les time actuels des joueurs depuis la base de données
             player1_duration = match.player1.play_time if match.player1.play_time else timedelta(seconds=0)
             player2_duration = match.player2.play_time if match.player2.play_time else timedelta(seconds=0)
-            
+
             # Idem pour les game session
             player1_gamesess = match.player1.game_session if match.player1.game_session else timedelta(seconds=0)
             player2_gamesess = match.player2.game_session if match.player2.game_session else timedelta(seconds=0)
-            
+
             # Ajouter la durée du match aux durées des joueurs
             match.player1.play_time = player1_duration + match.match_duration
             match.player2.play_time = player2_duration + match.match_duration
-            
+
             # Idem pour les games session
             match.player1.game_session = player1_gamesess + match.match_duration
             match.player2.game_session = player2_gamesess + match.match_duration
-            
-            #Mise a jour du status
+
+            # Mise a jour du status
             match.player1.state = 'online'
             match.player2.state = 'online'
-            
+
             # Enregistrer les modifications
             match.player1.save()
             match.player2.save()
@@ -636,15 +671,16 @@ class CreateFinishOxoAPIView(generics.GenericAPIView):
             return Response({"message": "Le match a été mis à jour"}, status=status.HTTP_200_OK)
         return Response({"detail": "Invalid action."}, status=status.HTTP_404_NOT_FOUND)
 
+
 class getPlayerMatchesData(generics.GenericAPIView):
     def get(self, request, *args, **kwargs):
         current_user = self.request.user
-        
+
         matches = Match.objects.filter(models.Q(player1=current_user) | models.Q(player2=current_user))
         oxo_matches = OxoMatch.objects.filter(models.Q(player1=current_user) | models.Q(player2=current_user))
-        
+
         data = []
-        
+
         for match in matches:
             game_date = match.time_date.strftime("%d %B %H %M")
             opponent = match.player2.username if match.player1 == current_user else match.player1.username
@@ -652,13 +688,13 @@ class getPlayerMatchesData(generics.GenericAPIView):
             duration = self.format_time(match.match_duration)
             data.append({
                 "date": game_date,
-                "formatted_date" : match.time_date.strftime("%d %B"),
+                "formatted_date": match.time_date.strftime("%d %B"),
                 "game": "Pong",
                 "opponent": opponent,
                 "result": result,
                 "duration": duration
             })
-        
+
         for oxo_match in oxo_matches:
             game_date = oxo_match.time_date.strftime("%d %B %H %M")
             opponent = oxo_match.player2.username if oxo_match.player1 == current_user else oxo_match.player1.username
@@ -666,17 +702,17 @@ class getPlayerMatchesData(generics.GenericAPIView):
             duration = self.format_time(oxo_match.match_duration)
             data.append({
                 "date": game_date,
-                "formatted_date" : match.time_date.strftime("%d %B"),
+                "formatted_date": match.time_date.strftime("%d %B"),
                 "game": "Oxo",
                 "opponent": opponent,
                 "result": result,
                 "duration": duration
             })
-        
+
         data.sort(key=lambda x: datetime.strptime(x['date'], "%d %B %H %M"), reverse=True)
-        
+
         return Response({"data": data}, status=status.HTTP_200_OK)
-    
+
     def format_time(self, duration):
         total_seconds = duration.total_seconds()
         hours, remainder = divmod(total_seconds, 3600)
@@ -690,6 +726,3 @@ class getPlayerMatchesData(generics.GenericAPIView):
             return f"{int(seconds)} sec"
         else:
             return "< 1 min"
-    
-
-        
