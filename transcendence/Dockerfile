@@ -22,12 +22,14 @@ RUN pip install --no-cache-dir -r requirements.txt
 ENV PYTHONWARNINGS=default
 
 COPY . /transcendence/
-COPY ./blockchain/contracts /contracts
-
-# Copy the Python script to the Docker container
-COPY ./blockchain/getContractAddress.py /getContractAddress.py
-RUN chmod +x /getContractAddress.py
 
 EXPOSE 8000
 
-CMD ganache-cli -h 0.0.0.0 & sleep 5 && cd blockchain && truffle migrate && python /blockchain/getContractAddress.py && python /transcendence/manage.py makemigrations && python /transcendence/manage.py migrate && python /transcendence/manage.py runserver 0.0.0.0:8000
+CMD ganache-cli -h 0.0.0.0 & sleep 10 && \
+    cd blockchain && \
+    truffle migrate && \
+    chmod +x /transcendence/blockchain/getContractAddress.py && \
+    python /transcendence/manage.py makemigrations && \
+    python /transcendence/manage.py migrate && \
+    python /transcendence/blockchain/getContractAddress.py && \
+    python /transcendence/manage.py runserver 0.0.0.0:8000

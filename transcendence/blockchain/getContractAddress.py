@@ -1,6 +1,8 @@
 from web3 import Web3
 import json
 
+print("STARTING")
+
 # Connect to Ganache
 w3 = Web3(Web3.HTTPProvider("http://ganache:8545"))
 
@@ -16,5 +18,7 @@ receipt = w3.eth.get_transaction_receipt(transaction['hash'])
 contract_address = receipt['contractAddress']
 
 # Write the contract address to a file
-with open('tempContractAddress.txt', 'w') as file:
+with open('/transcendence/blockchain/tempContractAddress.txt', 'w') as file:
     file.write(contract_address.strip())
+    
+print("FINISHED")
