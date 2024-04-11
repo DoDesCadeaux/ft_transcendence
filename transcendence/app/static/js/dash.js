@@ -144,18 +144,6 @@ function displayGoBtn(btnGo, element) {
   ) {
     btnGo.forEach((button) => (button.style.display = "none"));
   } else {
-    // if (element.winners[2] || !element.winners[0] || !element.winners[1])
-    //   btnGo[2].style.display = "none";
-    // if (isSubscribeTo(element.players.slice(0, 2))) {
-    //   btnGo[1].style.display = "none";
-    //   console.log(element.winners)
-    //   if (element.winners[0]) btnGo[0].style.display = "none";
-    // }
-    //
-    // else {
-    //   btnGo[0].style.display = "none";
-    //   if (element.winners[1]) btnGo[1].style.display = "none";
-    // }
     if (element.winners[2] || !element.winners[0] || !element.winners[1])
       btnGo[2].style.display = "none";
     if (element.players.length < 4) {
@@ -174,7 +162,6 @@ function displayGoBtn(btnGo, element) {
 function manageGoBtn(btnGo, element){
   if (btnGo[0].style.display != "none" && element.players[1]) {
     btnGo[0].style.cursor = "pointer";
-    // console.log(element.players[0] + "Envoie l'inv à " + element.players[1]);
     btnGo[0].onclick = ()=> sentNotification(element.players[1].username, element.id, 0)
   }
   if (btnGo[1].style.display != "none" && element.players[3]) {
