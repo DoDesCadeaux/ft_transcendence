@@ -10,6 +10,9 @@ import ast
 from django.db.models import Avg, ExpressionWrapper, F, fields, Sum
 from datetime import timedelta, datetime
 from django.utils import timezone
+from django.db.models import Q
+from django.db.models import Subquery, OuterRef, IntegerField
+
 
 class UserInfoAPIView(generics.ListAPIView):
     serializer_class = UserListSerializer
@@ -25,16 +28,25 @@ class UserListAPIView(generics.ListAPIView):
     def list(self, request, *args, **kwargs):
         serialized_users = []
         current_user = self.request.user
-        queryset = User.objects.exclude(id=current_user.id).exclude(username='IA')
-        
+
+        # Créer une sous-requête pour calculer la différence de points
+        points_difference = User.objects.filter(id=OuterRef('id')).annotate(
+            points_difference=models.functions.Abs(models.F('points') - current_user.points)
+        ).values('points_difference')[:1]
+
+        # Filtrer le queryset en utilisant la sous-requête
+        queryset = User.objects.exclude(id=current_user.id).exclude(username='IA').annotate(
+            points_difference=Subquery(points_difference, output_field=IntegerField())
+        ).filter(points_difference__lte=15)
+
         for user in queryset:
             serializer = self.get_serializer(user)
             serialized_data = serializer.data
             serialized_data['is_friend'] = False
-            
+
             if Friendship.objects.filter(user=current_user, friend=user).exists():
                 serialized_data['is_friend'] = True
-                
+
             serialized_users.append(serialized_data)
 
         return Response(serialized_users)
@@ -274,13 +286,13 @@ class DataMatchTournamentAPIView(generics.GenericAPIView):
                         player2_id__in=[player['id'] for player in last_two_players]
                     ).values('winner').first()
                     
-                    
-                    winner_demi_user = get_object_or_404(User, id=winner_demi_last['winner'])
+                    if winner_demi_last is not None:
+                        winner_demi_user = get_object_or_404(User, id=winner_demi_last['winner'])
 
                     # Utilisez le serializer pour convertir l'utilisateur en données JSON
-                    winner_demi_serializer = UserSerializer(winner_demi_user)
+                        winner_demi_serializer = UserSerializer(winner_demi_user)
                         # Ajoutez le résultat au tableau winner_demi
-                    tournament_info['winners'][1] = winner_demi_serializer.data if winner_demi_last else None
+                        tournament_info['winners'][1] = winner_demi_serializer.data if winner_demi_last else None
                 
                 if tournament_info['winners'][0] is not None and tournament_info['winners'][1]  is not None:
                 # if len(tournament_info['winner_demi']) == 2:
@@ -297,8 +309,10 @@ class DataMatchTournamentAPIView(generics.GenericAPIView):
                     winner_demi_serializer = UserSerializer(winner_demi_user)
 
                     # Ajoutez le résultat au champ winner_final
-                    tournament_info['winner'][2] = winner_demi_serializer.data if winner_final_match else None
+                    tournament_info['winners'][2] = winner_demi_serializer.data if winner_final_match else None
                 tournament_data.append(tournament_info)
+                print(tournament_data)
+
             return Response(tournament_data)
         else:
             return Response({'error': 'Opération non prise en charge'})

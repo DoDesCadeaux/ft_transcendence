@@ -144,28 +144,49 @@ function displayGoBtn(btnGo, element) {
   ) {
     btnGo.forEach((button) => (button.style.display = "none"));
   } else {
+    // if (element.winners[2] || !element.winners[0] || !element.winners[1])
+    //   btnGo[2].style.display = "none";
+    // if (isSubscribeTo(element.players.slice(0, 2))) {
+    //   btnGo[1].style.display = "none";
+    //   console.log(element.winners)
+    //   if (element.winners[0]) btnGo[0].style.display = "none";
+    // }
+    //
+    // else {
+    //   btnGo[0].style.display = "none";
+    //   if (element.winners[1]) btnGo[1].style.display = "none";
+    // }
     if (element.winners[2] || !element.winners[0] || !element.winners[1])
       btnGo[2].style.display = "none";
-    if (isSubscribeTo(element.players.slice(0, 2))) {
+    if (element.players.length < 4) {
+      if (element.players.length < 2)
+        btnGo[0].style.display = "none";
       btnGo[1].style.display = "none";
-      if (element.winners[0]) btnGo[0].style.display = "none";
     } else {
-      btnGo[0].style.display = "none";
-      if (element.winners[1]) btnGo[1].style.display = "none";
+      for (let i = 0; i <= element.winners.length; i++) {
+        if (element.winners[i] != null)
+          btnGo[i].style.display = "none";
+      }
     }
   }
 }
 
 function manageGoBtn(btnGo, element){
-  if (btnGo[0].style.display != "none" && element.players[1]){
+  if (btnGo[0].style.display != "none" && element.players[1]) {
     btnGo[0].style.cursor = "pointer";
+    // console.log(element.players[0] + "Envoie l'inv à " + element.players[1]);
     btnGo[0].onclick = ()=> sentNotification(element.players[1].username, element.id, 0)
   }
-  if (btnGo[1].style.display != "none" && element.players[3])
-    console.log(`le bouton est actif pour les joueurs ${element.players[2].username} et ${element.players[3].username} dans le tournois ${element.name}`)
-  if (btnGo[2].style.display != "none" && element.winners[1])
-    console.log(`le bouton est actif pour les joueurs ${element.winners[0].username} et ${element.winners[1].username} dans le tournois ${element.name}`)
+  if (btnGo[1].style.display != "none" && element.players[3]) {
+    btnGo[1].style.cursor = "pointer";
+    btnGo[1].onclick = ()=> sentNotification(element.players[3].username, element.id, 0)
   }
+  if (btnGo[2].style.display != "none") {
+    btnGo[2].style.cursor = "pointer";
+    btnGo[2].onclick = ()=> sentNotification(element.winners[1].username, element.id, 0)
+  }
+  console.log(element.players)
+}
 
 function manageSlide() {
   const buttons = document.querySelectorAll(".btn");
