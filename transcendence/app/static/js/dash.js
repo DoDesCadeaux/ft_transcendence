@@ -16,8 +16,8 @@ document.body.addEventListener("DOMNodeInserted", function (event) {
         data.total == 0
           ? "Zéro match a ton actif"
           : data.won > 1
-          ? `${data.won} sur ${data.total} de gagnés`
-          : `${data.won} sur ${data.total} de gagné`;
+            ? `${data.won} sur ${data.total} de gagnés`
+            : `${data.won} sur ${data.total} de gagné`;
       globalStatMatch.textContent = msg;
     })();
     globalStatTournament = document.querySelector("#glabalStatTournament");
@@ -27,8 +27,8 @@ document.body.addEventListener("DOMNodeInserted", function (event) {
         data.total == 0
           ? "Zéro tournoi a ton actif"
           : data.won > 1
-          ? `${data.won} sur ${data.total} de gagnés`
-          : `${data.won} sur ${data.total} de gagné`;
+            ? `${data.won} sur ${data.total} de gagnés`
+            : `${data.won} sur ${data.total} de gagné`;
       globalStatTournament.textContent = msg;
     })();
   }
@@ -159,34 +159,33 @@ function displayGoBtn(btnGo, element) {
   }
 }
 
-function manageGoBtn(btnGo, element){
+function manageGoBtn(btnGo, element) {
   if (btnGo[0].style.display != "none" && element.players[1]) {
     btnGo[0].style.cursor = "pointer";
-    btnGo[0].onclick = ()=> sentNotification(element.players[1].username, element.id, 0)
+    btnGo[0].onclick = () => sentNotification(element.players[1].username, element.id, 0)
   }
   if (btnGo[1].style.display != "none" && element.players[3]) {
     btnGo[1].style.cursor = "pointer";
-    btnGo[1].onclick = ()=> sentNotification(element.players[3].username, element.id, 0)
+    btnGo[1].onclick = () => sentNotification(element.players[3].username, element.id, 0)
   }
   if (btnGo[2].style.display != "none") {
     btnGo[2].style.cursor = "pointer";
-    btnGo[2].onclick = ()=> sentNotification(element.winners[1].username, element.id, 0)
+    btnGo[2].onclick = () => sentNotification(element.winners[1].username, element.id, 0)
   }
-  console.log(element.players)
 }
 
 function manageSlide() {
   const buttons = document.querySelectorAll(".btn");
-  setTimeout(function() {
+  setTimeout(function () {
     const slides = document.querySelectorAll(".slide");
-    if (slides.length > 1){
+    if (slides.length > 1) {
       buttons.forEach((button) => {
         button.addEventListener("click", (e) => {
           const calcNextSlide = e.target.id === "next" ? 1 : -1;
           const slideActive = document.querySelector(".active");
-    
+
           newIndex = calcNextSlide + [...slides].indexOf(slideActive);
-    
+
           if (newIndex < 0) newIndex = [...slides].length - 1;
           if (newIndex >= [...slides].length) newIndex = 0;
           slides[newIndex].classList.add("active");
@@ -357,25 +356,25 @@ document.body.addEventListener("DOMNodeInserted", function (event) {
 
     getAndUpdateData()
     const statsPannel = document.querySelector(".advencedStats");
-  const hystoricPannel = document.querySelector(".historic-game");
-  const statsBtn = document.querySelector(".btn-satistics");
-  const hystoricBtn = document.querySelector(".btn-hystoric")
-  statsBtn.addEventListener("click", () => {
-    statsPannel.classList.remove("displayNone");
-    hystoricPannel.classList.add("displayNone");
-  })
-  hystoricBtn.addEventListener("click", () => {
-    statsPannel.classList.add("displayNone");
-    fillDataHistoric()
-    hystoricPannel.classList.remove("displayNone");
-  })
+    const hystoricPannel = document.querySelector(".historic-game");
+    const statsBtn = document.querySelector(".btn-satistics");
+    const hystoricBtn = document.querySelector(".btn-hystoric")
+    statsBtn.addEventListener("click", () => {
+      statsPannel.classList.remove("displayNone");
+      hystoricPannel.classList.add("displayNone");
+    })
+    hystoricBtn.addEventListener("click", () => {
+      statsPannel.classList.add("displayNone");
+      fillDataHistoric()
+      hystoricPannel.classList.remove("displayNone");
+    })
   }
   if (!document.querySelector(".advencedStats")) advencedStats = null;
-  
+
 
 });
 
-function getAndUpdateData(){
+function getAndUpdateData() {
 
   const params = JSON.stringify(toggleList);
 
@@ -395,7 +394,7 @@ function fillParams(data) {
   });
   const boxes = [];
   addToggle(true, CURRENT_USER, boxes);
-  if (data){
+  if (data) {
     data.forEach((user) => {
       addToggle(false, user, boxes);
     });
@@ -424,7 +423,7 @@ function handleChange(event) {
 }
 
 function addToggle(state, player, boxes) {
-  if (player.is_friend == false) return ;
+  if (player.is_friend == false) return;
   const panel = document.querySelector(".comp-panel");
 
   const label = document.createElement("label");
@@ -462,9 +461,9 @@ function addToggle(state, player, boxes) {
 
 function updateGraph(fetchData) {
   const titles = ["Matchs gagnés (en %)", "Demies finales gagnées (en %)", "Finales gagnées (en %)"];
-  
+
   radialCharts.forEach((chart, index) => {
-    var data = index == 0 ? fetchData.percentWon : index == 1 ?  fetchData.percentWonDemi  : fetchData.percentWonFinal;
+    var data = index == 0 ? fetchData.percentWon : index == 1 ? fetchData.percentWonDemi : fetchData.percentWonFinal;
     var dataLen = data.map((item) => item.data).length;
     chart.updateOptions({
       series: data.map((item) => item.data),
@@ -492,40 +491,39 @@ function updateGraph(fetchData) {
   });
 }
 
-function fillDataHistoric(){
+function fillDataHistoric() {
   const table = document.querySelector(".historic-game-table tbody")
   table.innerHTML = "";
 
   (async () => {
     const data = await fetchGET(URI.HISTORY);
-    console.log(data);
     data.data.forEach((match) => {
       const tr = document.createElement("tr");
-  
+
       const matchDate = document.createElement("td");
       matchDate.textContent = match.formatted_date;
       tr.appendChild(matchDate);
-  
+
       const matchGame = document.createElement("td");
       matchGame.textContent = match.game;
       tr.appendChild(matchGame);
-  
+
       const matchOpponent = document.createElement("td");
       matchOpponent.textContent = match.opponent;
       tr.appendChild(matchOpponent);
-  
+
       const matchResult = document.createElement("td");
       matchResult.textContent = match.result;
       tr.appendChild(matchResult);
-  
+
       const matchDuration = document.createElement("td");
       matchDuration.textContent = match.duration;
       tr.appendChild(matchDuration);
-  
+
       table.appendChild(tr);
     })
   })();
-  
+
 
 }
 
@@ -557,34 +555,34 @@ const superData = {
 };
 
 const fakeData = {
-  data :[
+  data: [
     {
-      date : "7 Avril",
-      game : "Pong",
-      opponent : "dduraku",
-      result : "Gagné",
-      duration : "2 min",
+      date: "7 Avril",
+      game: "Pong",
+      opponent: "dduraku",
+      result: "Gagné",
+      duration: "2 min",
     },
     {
-      date : "7 Avril",
-      game : "Oxo",
-      opponent : "dduraku",
-      result : "Perdu",
-      duration : "1 min",
+      date: "7 Avril",
+      game: "Oxo",
+      opponent: "dduraku",
+      result: "Perdu",
+      duration: "1 min",
     },
     {
-      date : "7 Avril",
-      game : "Oxo",
-      opponent : "dduraku",
-      result : "Egalité",
-      duration : "4 min",
+      date: "7 Avril",
+      game: "Oxo",
+      opponent: "dduraku",
+      result: "Egalité",
+      duration: "4 min",
     },
     {
-      date : "7 Avril",
-      game : "Pong",
-      opponent : "dduraku",
-      result : "Gagné",
-      duration : "2 min",
+      date: "7 Avril",
+      game: "Pong",
+      opponent: "dduraku",
+      result: "Gagné",
+      duration: "2 min",
     }
   ]
 }
