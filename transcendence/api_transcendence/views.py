@@ -302,7 +302,6 @@ class DataMatchTournamentAPIView(generics.GenericAPIView):
                         tournament_info['winners'][1] = winner_demi_serializer.data if winner_demi_last else None
 
                 if tournament_info['winners'][0] and tournament_info['winners'][1]:
-                    print("<======================================> ICICICICI <======================================>")
                     # if len(tournament_info['winner_demi']) == 2:
                     # Recherchez le gagnant du match final
                     winner_final_match = Match.objects.filter(
@@ -311,8 +310,6 @@ class DataMatchTournamentAPIView(generics.GenericAPIView):
                         player2_id__in=[player['id'] for player in tournament_info['winners'][:2]],
                     ).values('winner').first()
 
-                    print(winner_final_match)
-
                     winner_final_user = get_object_or_404(User, id=winner_final_match['winner'])
 
                     # Utilisez le serializer pour convertir l'utilisateur en données JSON
@@ -320,12 +317,6 @@ class DataMatchTournamentAPIView(generics.GenericAPIView):
 
                     # Ajoutez le résultat au champ winner_final
                     tournament_info['winners'][2] = winner_final_serializer.data if winner_final_match else None
-
-                    # DORIAN MAISON : Le winner de la final est toujours le winner de la demi final (à cause de la ligne 321)
-                    # Il faut réussir à récuperer le gagnant de la finale correctement et l'envoyer dans tournament-info
-                    # Commencer par la ligne 307, vérifier aussi la condition ligne 304 si on rentre bien dedans.
-                    # Check toutes les variables existantes si elles sont bien prises en compte avec la bonne donnée.
-                    # Il est possible de fix cette merde ce soir courage fdp
 
                 tournament_data.append(tournament_info)
 
