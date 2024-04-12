@@ -301,8 +301,6 @@ class DataMatchTournamentAPIView(generics.GenericAPIView):
                         # Ajoutez le résultat au tableau winner_demi
                         tournament_info['winners'][1] = winner_demi_serializer.data if winner_demi_last else None
 
-                print(f"Les matchs: {Match.objects.filter(tournament=tournament)}")
-
                 if tournament_info['winners'][0] and tournament_info['winners'][1] and len(Match.objects.filter(tournament=tournament)) == 3:
                     # if len(tournament_info['winner_demi']) == 2:
                     # Recherchez le gagnant du match final
@@ -436,10 +434,11 @@ class FullStatsAPIView(generics.GenericAPIView):
 
     def getPercentWonTournyData(self, user):
         tournaments_participated = Tournament.objects.filter(players=user)
-        total_demi = 0
-        total_final = 0
-        won_demi = 0
-        won_final = 0
+        total_demi = user.semi_played
+        total_final = user.final_played
+        won_demi = user.semi_won
+        won_final = user.final_won
+
         # Pour chaque tournoi, récupérer les matchs correspondants
         for tournament in tournaments_participated:
             matches = Match.objects.filter(tournament=tournament)
@@ -467,8 +466,18 @@ class FullStatsAPIView(generics.GenericAPIView):
         else:
             res_final = 0
 
+        # Mettre à jour les statistiques de l'utilisateur
+        user.semi_played = total_demi
+        user.final_played = total_final
+        user.semi_won = won_demi
+        user.final_won = won_final
+
+        # Enregistrer les modifications
+        user.save()
+
         percent_demi = {'label': user.username, 'data': res_demi}
         percent_final = {'label': user.username, 'data': res_final}
+
 
         return percent_demi, percent_final
 
