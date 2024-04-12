@@ -149,6 +149,8 @@ function displayGoBtn(btnGo, element) {
     if (element.players.length < 4) {
       if (element.players.length < 2)
         btnGo[0].style.display = "none";
+      else if (element.winners[0])
+        btnGo[0].style.display = "none";
       btnGo[1].style.display = "none";
     } else {
       for (let i = 0; i <= element.winners.length; i++) {

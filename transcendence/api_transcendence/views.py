@@ -301,9 +301,12 @@ class DataMatchTournamentAPIView(generics.GenericAPIView):
                         # Ajoutez le résultat au tableau winner_demi
                         tournament_info['winners'][1] = winner_demi_serializer.data if winner_demi_last else None
 
-                if tournament_info['winners'][0] and tournament_info['winners'][1] and not tournament_info['winners'][2]:
+                print(f"Les matchs: {Match.objects.filter(tournament=tournament)}")
+
+                if tournament_info['winners'][0] and tournament_info['winners'][1] and len(Match.objects.filter(tournament=tournament)) == 3:
                     # if len(tournament_info['winner_demi']) == 2:
                     # Recherchez le gagnant du match final
+
                     winner_final_match = Match.objects.filter(
                         tournament_id=tournament_info['id'],
                         player1_id__in=[player['id'] for player in tournament_info['winners'][:2]],
