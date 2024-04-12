@@ -16,7 +16,6 @@ from web3 import Web3
 import json
 import urllib.request
 from django.http import QueryDict
-from threading import Thread
 
 class Blockchain(generics.GenericAPIView):
     web3 = Web3(Web3.HTTPProvider('http://ganache:8545'))
@@ -41,8 +40,11 @@ class Blockchain(generics.GenericAPIView):
     def get_contract(self):
         contract_abi = self.fetchContractABI()
 
-        with open('../blockchain/tempContractAddress.txt', 'r') as file:
-            contract_address = file.read().strip()
+        # with open('../blockchain/tempContractAddress.txt', 'r') as file:
+        #     contract_address = file.read().strip()
+        
+        #### add manually the contract address for the moment...
+        contract_address = '0x454A77Cd6610753380ED16E8b2dB621bB6D91895'
 
         return self.web3.eth.contract(address=contract_address, abi=contract_abi)
 
@@ -51,11 +53,23 @@ class Blockchain(generics.GenericAPIView):
 
     def getMethod(self, id, *args, **kwargs):
         try:
-            contract = self.get_contract()
+            contract = self.get_contract(id)
 
             # Call the smart contract function to retrieve tournament info
-            result = contract.functions.getTournamentResult(id).call({'from': self.web3.eth.accounts[0]})
+            # result = contract.functions.getTournamentResult(id).call({'from': self.web3.eth.accounts[0]})
 
+            # Get the transaction from the latest block
+            latest_block = w3.eth.get_block('latest')
+            
+            # Iterate over transactions in the block and print transactions (test)
+            for tx_hash in block['transactions']:
+                tx = web3.eth.get_transaction(tx_hash)
+                input_data = tx['input']
+                text_data = web3.toText(input_data) #toAscii(input_data)
+                print("Transaction:", tx, " - Input data in text format:", text_data)
+
+
+            result = w3.eth.get_transaction(latest_block['transactions'][0])
             response = {
                 "detail": "Informations récupérés avec succès.",
                 "tournament_name": result[0],
@@ -83,29 +97,21 @@ class Blockchain(generics.GenericAPIView):
                 "tournament_name": tournament_name,
                 "winner_name": winner_name,
             }
+
+            ###### test & development
+            try:
+                results = blockchain.getResult(id)
+                print("---------results = ", results)        
+            except Exception as e:
+                print("An error occurred while getting results from tournament ... :", e)
+            ######
+            
             return Response(response, status=status.HTTP_200_OK) 
         except Exception as e:
-            return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
-
-    # def listen_for_events(self):
-    #     contract = self.get_contract()
-
-    #     # Create a filter for the TournamentUpdated event
-    #     event_filter = contract.events.TournamentUpdated.createFilter(fromBlock='latest')
-
-    #     # Poll the filter for new entries
-    #     while True:
-    #         for event in event_filter.get_new_entries():
-    #             tournament_id = event['args']['id']
-    #             tournament_info = self.getResult(tournament_id)
-    #             print(tournament_info.data)
-                
-    #         time.sleep(10)
+            print("An error occurred while updateing the blockchain:", e)
 
 from .views import Blockchain
 blockchain = Blockchain()
-
-# Thread(target=blockchain.listen_for_events).start()
 
 class UserInfoAPIView(generics.ListAPIView):
     serializer_class = UserListSerializer
@@ -189,7 +195,7 @@ class ResultsAPIView(generics.GenericAPIView):
         else:
             # Gérer d'autres cas ou renvoyer une réponse d'erreur
             return Response({'error': 'Opération non prise en charge'})
-        
+
 class CreateFinishMatchAPIView(generics.GenericAPIView):
     #                                               DATA DOIT CONTENIR :
     #               action = create                         |               action = finish
@@ -229,6 +235,7 @@ class CreateFinishMatchAPIView(generics.GenericAPIView):
             player2.save()
             current_player.save()
             return Response(response, status=status.HTTP_201_CREATED)
+        
         elif action == 'finish':
             try:
                 match = Match.objects.get(id=request.data.get('id'))
@@ -262,30 +269,36 @@ class CreateFinishMatchAPIView(generics.GenericAPIView):
             if tournament_id is None:
                 return Response({"detail": "Tournament ID is missing."}, status=status.HTTP_400_BAD_REQUEST)
 
-            # tournament_id_int = int(tournament_id)
-            # tournament_id_str = str(tournament_id)
-            # winner_id_str = str(match.winner_id)
-            # print("tournament_id_str = ", tournament_id_str, "\ntournament_id_int = ", tournament_id_int, "\nwinnner_str = ", winner_id_str) 
-            tournament_id_int = 42
-            tournament_id_str = "quarante deux"
-            winner_id_str = "19"
+            tournament_id_int = int(tournament_id)
+            tournament_id_str = str(tournament_id)
+            winner_id_str = str(match.winner_id)
+            ##comment print
+            print("tournament_id_str = ", tournament_id_str, "\ntournament_id_int = ", tournament_id_int, "\nwinnner_str = ", winner_id_str)
             
             try:
                 print("Before calling blockchain.update")
-                print("tournament_id_int:", tournament_id_int)
-                print("tournament_id_str:", tournament_id_str)
-                print("winner_id_str:", winner_id_str)
-
                 blockchain.update(tournament_id_int, tournament_id_str, winner_id_str)
-
                 print("After calling blockchain.update")
             except Exception as e:
                 print("An error occurred while calling blockchain.update:", e)
-            
-            # blockchain.update(tournament_id_int, tournament_id_str, winner_id_str)
 
             return Response({"message": "Le match a été mis à jour"}, status=status.HTTP_200_OK)
         return Response({"detail": "Invalid action."}, status=status.HTTP_404_NOT_FOUND)
+
+    def get(self, request, *args, **kwargs):
+        action = kwargs.get('action')
+        
+        if action == 'results': 
+            try:
+                result = blockchain.getResult()
+            except Exception as e:
+                print("An error occurred while calling :", e)
+                response = {
+                    # "id" : ???,
+                    "tournament" : result[0],
+                    "winner" : result[1],
+                }
+            return Response(response, status=status.HTTP_200_OK)
 
 class CreateJoinTournamentAPIView(generics.GenericAPIView):
     #                                               DATA DOIT CONTENIR :
