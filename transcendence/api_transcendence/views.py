@@ -100,7 +100,7 @@ class ResultsAPIView(generics.GenericAPIView):
             response = {'total': matches_played.count(), 'won': matches_won.count()}
             return Response(response)
         elif game == 'tournaments':
-            tournaments_won = 0
+            tournaments_won = current_player.final_won
             tournaments_participated = Tournament.objects.filter(players=current_player)
             for tournament in tournaments_participated:
                 if tournament.winner == current_player:
@@ -465,15 +465,6 @@ class FullStatsAPIView(generics.GenericAPIView):
             res_final = (won_final * 100) / total_final
         else:
             res_final = 0
-
-        # Mettre à jour les statistiques de l'utilisateur
-        user.semi_played = total_demi
-        user.final_played = total_final
-        user.semi_won = won_demi
-        user.final_won = won_final
-
-        # Enregistrer les modifications
-        user.save()
 
         percent_demi = {'label': user.username, 'data': res_demi}
         percent_final = {'label': user.username, 'data': res_final}
