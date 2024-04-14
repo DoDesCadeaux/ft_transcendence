@@ -14,8 +14,27 @@ from datetime import timedelta
 from django.http import JsonResponse
 from web3 import Web3
 import json
-import urllib.request
-from django.http import QueryDict
+
+# - getContractAddress.py
+# - integrate code in API to get results from tournamet on blockchain
+# - pointsToScore & countdown --> change
+
+###########
+    # def get(self, request, *args, **kwargs):
+    #     action = kwargs.get('action')
+        
+    #     if action == 'results': 
+    #         try:
+    #             result = blockchain.getResult()
+    #         except Exception as e:
+    #             print("An error occurred while calling :", e)
+    #             response = {
+    #                 # "id" : ???,
+    #                 "tournament" : result[0],
+    #                 "winner" : result[1],
+    #             }
+    #         return Response(response, status=status.HTTP_200_OK)
+###########
 
 class Blockchain(generics.GenericAPIView):
     web3 = Web3(Web3.HTTPProvider('http://ganache:8545'))
@@ -42,42 +61,33 @@ class Blockchain(generics.GenericAPIView):
 
         # with open('../blockchain/tempContractAddress.txt', 'r') as file:
         #     contract_address = file.read().strip()
-        
+
         #### add manually the contract address for the moment...
-        contract_address = '0x454A77Cd6610753380ED16E8b2dB621bB6D91895'
+        contract_address = '0xD585f9d1d83E08467aFDB7d4Dc5e7c44aFB9e220'
 
         return self.web3.eth.contract(address=contract_address, abi=contract_abi)
 
     def getResult(self, id):
-        self.getMethod(id)
+        return self.getMethod(id)
 
     def getMethod(self, id, *args, **kwargs):
         try:
-            contract = self.get_contract(id)
-
             # Call the smart contract function to retrieve tournament info
-            # result = contract.functions.getTournamentResult(id).call({'from': self.web3.eth.accounts[0]})
-
-            # Get the transaction from the latest block
-            latest_block = w3.eth.get_block('latest')
-            
-            # Iterate over transactions in the block and print transactions (test)
-            for tx_hash in block['transactions']:
-                tx = web3.eth.get_transaction(tx_hash)
-                input_data = tx['input']
-                text_data = web3.toText(input_data) #toAscii(input_data)
-                print("Transaction:", tx, " - Input data in text format:", text_data)
-
-
-            result = w3.eth.get_transaction(latest_block['transactions'][0])
-            response = {
-                "detail": "Informations récupérés avec succès.",
-                "tournament_name": result[0],
-                "winner_name": result[1],
-            }
-            return Response(response, status=status.HTTP_200_OK)
+            contract = self.get_contract()
+            if contract.functions.tournamentExists(id).call():
+                result = contract.functions.getTournamentResult(id).call({'from': self.web3.eth.accounts[0]})
+                response = {
+                        "detail": f"Information from tournament with id {id} successfuly retrieved",
+                        "tournament_name": result[0],
+                        "winner_name": result[1],
+                    }
+                return response ### choose what to return
+                return Response(response, status=status.HTTP_200_OK)
+            else:
+                print(f"Tournament with id {id} does not exist.")
+        
         except Exception as e:
-            return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+            print("An error occurred while getting results from the blockchain:", e)
 
     def update(self, id, tournament_name, winner_name):
         self.putMethod(id, tournament_name, winner_name)
@@ -86,11 +96,10 @@ class Blockchain(generics.GenericAPIView):
         try:
             contract = self.get_contract()
             
-            # Call the smart contract function to update tournament info
+            # Call the smart contract function to update tournament info & wait for transaction to be mined
             tx_hash = contract.functions.updateResult(id, tournament_name, winner_name).transact({'from': self.web3.eth.accounts[0]})
-            # Wait for transaction to be mined
-            self.web3.eth.wait_for_transaction_receipt(tx_hash)
-
+            self.web3.eth.waitForTransactionReceipt(tx_hash)
+ 
             response = {
                 "detail": "Mis à jour avec succès.",
                 "id": id,
@@ -98,17 +107,17 @@ class Blockchain(generics.GenericAPIView):
                 "winner_name": winner_name,
             }
 
-            ###### test & development
-            try:
-                results = blockchain.getResult(id)
+            ############################# - R&D
+            try: 
+                results = blockchain.getResult(77)
                 print("---------results = ", results)        
             except Exception as e:
                 print("An error occurred while getting results from tournament ... :", e)
-            ######
+            #############################
             
-            return Response(response, status=status.HTTP_200_OK) 
+            return Response(response, status=status.HTTP_200_OK)
         except Exception as e:
-            print("An error occurred while updateing the blockchain:", e)
+            print("An error occurred while updateting the blockchain:", e)
 
 from .views import Blockchain
 blockchain = Blockchain()
@@ -191,6 +200,7 @@ class ResultsAPIView(generics.GenericAPIView):
                 if tournament.winner == current_player:
                     tournaments_won += 1
             response = {'total': tournaments_participated.count(), 'won': tournaments_won}
+
             return Response(response)
         else:
             # Gérer d'autres cas ou renvoyer une réponse d'erreur
@@ -265,40 +275,26 @@ class CreateFinishMatchAPIView(generics.GenericAPIView):
             match.player2.save()
             match.save()
             
+            ####################### - R&D
             tournament_id = request.data.get('id')
             if tournament_id is None:
                 return Response({"detail": "Tournament ID is missing."}, status=status.HTTP_400_BAD_REQUEST)
 
-            tournament_id_int = int(tournament_id)
-            tournament_id_str = str(tournament_id)
-            winner_id_str = str(match.winner_id)
-            ##comment print
-            print("tournament_id_str = ", tournament_id_str, "\ntournament_id_int = ", tournament_id_int, "\nwinnner_str = ", winner_id_str)
+            tournament_id = int(tournament_id)
+            tournament_name = "EKIP"
+            winner = str(match.winner_id)
+            print("tournament_id = ", tournament_id, "\ntournament_name = ", tournament_name, "\nwinnner_str = ", winner)
             
             try:
                 print("Before calling blockchain.update")
-                blockchain.update(tournament_id_int, tournament_id_str, winner_id_str)
+                blockchain.update(tournament_id, tournament_name, winner)
                 print("After calling blockchain.update")
             except Exception as e:
                 print("An error occurred while calling blockchain.update:", e)
-
+            #######################
+            
             return Response({"message": "Le match a été mis à jour"}, status=status.HTTP_200_OK)
         return Response({"detail": "Invalid action."}, status=status.HTTP_404_NOT_FOUND)
-
-    def get(self, request, *args, **kwargs):
-        action = kwargs.get('action')
-        
-        if action == 'results': 
-            try:
-                result = blockchain.getResult()
-            except Exception as e:
-                print("An error occurred while calling :", e)
-                response = {
-                    # "id" : ???,
-                    "tournament" : result[0],
-                    "winner" : result[1],
-                }
-            return Response(response, status=status.HTTP_200_OK)
 
 class CreateJoinTournamentAPIView(generics.GenericAPIView):
     #                                               DATA DOIT CONTENIR :

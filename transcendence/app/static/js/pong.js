@@ -73,7 +73,7 @@ function gameLoop() {
     }
     if ((startGame % 2) != 0) {
         countdownInProgress = true;
-        countdown(3);
+        countdown(1);
     }
     if (keysPressed["w"]) {
         if (paddleLeftY > 0) {

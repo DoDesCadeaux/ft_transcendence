@@ -13,7 +13,8 @@ RUN apt-get install -y nodejs
 RUN npm install -g truffle
 RUN npm install -g ganache-cli
 RUN npm install --save ethers
-RUN pip install web3
+RUN pip install web3==5.17.0
+RUN pip install --upgrade eth-utils
 
 COPY requirements.txt /transcendence/
 RUN pip install --no-cache-dir -r requirements.txt
@@ -29,6 +30,7 @@ CMD ganache-cli -h 0.0.0.0 & sleep 10 && \
     cd blockchain && \
     truffle migrate && \
     chmod +x /transcendence/blockchain/getContractAddress.py && \
+    python /transcendence/blockchain/getContractAddress.py && \
     python /transcendence/manage.py makemigrations && \
     python /transcendence/manage.py migrate && \
     python /transcendence/blockchain/getContractAddress.py && \

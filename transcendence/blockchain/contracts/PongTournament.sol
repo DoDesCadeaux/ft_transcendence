@@ -6,6 +6,7 @@ contract PongTournament {
     struct Tournament {
         string tournamentName;
         string winnerName;
+        bool   exists;
     }
 
     // Map tournament IDs to their respective Tournament
@@ -18,14 +19,21 @@ contract PongTournament {
     function updateResult(uint256 id, string memory tournamentName, string memory winnerName) public {
         tournaments[id].tournamentName = tournamentName;
         tournaments[id].winnerName = winnerName;
+        tournaments[id].exists = true;
 
         emit TournamentUpdated(id, tournamentName, winnerName);
     }
 
     // Function to retrieve a Tournament's info
-    function getTournamentResult(uint256 tournamentId) public view returns (string memory, string memory) {
-        Tournament memory t = tournaments[tournamentId];
-        require(bytes(t.tournamentName).length > 0, "Tournament does not exist");
+    function getTournamentResult(uint256 id) public view returns (string memory, string memory) {
+        Tournament memory t = tournaments[id];
+        // require(bytes(t.tournamentName).length > 0, "Tournament does not exist");
+        require(tournaments[id].exists, "Tournament does not exist");
         return (t.tournamentName, t.winnerName);
+    }
+
+    // Function to check if a Tournament exists
+    function tournamentExists(uint256 id) public view returns (bool) {
+        return tournaments[id].exists;
     }
 }
