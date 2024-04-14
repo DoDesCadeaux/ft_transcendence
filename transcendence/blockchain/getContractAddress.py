@@ -15,7 +15,7 @@ try:
 
 
     # Get the contract address from the transaction receipt
-    receipt = w3.eth.get_transaction_receipt(transaction['hash'])
+    receipt = w3.eth.getTransactionReceipt(transaction['hash'])
     contract_address = receipt['contractAddress']
 
     # Write the contract address to a file
