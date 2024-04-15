@@ -26,12 +26,4 @@ COPY . /transcendence/
 
 EXPOSE 8000
 
-CMD ganache-cli -h 0.0.0.0 & sleep 10 && \
-    cd blockchain && \
-    truffle migrate && \
-    chmod +x /transcendence/blockchain/getContractAddress.py && \
-    python /transcendence/blockchain/getContractAddress.py && \
-    python /transcendence/manage.py makemigrations && \
-    python /transcendence/manage.py migrate && \
-    python /transcendence/blockchain/getContractAddress.py && \
-    python /transcendence/manage.py runserver 0.0.0.0:8000
+ENTRYPOINT [ "bash", "entrypoint.sh" ]

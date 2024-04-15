@@ -59,11 +59,8 @@ class Blockchain(generics.GenericAPIView):
     def get_contract(self):
         contract_abi = self.fetchContractABI()
 
-        # with open('../blockchain/tempContractAddress.txt', 'r') as file:
-        #     contract_address = file.read().strip()
-
-        #### add manually the contract address for the moment...
-        contract_address = '0xD585f9d1d83E08467aFDB7d4Dc5e7c44aFB9e220'
+        with open('../blockchain/tempContractAddress.txt', 'r') as file:
+            contract_address = file.read().strip()
 
         return self.web3.eth.contract(address=contract_address, abi=contract_abi)
 
@@ -109,7 +106,7 @@ class Blockchain(generics.GenericAPIView):
 
             ############################# - R&D
             try: 
-                results = blockchain.getResult(77)
+                results = blockchain.getResult(3)
                 print("---------results = ", results)        
             except Exception as e:
                 print("An error occurred while getting results from tournament ... :", e)
