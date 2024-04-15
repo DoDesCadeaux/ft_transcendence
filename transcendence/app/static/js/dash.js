@@ -81,6 +81,7 @@ document.body.addEventListener("DOMNodeInserted", function (event) {
                         const name = li.querySelector(".tournament-name");
                         setName(name, element);
 
+
                         let players = li.querySelectorAll(".players-tournament");
                         setPhoto(players, element.players);
 
@@ -141,31 +142,29 @@ function displayGoBtn(btnGo, element) {
     if (
         isSubscribeTo(element.players) == false ||
         element.winners.every((element) => element !== null)
-    ) {
+    )
         btnGo.forEach((button) => (button.style.display = "none"));
-    } else {
+    else {
         if (element.players.length != 4)
             btnGo.forEach((button) => (button.style.display = "none"));
-        else {
+        else { // Y a les 4 joueurs
             if (element.winners[2] || !element.winners[0] || !element.winners[1])
                 btnGo[2].style.display = "none";
-            if (element.players.length < 4) {
-                if (element.players.length < 2)
-                    btnGo[0].style.display = "none";
-                else if (element.winners[0])
-                    btnGo[0].style.display = "none";
+            if (isSubscribeTo(element.players.slice(0, 2))) {
                 btnGo[1].style.display = "none";
-            } else {
-                for (let i = 0; i <= element.winners.length; i++) {
-                    if (element.winners[i] != null)
-                        btnGo[i].style.display = "none";
-                }
+                if (element.winners[0])
+                    btnGo[0].style.display = "none";
+            } else if (!isSubscribeTo(element.players.slice(0, 2))) {
+                btnGo[0].style.display = "none";
+                if (element.winners[1])
+                    btnGo[1].style.display = "none";
             }
         }
     }
 }
 
 function manageGoBtn(btnGo, element) {
+    console.log(CURRENT_USER) // Je peux recup le current USER. ReCommencer la logique ici.
     if (btnGo[0].style.display != "none" && element.players[1]) {
         btnGo[0].style.cursor = "pointer";
         btnGo[0].onclick = () => sentNotification(element.players[1].username, element.id, 0)
