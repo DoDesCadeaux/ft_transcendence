@@ -6,6 +6,7 @@ contract PongTournament {
     struct Tournament {
         string tournamentName;
         string winnerName;
+        string winnerNickname;
         bool   exists;
     }
 
@@ -13,23 +14,23 @@ contract PongTournament {
     mapping(uint256 => Tournament) private tournaments;
 
     // Event that will be emitted whenever a Tournament's updated
-    event TournamentUpdated(uint256 indexed id, string tournamentName, string winnerName);
+    event TournamentUpdated(uint256 indexed id, string tournamentName, string winnerName, string winnerNickname);
 
     // Function to update a Tournament's info
-    function updateResult(uint256 id, string memory tournamentName, string memory winnerName) public {
+    function updateResult(uint256 id, string memory tournamentName, string memory winnerName, string memory winnerNickname) public {
         tournaments[id].tournamentName = tournamentName;
         tournaments[id].winnerName = winnerName;
+        tournaments[id].winnerNickname = winnerNickname;
         tournaments[id].exists = true;
 
-        emit TournamentUpdated(id, tournamentName, winnerName);
+        emit TournamentUpdated(id, tournamentName, winnerName, winnerNickname);
     }
 
     // Function to retrieve a Tournament's info
-    function getTournamentResult(uint256 id) public view returns (string memory, string memory) {
+    function getTournamentResult(uint256 id) public view returns (string memory, string memory, string memory) {
         Tournament memory t = tournaments[id];
-        // require(bytes(t.tournamentName).length > 0, "Tournament does not exist");
         require(tournaments[id].exists, "Tournament does not exist");
-        return (t.tournamentName, t.winnerName);
+        return (t.tournamentName, t.winnerName, t.winnerNickname);
     }
 
     // Function to check if a Tournament exists

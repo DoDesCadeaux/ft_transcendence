@@ -73,10 +73,12 @@ class Blockchain(generics.GenericAPIView):
             contract = self.get_contract()
             if contract.functions.tournamentExists(id).call():
                 result = contract.functions.getTournamentResult(id).call({'from': self.web3.eth.accounts[0]})
+                print("-----result = ", result)
                 response = {
                         "detail": f"Information from tournament with id {id} successfuly retrieved",
                         "tournament_name": result[0],
                         "winner_name": result[1],
+                        "winner_nickname": result[2],
                     }
                 return response ### choose what to return
                 return Response(response, status=status.HTTP_200_OK)
@@ -86,15 +88,15 @@ class Blockchain(generics.GenericAPIView):
         except Exception as e:
             print("An error occurred while getting results from the blockchain:", e)
 
-    def update(self, id, tournament_name, winner_name):
-        self.putMethod(id, tournament_name, winner_name)
+    def update(self, id, tournament_name, winner_name, winner_nickname):
+        self.putMethod(id, tournament_name, winner_name, winner_nickname)
 
-    def putMethod(self, id, tournament_name, winner_name, *args, **kwargs):
+    def putMethod(self, id, tournament_name, winner_name, winner_nickname, *args, **kwargs):
         try:
             contract = self.get_contract()
             
             # Call the smart contract function to update tournament info & wait for transaction to be mined
-            tx_hash = contract.functions.updateResult(id, tournament_name, winner_name).transact({'from': self.web3.eth.accounts[0]})
+            tx_hash = contract.functions.updateResult(id, tournament_name, winner_name, winner_nickname).transact({'from': self.web3.eth.accounts[0]})
             self.web3.eth.waitForTransactionReceipt(tx_hash)
  
             response = {
@@ -102,19 +104,20 @@ class Blockchain(generics.GenericAPIView):
                 "id": id,
                 "tournament_name": tournament_name,
                 "winner_name": winner_name,
+                "winner_nickname": winner_nickname,
             }
 
             ############################# - R&D
-            try: 
-                results = blockchain.getResult(3)
+            try:
+                results = blockchain.getResult(id)
                 print("---------results = ", results)        
             except Exception as e:
                 print("An error occurred while getting results from tournament ... :", e)
             #############################
-            
+             
             return Response(response, status=status.HTTP_200_OK)
         except Exception as e:
-            print("An error occurred while updateting the blockchain:", e)
+            print("An error occurred while updating the blockchain:", e)
 
 from .views import Blockchain
 blockchain = Blockchain()
@@ -280,15 +283,18 @@ class CreateFinishMatchAPIView(generics.GenericAPIView):
             tournament_id = int(tournament_id)
             tournament_name = "EKIP"
             winner = str(match.winner_id)
-            print("tournament_id = ", tournament_id, "\ntournament_name = ", tournament_name, "\nwinnner_str = ", winner)
+            winner_nickname = winner
+            # print("tournament_id = ", tournament_id, "\ntournament_name = ", tournament_name, "\nwinner = ", winner, "\nwinner_nickname = ", winner_nickname)
             
             try:
                 print("Before calling blockchain.update")
-                blockchain.update(tournament_id, tournament_name, winner)
+                blockchain.update(tournament_id, tournament_name, winner, winner_nickname)
                 print("After calling blockchain.update")
             except Exception as e:
                 print("An error occurred while calling blockchain.update:", e)
             #######################
+            
+            
             
             return Response({"message": "Le match a été mis à jour"}, status=status.HTTP_200_OK)
         return Response({"detail": "Invalid action."}, status=status.HTTP_404_NOT_FOUND)
