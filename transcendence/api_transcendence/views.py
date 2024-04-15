@@ -197,6 +197,13 @@ class CreateFinishMatchAPIView(generics.GenericAPIView):
             match.player2.save()
             match.save()
 
+            if (match.tournament.pk):
+                games = Match.objects.filter(tournament_id=match.tournament_id)
+                if (len(games) == 3):
+                    tournament =  Tournament.objects.get(pk=match.tournament_id)
+                    tournament.winner_id = match.winner_id
+                    tournament.save()
+
             return Response({"message": "Le match a été mis à jour"}, status=status.HTTP_200_OK)
         return Response({"detail": "Invalid action."}, status=status.HTTP_404_NOT_FOUND)
 
