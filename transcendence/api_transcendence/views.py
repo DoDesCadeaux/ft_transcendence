@@ -216,12 +216,7 @@ class CreateJoinTournamentAPIView(generics.GenericAPIView):
                 name=request.data.get('name'),
             )
 
-            newTournament.players.add(current_player)
-            newTournament.save()
-
-            newTournament.players.add(current_player)
-            newTournament.save()
-
+            TournamentPlayer.objects.create(tournament=newTournament, player=current_player, player_username=request.data.get('username'))
             return Response({"message": "Tournoi créé avec succès"}, status=status.HTTP_201_CREATED)
 
         elif action == 'join':
@@ -239,10 +234,12 @@ class CreateJoinTournamentAPIView(generics.GenericAPIView):
                                 status=status.HTTP_400_BAD_REQUEST)
 
             # Ajouter le joueur actuel à la liste des joueurs du tournoi
-            tournament.players.add(current_player)
+            # tournament.players.add(current_player)
+            TournamentPlayer.objects.create(tournament=tournament, player=current_player, player_username=request.data.get('username'))
+            
 
             # Sauvegarder les modifications
-            tournament.save()
+            # tournament.save()
 
             return Response(f"Inscription réussie au tournoi {tournament.name} !", status=status.HTTP_200_OK)
 
