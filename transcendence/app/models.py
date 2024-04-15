@@ -8,18 +8,13 @@ import os
 from datetime import timedelta
 
 
-
-#kwargs = keywords arguments -> permet de passer des variable en plus des arguments dans une fonction
-
-
-
 class User(AbstractUser):
     id_api = models.CharField(max_length=100, unique=True)
     name = models.CharField(max_length=100)
     username = models.CharField(max_length=100, unique=True)
     photo = models.ImageField(upload_to='user_photos/', blank=True, null=True)
     play_time = models.DurationField()
-    state = models.CharField(max_length=50)  # Par exemple: online, offline, in-game
+    state = models.CharField(max_length=50)
     amis = models.ManyToManyField('self', blank=True)
     game_session = models.DurationField(default=timedelta(minutes=0))
     semi_played = models.PositiveSmallIntegerField(default=0)
@@ -54,7 +49,6 @@ class User(AbstractUser):
 
     def __str__(self):
         return f"{self.name} - {self.username} -  {self.state}"
-    
 
     def formatted_play_time(self):
         total_seconds = self.play_time.total_seconds()
@@ -85,21 +79,15 @@ class User(AbstractUser):
             return "0min"
 
     def save(self, *args, **kwargs):
-        # Vérifier s'il y a une photo existante
         try:
-            #pk c'est la primary key, ici on essaye de recuperer l'user pour
-            #maj sa photo en ecrasant l'ancienne, si on le recup pas on va dans
-            #dans le execept et on fait rien
             existing_user = User.objects.get(pk=self.pk)
             if existing_user.photo and self.photo != existing_user.photo:
-                # si il existe on supprime l'ancienne photo avant d'enregistrer la nouvelle
                 existing_user.photo.delete(save=False)
         except User.DoesNotExist:
             pass
 
-        #on utilise super pour maj, c'est la class parente par defaut de toutes nos classes
         super().save(*args, **kwargs)
-        
+
 
 class Tournament(models.Model):
     name = models.CharField(max_length=100)

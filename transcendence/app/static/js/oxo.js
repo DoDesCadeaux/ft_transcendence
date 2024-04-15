@@ -233,7 +233,6 @@ function getWinner(whoWin) {
   const formData = new FormData();
   formData.append("id", dataOxo.match_id);
   if (winner) formData.append("winner", winner);
-  console
   formData.append("match_duration", getGameDuration());
 
   fetch(`/api/oxo/finish/`, {
