@@ -26,7 +26,8 @@ class User(AbstractUser):
     semi_won = models.PositiveSmallIntegerField(default=0)
     final_played = models.PositiveSmallIntegerField(default=0)
     final_won = models.PositiveSmallIntegerField(default=0)
-    points = models.IntegerField(default=0)
+    points = models.IntegerField(default=0) # remplacer points en pong_points
+    # Rajouter OXO elo points en oxo_points
 
     USERNAME_FIELD = 'id_api'
     password = models.CharField(max_length=128, null=True)  # Ajoutez cette ligne
@@ -103,11 +104,17 @@ class User(AbstractUser):
 class Tournament(models.Model):
     name = models.CharField(max_length=100)
     winner = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
-    players = models.ManyToManyField(User, related_name='tournaments')
+    players = models.ManyToManyField(User, through='TournamentPlayer', related_name='tournaments')
 
     def __str__(self):
         return f"{self.pk} : {self.name}"
-    
+
+class TournamentPlayer(models.Model):
+    tournament = models.ForeignKey(Tournament, on_delete=models.CASCADE)
+    player = models.ForeignKey(User, on_delete=models.CASCADE)
+    player_username = models.CharField(max_length=25, default="DefaultNickname")
+    joined_at = models.DateTimeField(auto_now_add=True)
+
 
 class Match(models.Model):
     tournament = models.ForeignKey(Tournament, on_delete=models.CASCADE, related_name="matches", null=True)
