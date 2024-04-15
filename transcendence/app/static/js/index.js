@@ -30,9 +30,9 @@ const filesToLoad = [
   "../static/js/dash.js",
   "../static/js/pong.js",
   "../static/js/oxo.js",
-  "../static/js/game.js",
   "../static/js/profile.js",
   "../static/js/modale.js",
+  "../static/js/game.js",
   "../static/js/listPlayers.js",
 ];
 

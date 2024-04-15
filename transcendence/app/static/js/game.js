@@ -281,3 +281,15 @@ function playVScomputer(game){
 
   playGame("IA", null, game);
 }
+
+
+function matchMaking(game){
+  const pong = document.querySelector(".Pong");
+  const oxo = document.querySelector(".Oxo");
+  pong.classList.add("displayNone");
+  oxo.classList.add("displayNone");
+
+  alert(`match making pour  ${game}`);
+
+  // playGame("IA", null, game);
+}

@@ -810,7 +810,7 @@ tbody tr:nth-child(2n + 1) {
         /* Styles pour le deuxième élément #search */
         top: 55%; /* Par exemple, déplacer le deuxième élément vers le bas de 50% de la hauteur de son conteneur parent */
       }
-      .vsComputeur {
+      .vsComputeur, .matchmaking {
         background-color: var(--orange);
         height: 2rem;
         display: flex;

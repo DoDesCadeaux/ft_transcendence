@@ -4,7 +4,7 @@ var player1Turn = true; // Variable pour garder une trace du tour du joueur 1 en
 
 const oPlayer = "O";
 const xPlayer = "X";
-const aiPlayer = "X";
+const oxoIaPlayer = "X";
 
 const combinaisonsWin = [
   //horizontal
@@ -117,11 +117,11 @@ function startMatchPlayer() {
 */
 function turnClick(square) {
   if (typeof baseTableau[square.target.id] == "number") {
-    if (checkWin(baseTableau, oPlayer) || checkWin(baseTableau, aiPlayer))
+    if (checkWin(baseTableau, oPlayer) || checkWin(baseTableau, oxoIaPlayer))
       return;
     if (typeof baseTableau[square.target.id] == "number") {
       tour_suivant(square.target.id, oPlayer);
-      if (!checkEgalite()) tour_suivant(bestSpot(), aiPlayer);
+      if (!checkEgalite()) tour_suivant(bestSpot(), oxoIaPlayer);
     }
   }
 }
@@ -269,7 +269,7 @@ function casesVides() {
     Utilise l'algorithme minimax pour déterminer le meilleur coup à jouer pour l'IA, puis renvoie l'index de ce coup.
 */
 function bestSpot() {
-  return minimax(baseTableau, aiPlayer).index;
+  return minimax(baseTableau, oxoIaPlayer).index;
 }
 
 /*
@@ -294,7 +294,7 @@ function minimax(newBoard, player) {
   var casesDispo = casesVides();
   if (checkWin(newBoard, oPlayer)) {
     return { score: -10 };
-  } else if (checkWin(newBoard, aiPlayer)) {
+  } else if (checkWin(newBoard, oxoIaPlayer)) {
     return { score: 10 };
   } else if (casesDispo.length === 0) {
     return { score: 0 };
@@ -304,18 +304,18 @@ function minimax(newBoard, player) {
     var move = {};
     move.index = newBoard[casesDispo[i]];
     newBoard[casesDispo[i]] = player;
-    if (player == aiPlayer) {
+    if (player == oxoIaPlayer) {
       var result = minimax(newBoard, oPlayer);
       move.score = result.score;
     } else {
-      var result = minimax(newBoard, aiPlayer);
+      var result = minimax(newBoard, oxoIaPlayer);
       move.score = result.score;
     }
     newBoard[casesDispo[i]] = move.index;
     moves.push(move);
   }
   var meilleurMove;
-  if (player === aiPlayer) {
+  if (player === oxoIaPlayer) {
     var meilleurScore = -10000;
     for (var i = 0; i < moves.length; i++) {
       if (moves[i].score > meilleurScore) {
