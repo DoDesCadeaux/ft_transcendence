@@ -3,7 +3,7 @@ from rest_framework import generics
 from rest_framework.response import Response
 from rest_framework import status
 from django.db import models
-from app.models import User, Match, Tournament, Notifications, Friendship, OxoMatch
+from app.models import User, Match, Tournament, Notifications, Friendship, OxoMatch, TournamentPlayer
 from app.serializer import *
 from django.shortcuts import get_object_or_404
 import ast
@@ -260,10 +260,11 @@ class DataMatchTournamentAPIView(generics.GenericAPIView):
 
             tournament_data = []
             for tournament in tournaments:
+                setPlayers = []
                 tournament_info = {
                     'id': tournament.id,
                     'name': tournament.name,
-                    'players': UserSerializer(tournament.players.all(), many=True).data,
+                    'players': self.orderSetPlayers(tournament),
                     'winners': [None, None, None]
                 }
                 players = tournament_info['players']
@@ -324,7 +325,9 @@ class DataMatchTournamentAPIView(generics.GenericAPIView):
             return Response(tournament_data)
         else:
             return Response({'error': 'Opération non prise en charge'})
-
+    
+    def orderSetPlayers(self, tournament):
+        return UserSerializer(tournament.players.order_by('tournamentplayer__joined_at'), many=True).data
 
 class FullStatsAPIView(generics.GenericAPIView):
     def get(self, request, *args, **kwargs):

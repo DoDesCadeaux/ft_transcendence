@@ -60,6 +60,7 @@ document.body.addEventListener("DOMNodeInserted", function (event) {
 
         (async () => {
             const dataTournament = await fetchGET(URI.DATA_TOURNAMENT);
+            console.log(dataTournament);
             if (dataTournament.length < 1) {
                 const empty = document.createElement("p");
                 empty.classList.add("no-tournament");
