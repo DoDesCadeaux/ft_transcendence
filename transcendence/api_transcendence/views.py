@@ -29,16 +29,7 @@ class UserListAPIView(generics.ListAPIView):
     def list(self, request, *args, **kwargs):
         serialized_users = []
         current_user = self.request.user
-
-        # Créer une sous-requête pour calculer la différence de points
-        points_difference = User.objects.filter(id=OuterRef('id')).annotate(
-            points_difference=models.functions.Abs(models.F('points') - current_user.points)
-        ).values('points_difference')[:1]
-
-        # Filtrer le queryset en utilisant la sous-requête
-        queryset = User.objects.exclude(id=current_user.id).exclude(username='IA').annotate(
-            points_difference=Subquery(points_difference, output_field=IntegerField())
-        ).filter(points_difference__lte=15)
+        queryset = User.objects.exclude(id=current_user.id).exclude(username='IA')
 
         for user in queryset:
             serializer = self.get_serializer(user)
