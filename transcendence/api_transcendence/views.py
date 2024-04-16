@@ -295,33 +295,34 @@ class CreateFinishMatchAPIView(generics.GenericAPIView):
             match.player2.save()
             match.save()
             
-            if match.tournament.pk:
-                games = Match.objects.filter(tournament_id=match.tournament_id)
-                if len(games) == 3:
-                    tournament = Tournament.objects.get(pk=match.tournament_id)
-                    tournament.winner_id = match.winner_id
-                    tournament.save()
-                    match.player1.final_played += 1
-                    match.player2.final_played += 1
-                    if match.winner.id == match.player1.id:
-                        match.player1.final_won += 1
-                    else:
-                        match.player2.final_won += 1
-                    match.player1.save()
-                    match.player2.save()
-                else:
-                    demi = games.filter(models.Q(player1=current_player.id) | models.Q(player2=current_player.id))
-                    if demi.exists():
-                        demi = demi[0]
-                        demi.player1.semi_played += 1
-                        demi.player2.semi_played += 1
-
-                        if demi.winner.id == demi.player1.id:
-                            demi.player1.semi_won += 1
+            if match.tournament is not None:
+                if match.tournament.pk:
+                    games = Match.objects.filter(tournament_id=match.tournament_id)
+                    if len(games) == 3:
+                        tournament = Tournament.objects.get(pk=match.tournament_id)
+                        tournament.winner_id = match.winner_id
+                        tournament.save()
+                        match.player1.final_played += 1
+                        match.player2.final_played += 1
+                        if match.winner.id == match.player1.id:
+                            match.player1.final_won += 1
                         else:
-                            demi.player2.semi_won += 1
-                        demi.player1.save()
-                        demi.player2.save()
+                            match.player2.final_won += 1
+                        match.player1.save()
+                        match.player2.save()
+                    else:
+                        demi = games.filter(models.Q(player1=current_player.id) | models.Q(player2=current_player.id))
+                        if demi.exists():
+                            demi = demi[0]
+                            demi.player1.semi_played += 1
+                            demi.player2.semi_played += 1
+
+                            if demi.winner.id == demi.player1.id:
+                                demi.player1.semi_won += 1
+                            else:
+                                demi.player2.semi_won += 1
+                            demi.player1.save()
+                            demi.player2.save()
 
             ####################### - R&D
             tournament_id = request.data.get('id')
