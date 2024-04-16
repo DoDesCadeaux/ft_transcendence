@@ -6,7 +6,7 @@ from django.core.files import File
 from django.core.files.images import ImageFile
 import os
 from datetime import timedelta
-
+from django.core.files.base import ContentFile
 
 class User(AbstractUser):
     id_api = models.CharField(max_length=100, unique=True)
@@ -29,24 +29,36 @@ class User(AbstractUser):
 
     @classmethod
     def create_ia_user(cls):
-        image_file = ImageFile(open("/transcendence/app/static/img/ia.png", 'rb'))
+        base_dir = '/transcendence/app/static/'
+        file_path = os.path.join(base_dir, 'img', 'ia.png')
 
-        user, created = cls.objects.get_or_create(
-            id_api='IA',
-            defaults={
-                'name': 'IA',
-                'username': 'IA',
-                'photo': image_file,
-                'play_time': models.DurationField().to_python('0'),
-                'state': 'online',
-                'password': None,
-            }
-        )
+        # Check if the file exists before attempting to open it
+        if os.path.exists(file_path):
+            # Read the file content
+            with open(file_path, 'rb') as f:
+                file_content = f.read()
 
-        if created:
-            user.photo.save('ia.png', image_file, save=True)
-            image_file.close()
+            # Create a ContentFile object with the file content
+            image_file = ContentFile(file_content, name='ia.png')
 
+            # Create the user with the provided default values
+            user, created = cls.objects.get_or_create(
+                id_api='IA',
+                defaults={
+                    'name': 'IA',
+                    'username': 'IA',
+                    'state': 'online',
+                    'password': None,
+                    'play_time': timezone.timedelta(seconds=0),
+                }
+            )
+
+            # Set the photo field with the image file
+            if created:
+                user.photo.save('ia.png', image_file, save=True)
+        else:
+            # Handle the case where the file doesn't exist
+            print("Image file 'ia.png' not found.")
 
     def __str__(self):
         return f"{self.name} - {self.username} -  {self.state}"
