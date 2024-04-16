@@ -29,7 +29,7 @@ class User(AbstractUser):
 
     @classmethod
     def create_ia_user(cls):
-        image_file = ImageFile(open("app/static/img/ia.png", 'rb'))
+        image_file = ImageFile(open("/transcendence/app/static/img/ia.png", 'rb'))
 
         user, created = cls.objects.get_or_create(
             id_api='IA',
@@ -45,6 +45,7 @@ class User(AbstractUser):
 
         if created:
             user.photo.save('ia.png', image_file, save=True)
+            image_file.close()
 
 
     def __str__(self):

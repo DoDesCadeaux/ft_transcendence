@@ -1,6 +1,7 @@
 # api/views.py
 from rest_framework import generics
 from rest_framework.response import Response
+from rest_framework.request import Request
 from rest_framework import status
 from django.db import models
 from app.models import User, Match, Tournament, Notifications, Friendship, OxoMatch, TournamentPlayer
@@ -13,6 +14,117 @@ from django.utils import timezone
 from django.db.models import Q
 from django.db.models import Subquery, OuterRef, IntegerField
 
+
+from django.http import JsonResponse
+from web3 import Web3
+import json
+
+# - getContractAddress.py
+# - integrate code in API to get results from tournamet on blockchain
+# - pointsToScore & countdown --> change
+
+###########
+    # def get(self, request, *args, **kwargs):
+    #     action = kwargs.get('action')
+        
+    #     if action == 'results': 
+    #         try:
+    #             result = blockchain.getResult()
+    #         except Exception as e:
+    #             print("An error occurred while calling :", e)
+    #             response = {
+    #                 # "id" : ???,
+    #                 "tournament" : result[0],
+    #                 "winner" : result[1],
+    #             }
+    #         return Response(response, status=status.HTTP_200_OK)
+###########
+
+class Blockchain(generics.GenericAPIView):
+    web3 = Web3(Web3.HTTPProvider('http://ganache:8545'))
+
+    @staticmethod
+    def fetchContractABI():
+        try:
+            with open('../blockchain/build/contracts/PongTournament.json', 'r') as file:
+                contract_data = json.load(file)
+                abi = contract_data.get('abi')
+                if abi:
+                    return abi
+                else:
+                    raise ValueError("ABI not found in contract JSON file")
+        except FileNotFoundError:
+            print("Contract JSON file not found")
+        except json.JSONDecodeError:
+            print("Error decoding JSON file")
+        except Exception as e:
+            print("Error:", e)
+
+    def get_contract(self):
+        contract_abi = self.fetchContractABI()
+
+        with open('../blockchain/tempContractAddress.txt', 'r') as file:
+            contract_address = file.read().strip()
+
+        return self.web3.eth.contract(address=contract_address, abi=contract_abi)
+
+    def getResult(self, id):
+        return self.getMethod(id)
+
+    def getMethod(self, id, *args, **kwargs):
+        try:
+            # Call the smart contract function to retrieve tournament info
+            contract = self.get_contract()
+            if contract.functions.tournamentExists(id).call():
+                result = contract.functions.getTournamentResult(id).call({'from': self.web3.eth.accounts[0]})
+                print("-----result = ", result)
+                response = {
+                        "detail": f"Information from tournament with id {id} successfuly retrieved",
+                        "tournament_name": result[0],
+                        "winner_name": result[1],
+                        "winner_nickname": result[2],
+                    }
+                return response ### choose what to return
+                return Response(response, status=status.HTTP_200_OK)
+            else:
+                print(f"Tournament with id {id} does not exist.")
+        
+        except Exception as e:
+            print("An error occurred while getting results from the blockchain:", e)
+
+    def update(self, id, tournament_name, winner_name, winner_nickname):
+        self.putMethod(id, tournament_name, winner_name, winner_nickname)
+
+    def putMethod(self, id, tournament_name, winner_name, winner_nickname, *args, **kwargs):
+        try:
+            contract = self.get_contract()
+            
+            # Call the smart contract function to update tournament info & wait for transaction to be mined
+            tx_hash = contract.functions.updateResult(id, tournament_name, winner_name, winner_nickname).transact({'from': self.web3.eth.accounts[0]})
+            self.web3.eth.waitForTransactionReceipt(tx_hash)
+ 
+            response = {
+                "detail": "Mis à jour avec succès.",
+                "id": id,
+                "tournament_name": tournament_name,
+                "winner_name": winner_name,
+                "winner_nickname": winner_nickname,
+            }
+
+            ############################# - R&D
+            try:
+                results = blockchain.getResult(id)
+                print("---------results = ", results)        
+            except Exception as e:
+                print("An error occurred while getting results from tournament ... :", e)
+            #############################
+             
+            return Response(response, status=status.HTTP_200_OK)
+        except Exception as e:
+            print("An error occurred while updating the blockchain:", e)
+
+from .views import Blockchain
+blockchain = Blockchain()
 
 class UserInfoAPIView(generics.ListAPIView):
     serializer_class = UserListSerializer
@@ -100,7 +212,6 @@ class ResultsAPIView(generics.GenericAPIView):
             # Gérer d'autres cas ou renvoyer une réponse d'erreur
             return Response({'error': 'Opération non prise en charge'})
 
-
 class CreateFinishMatchAPIView(generics.GenericAPIView):
     #                                               DATA DOIT CONTENIR :
     #               action = create                         |               action = finish
@@ -120,9 +231,9 @@ class CreateFinishMatchAPIView(generics.GenericAPIView):
             except User.DoesNotExist:
                 return Response({"detail": "User not found."}, status=status.HTTP_404_NOT_FOUND)
             new_match = Match.objects.create(
-                player1=current_player,
-                player2=player2,
-                tournament_id=request.data.get('tournament')  # Assurez-vous de récupérer ou de passer l'ID du tournoi
+                player1 = current_player,
+                player2 = player2,
+                tournament_id = request.data.get('tournament')  # Assurez-vous de récupérer ou de passer l'ID du tournoi
             )
             response = {
                 "match_id": new_match.id,
@@ -140,6 +251,7 @@ class CreateFinishMatchAPIView(generics.GenericAPIView):
             player2.save()
             current_player.save()
             return Response(response, status=status.HTTP_201_CREATED)
+        
         elif action == 'finish':
             try:
                 match = Match.objects.get(id=request.data.get('id'))
@@ -185,6 +297,11 @@ class CreateFinishMatchAPIView(generics.GenericAPIView):
             match.player1.save()
             match.player2.save()
             match.save()
+            
+            ####################### - R&D
+            tournament_id = request.data.get('id')
+            if tournament_id is None:
+                return Response({"detail": "Tournament ID is missing."}, status=status.HTTP_400_BAD_REQUEST)
 
             if match.tournament.pk:
                 games = Match.objects.filter(tournament_id=match.tournament_id)
@@ -213,6 +330,20 @@ class CreateFinishMatchAPIView(generics.GenericAPIView):
                             demi.player2.semi_won += 1
                         demi.player1.save()
                         demi.player2.save()
+
+            tournament_id = int(tournament_id)
+            tournament_name = "EKIP"
+            winner = str(match.winner_id)
+            winner_nickname = winner
+            # print("tournament_id = ", tournament_id, "\ntournament_name = ", tournament_name, "\nwinner = ", winner, "\nwinner_nickname = ", winner_nickname)
+            
+            try:
+                print("Before calling blockchain.update")
+                blockchain.update(tournament_id, tournament_name, winner, winner_nickname)
+                print("After calling blockchain.update")
+            except Exception as e:
+                print("An error occurred while calling blockchain.update:", e)
+            #######################
 
             return Response({"message": "Le match a été mis à jour"}, status=status.HTTP_200_OK)
         return Response({"detail": "Invalid action."}, status=status.HTTP_404_NOT_FOUND)

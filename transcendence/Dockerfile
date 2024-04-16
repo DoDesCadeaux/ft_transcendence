@@ -13,21 +13,17 @@ RUN apt-get install -y nodejs
 RUN npm install -g truffle
 RUN npm install -g ganache-cli
 RUN npm install --save ethers
-
+RUN pip install web3==5.17.0
+RUN pip install --upgrade eth-utils
 
 COPY requirements.txt /transcendence/
 RUN pip install --no-cache-dir -r requirements.txt
 
+# Set Python logging level
+ENV PYTHONWARNINGS=default
+
 COPY . /transcendence/
-
-# Run Ganache CLI in the background
-RUN ganache-cli &
-
-# Check if the lock file exists, if not, migrate the contract
-#RUN if [ ! -f "blockchain/migration.lock" ]; then \
-#    cd blockchain && truffle migrate && touch migration.lock ; \
-#    fi
 
 EXPOSE 8000
 
-CMD python manage.py makemigrations && python manage.py migrate && python manage.py runserver 0.0.0.0:8000
+ENTRYPOINT [ "bash", "entrypoint.sh" ]
