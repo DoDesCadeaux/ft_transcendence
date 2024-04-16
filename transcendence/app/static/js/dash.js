@@ -615,6 +615,48 @@ function fillDataHistoric() {
       table.appendChild(tr);
     });
   })();
+
+  bcData.forEach((tournament) => { fillDataBlockChain(tournament) });
+}
+
+function fillDataBlockChain(tournament) {
+  const tournamentDiv = document.createElement("div");
+  tournamentDiv.classList.add("bc-tournament");
+
+  const nameDiv = document.createElement("div");
+  nameDiv.classList.add("bc-name");
+  nameDiv.textContent = tournament.tournamentName;
+
+  const blocDiv = document.createElement("div");
+  blocDiv.classList.add("bc-bloc");
+
+  const playersDiv = document.createElement("div");
+  playersDiv.classList.add("bc-players");
+
+  for (let i = 0; i < 4; i++) {
+    const playerDiv = document.createElement("div");
+    playerDiv.classList.add("bc-player");
+    playerDiv.textContent = `${tournament.players[i].username} AKA ${tournament.players[i].nickname}`;
+    playersDiv.appendChild(playerDiv);
+  }
+
+  const winnerDiv = document.createElement("div");
+  winnerDiv.classList.add("bc-winner");
+  const winnerNickname = tournament.players.find(
+    (player) => player.username === tournament.winner
+  )?.nickname;
+  winnerDiv.textContent = `WINNER : ${tournament.winner} AKA ${winnerNickname}`;
+
+  // Ajouter tous les éléments dans la structure appropriée
+  blocDiv.appendChild(playersDiv);
+  blocDiv.appendChild(winnerDiv);
+
+  tournamentDiv.appendChild(nameDiv);
+  tournamentDiv.appendChild(blocDiv);
+
+  const blockchain = document.querySelector(".bloc-blockChain")
+  // Ajouter le tournoi généré à la fin du body (ou autre élément parent de votre choix)
+ blockchain.appendChild(tournamentDiv);
 }
 
 /****************************************************************************
@@ -676,3 +718,72 @@ const fakeData = {
     },
   ],
 };
+
+const bcData = [
+  {
+    tournamentName: "Super Tournois",
+    players: [
+      {
+        username: "pamartin",
+        nickname: "pamartatruc",
+      },
+      {
+        username: "dduraku",
+        nickname: "DD",
+      },
+      {
+        username: "tverdood",
+        nickname: "tangzer",
+      },
+      {
+        username: "adevos",
+        nickname: "amau",
+      },
+    ],
+    winner: "dduraku",
+  },
+  {
+    tournamentName: "tournois",
+    players: [
+      {
+        username: "pamartin",
+        nickname: "pamartatruc",
+      },
+      {
+        username: "dduraku",
+        nickname: "DD",
+      },
+      {
+        username: "tverdood",
+        nickname: "tangzer",
+      },
+      {
+        username: "adevos",
+        nickname: "amau",
+      },
+    ],
+    winner: "dduraku",
+  },
+  {
+    tournamentName: "TRUC",
+    players: [
+      {
+        username: "pamartin",
+        nickname: "pamartatruc",
+      },
+      {
+        username: "dduraku",
+        nickname: "DD",
+      },
+      {
+        username: "tverdood",
+        nickname: "tangzer",
+      },
+      {
+        username: "adevos",
+        nickname: "amau",
+      },
+    ],
+    winner: "dduraku",
+  },
+];
