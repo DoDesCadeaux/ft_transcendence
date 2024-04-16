@@ -194,6 +194,22 @@ class CreateFinishMatchAPIView(generics.GenericAPIView):
                     tournament =  Tournament.objects.get(pk=match.tournament_id)
                     tournament.winner_id = match.winner_id
                     tournament.save()
+                    current_player.final_played += 1
+                    if (match.winner_id == current_player.id):
+                        current_player.final_won += 1
+                else:
+                    demi = games[0].filter(models.Q(player1=current_player.id) | models.Q(player2=current_player.id))
+                    if not demi:
+                        demi = games[1].filter(models.Q(player1=current_player.id) | models.Q(player2=current_player.id))
+                    current_player.semi_played += 1
+                    if (demi.winner_id == current_player.id):
+                        current_player.semi_won += 1
+                current_player.save()
+                
+                        
+                    
+                        
+                    
 
             return Response({"message": "Le match a été mis à jour"}, status=status.HTTP_200_OK)
         return Response({"detail": "Invalid action."}, status=status.HTTP_404_NOT_FOUND)
