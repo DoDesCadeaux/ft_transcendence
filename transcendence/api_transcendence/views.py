@@ -14,14 +14,11 @@ from django.utils import timezone
 from django.db.models import Q
 from django.db.models import Subquery, OuterRef, IntegerField
 
-
 from django.http import JsonResponse
 from web3 import Web3
 import json
 
-# - getContractAddress.py
-# - integrate code in API to get results from tournamet on blockchain
-# - pointsToScore & countdown --> change
+# - integrate code in API to get results from tournament on blockchain
 
 ###########
     # def get(self, request, *args, **kwargs):
@@ -298,11 +295,6 @@ class CreateFinishMatchAPIView(generics.GenericAPIView):
             match.player2.save()
             match.save()
             
-            ####################### - R&D
-            tournament_id = request.data.get('id')
-            if tournament_id is None:
-                return Response({"detail": "Tournament ID is missing."}, status=status.HTTP_400_BAD_REQUEST)
-
             if match.tournament.pk:
                 games = Match.objects.filter(tournament_id=match.tournament_id)
                 if len(games) == 3:
@@ -330,6 +322,11 @@ class CreateFinishMatchAPIView(generics.GenericAPIView):
                             demi.player2.semi_won += 1
                         demi.player1.save()
                         demi.player2.save()
+
+            ####################### - R&D
+            tournament_id = request.data.get('id')
+            if tournament_id is None:
+                return Response({"detail": "Tournament ID is missing."}, status=status.HTTP_400_BAD_REQUEST)
 
             tournament_id = int(tournament_id)
             tournament_name = "EKIP"
