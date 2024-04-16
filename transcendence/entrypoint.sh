@@ -1,5 +1,6 @@
 #!/bin/bash
 
+sleep 5
 cd blockchain
 truffle migrate &
 TRUFFLE_PID=$!

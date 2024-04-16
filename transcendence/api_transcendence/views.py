@@ -81,7 +81,7 @@ class Blockchain(generics.GenericAPIView):
                         "winner_name": result[1],
                         "winner_nickname": result[2],
                     }
-                return response ### choose what to return
+                return response                         ### chose what to return
                 return Response(response, status=status.HTTP_200_OK)
             else:
                 print(f"Tournament with id {id} does not exist.")
@@ -111,7 +111,7 @@ class Blockchain(generics.GenericAPIView):
             ############################# - R&D
             try:
                 results = blockchain.getResult(id)
-                print("---------results = ", results)        
+                print("-----results = ", results)        
             except Exception as e:
                 print("An error occurred while getting results from tournament ... :", e)
             #############################
@@ -306,8 +306,16 @@ class CreateFinishMatchAPIView(generics.GenericAPIView):
                         match.player2.final_played += 1
                         if match.winner.id == match.player1.id:
                             match.player1.final_won += 1
+                            try:
+                                blockchain.update(int(tournament.id), str(tournament.name), str(match.player1.name), str(match.player1.username)) ###change to nickname !!
+                            except Exception as e:
+                                print("An error occurred while updating blockchain:", e)
                         else:
                             match.player2.final_won += 1
+                            try:
+                                blockchain.update(int(tournament.id), str(tournament.name), str(match.player2.name), str(match.player2.username)) ###change to nickname !!
+                            except Exception as e:
+                                print("An error occurred while updating blockchain:", e)
                         match.player1.save()
                         match.player2.save()
                     else:
@@ -325,22 +333,22 @@ class CreateFinishMatchAPIView(generics.GenericAPIView):
                             demi.player2.save()
 
             ####################### - R&D
-            tournament_id = request.data.get('id')
-            if tournament_id is None:
-                return Response({"detail": "Tournament ID is missing."}, status=status.HTTP_400_BAD_REQUEST)
+            # tournament_id = request.data.get('id')
+            # if tournament_id is None:
+            #     return Response({"detail": "Tournament ID is missing."}, status=status.HTTP_400_BAD_REQUEST)
 
-            tournament_id = int(tournament_id)
-            tournament_name = "EKIP"
-            winner = str(match.winner_id)
-            winner_nickname = winner
-            # print("tournament_id = ", tournament_id, "\ntournament_name = ", tournament_name, "\nwinner = ", winner, "\nwinner_nickname = ", winner_nickname)
+            # tournament_id = int(tournament_id)
+            # tournament_name = "EKIP"
+            # winner = str(match.winner_id)
+            # winner_nickname = winner
+            # # print("tournament_id = ", tournament_id, "\ntournament_name = ", tournament_name, "\nwinner = ", winner, "\nwinner_nickname = ", winner_nickname)
             
-            try:
-                print("Before calling blockchain.update")
-                blockchain.update(tournament_id, tournament_name, winner, winner_nickname)
-                print("After calling blockchain.update")
-            except Exception as e:
-                print("An error occurred while calling blockchain.update:", e)
+            # try:
+            #     print("Before calling blockchain.update")
+            #     blockchain.update(tournament_id, tournament_name, winner, winner_nickname)
+            #     print("After calling blockchain.update")
+            # except Exception as e:
+            #     print("An error occurred while calling blockchain.update:", e)
             #######################
 
             return Response({"message": "Le match a été mis à jour"}, status=status.HTTP_200_OK)
