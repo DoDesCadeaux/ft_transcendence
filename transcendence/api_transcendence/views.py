@@ -92,11 +92,9 @@ class ResultsAPIView(generics.GenericAPIView):
             return Response(response)
         elif game == 'tournaments':
             tournaments_won = current_player.final_won
-            tournaments_participated = Tournament.objects.filter(players=current_player)
-            for tournament in tournaments_participated:
-                if tournament.winner == current_player:
-                    tournaments_won += 1
-            response = {'total': tournaments_participated.count(), 'won': tournaments_won}
+            tournaments_participated = current_player.semi_played
+
+            response = {'total': tournaments_participated, 'won': tournaments_won}
             return Response(response)
         else:
             # Gérer d'autres cas ou renvoyer une réponse d'erreur
@@ -188,28 +186,33 @@ class CreateFinishMatchAPIView(generics.GenericAPIView):
             match.player2.save()
             match.save()
 
-            if (match.tournament.pk):
+            if match.tournament.pk:
                 games = Match.objects.filter(tournament_id=match.tournament_id)
-                if (len(games) == 3):
-                    tournament =  Tournament.objects.get(pk=match.tournament_id)
+                if len(games) == 3:
+                    tournament = Tournament.objects.get(pk=match.tournament_id)
                     tournament.winner_id = match.winner_id
                     tournament.save()
-                    current_player.final_played += 1
-                    if (match.winner_id == current_player.id):
-                        current_player.final_won += 1
+                    match.player1.final_played += 1
+                    match.player2.final_played += 1
+                    if match.winner.id == match.player1.id:
+                        match.player1.final_won += 1
+                    else:
+                        match.player2.final_won += 1
+                    match.player1.save()
+                    match.player2.save()
                 else:
-                    demi = games[0].filter(models.Q(player1=current_player.id) | models.Q(player2=current_player.id))
-                    if not demi:
-                        demi = games[1].filter(models.Q(player1=current_player.id) | models.Q(player2=current_player.id))
-                    current_player.semi_played += 1
-                    if (demi.winner_id == current_player.id):
-                        current_player.semi_won += 1
-                current_player.save()
-                
-                        
-                    
-                        
-                    
+                    demi = games.filter(models.Q(player1=current_player.id) | models.Q(player2=current_player.id))
+                    if demi.exists():
+                        demi = demi[0]
+                        demi.player1.semi_played += 1
+                        demi.player2.semi_played += 1
+
+                        if demi.winner.id == demi.player1.id:
+                            demi.player1.semi_won += 1
+                        else:
+                            demi.player2.semi_won += 1
+                        demi.player1.save()
+                        demi.player2.save()
 
             return Response({"message": "Le match a été mis à jour"}, status=status.HTTP_200_OK)
         return Response({"detail": "Invalid action."}, status=status.HTTP_404_NOT_FOUND)
@@ -447,28 +450,10 @@ class FullStatsAPIView(generics.GenericAPIView):
         }
 
     def getPercentWonTournyData(self, user):
-        tournaments_participated = Tournament.objects.filter(players=user)
         total_demi = user.semi_played
         total_final = user.final_played
         won_demi = user.semi_won
         won_final = user.final_won
-
-        # Pour chaque tournoi, récupérer les matchs correspondants
-        for tournament in tournaments_participated:
-            matches = Match.objects.filter(tournament=tournament)
-            if len(matches) < 3:
-                for match_play in matches:
-                    participed = match_play.player1 == user or match_play.player2 == user
-                    if participed:
-                        total_demi += 1
-                    if match_play.winner == user:
-                        won_demi += 1
-            if len(matches) == 3:
-                participed = matches[2].player1 == user or matches[2].player2 == user
-                if participed:
-                    total_final += 1
-                if matches[2].winner == user:
-                    won_final += 1
 
         if total_demi != 0:
             res_demi = (won_demi * 100) / total_demi
