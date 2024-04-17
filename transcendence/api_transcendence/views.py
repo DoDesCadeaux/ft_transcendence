@@ -46,43 +46,35 @@ class Blockchain(generics.GenericAPIView):
 
         return self.web3.eth.contract(address=contract_address, abi=contract_abi)
 
-    def getResults(self):
+    def getAllTournamentResults(self):
         return self.getMethod()
 
     def getMethod(self):
         try:
-            # Call the smart contract function to retrieve tournaments info
             contract = self.get_contract()
-            
             result = contract.functions.getAllTournaments().call({'from': self.web3.eth.accounts[0]}) 
-            print("result = ", result)
-             
-                # result = contract.functions.getTournamentResult(id).call({'from': self.web3.eth.accounts[0]})
-                # response = {
-                #     "detail": f"Information from tournament with id {id} successfuly retrieved",
-                #     "tournamentName": result[0],
-                #     "winner": result[1],
-                #     "players" : [
-                #         {
-                #             "username": result[2],
-                #             "nickname": result[3],
-                #         },
-                #         {
-                #             "username": result[4],
-                #             "nickname": result[5],
-                #         },
-                #         {
-                #             "username": result[6],
-                #             "nickname": result[7],
-                #         },
-                #         {
-                #             "nickname": result[8],
-                #             "username": result[9],
-                #         }
-                #     ]
-                # }
-                # return Response(response, status=status.HTTP_200_OK)
-        
+
+            formatted_tournaments = []
+
+            for tournament_info in result:
+                tournament_name = tournament_info[0]
+                winner = tournament_info[1]
+                players = [
+                    {"username": tournament_info[2], "nickname": tournament_info[3]},
+                    {"username": tournament_info[4], "nickname": tournament_info[5]},
+                    {"username": tournament_info[6], "nickname": tournament_info[7]},
+                    {"username": tournament_info[8], "nickname": tournament_info[9]}
+                ]
+                # Construct dictionary of current tournament
+                tournament_response = {
+                    "tournamentName": tournament_name,
+                    "winner": winner,
+                    "players": players
+                }
+                formatted_tournaments.append(tournament_response)    
+            print("-----formatted_tournaments = ", formatted_tournaments) #### R&D
+
+            return Response(formatted_tournaments, status=status.HTTP_200_OK)
         except Exception as e:
             print("An error occurred while getting results from the blockchain:", e)
 
@@ -93,7 +85,7 @@ class Blockchain(generics.GenericAPIView):
         try:
             contract = self.get_contract()
             
-            # Call the smart contract function to update tournament info & wait for transaction to be mined
+            # Call the smart contract function, create block & wait for transaction to be mined
             tx_hash = contract.functions.createTournament(tournamentName, winnerUsername, p1Username, p1Nickname, p2Username, p2Nickname, p3Username, p3Nickname, p4Username, p4Nickname).transact({'from': self.web3.eth.accounts[0]})
             self.web3.eth.waitForTransactionReceipt(tx_hash)
 
@@ -124,8 +116,7 @@ class Blockchain(generics.GenericAPIView):
 
             ############################# - R&D
             try:
-                results = blockchain.getResults()
-                # print("-----results = ", results)        
+                results = blockchain.getAllTournamentResults()      
             except Exception as e:
                 print("An error occurred while getting results from tournament ... :", e)
             #############################
@@ -136,9 +127,6 @@ class Blockchain(generics.GenericAPIView):
 
 from .views import Blockchain
 blockchain = Blockchain()
-
-# class GetBlockchain(generics.GenericAPIView):
-#     result = blockchain.getAllTournaments()
 
 class UserInfoAPIView(generics.ListAPIView):
     serializer_class = UserListSerializer
