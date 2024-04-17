@@ -18,25 +18,6 @@ from django.http import JsonResponse
 from web3 import Web3
 import json
 
-# - integrate code in API to get results from tournament on blockchain
-
-###########
-    # def get(self, request, *args, **kwargs):
-    #     action = kwargs.get('action')
-        
-    #     if action == 'results': 
-    #         try:
-    #             result = blockchain.getResult()
-    #         except Exception as e:
-    #             print("An error occurred while calling :", e)
-    #             response = {
-    #                 # "id" : ???,
-    #                 "tournament" : result[0],
-    #                 "winner" : result[1],
-    #             }
-    #         return Response(response, status=status.HTTP_200_OK)
-###########
-
 class Blockchain(generics.GenericAPIView):
     web3 = Web3(Web3.HTTPProvider('http://ganache:8545'))
 
@@ -74,14 +55,29 @@ class Blockchain(generics.GenericAPIView):
             contract = self.get_contract()
             if contract.functions.tournamentExists(id).call():
                 result = contract.functions.getTournamentResult(id).call({'from': self.web3.eth.accounts[0]})
-                print("-----result = ", result)
                 response = {
-                        "detail": f"Information from tournament with id {id} successfuly retrieved",
-                        "tournament_name": result[0],
-                        "winner_name": result[1],
-                        "winner_nickname": result[2],
-                    }
-                return response                         ### chose what to return
+                    "detail": f"Information from tournament with id {id} successfuly retrieved",
+                    "tournamentName": result[0],
+                    "winner": result[1],
+                    "players" : [
+                        {
+                            "username": result[2],
+                            "nickname": result[3],
+                        },
+                        {
+                            "username": result[4],
+                            "nickname": result[5],
+                        },
+                        {
+                            "username": result[6],
+                            "nickname": result[7],
+                        },
+                        {
+                            "nickname": result[8],
+                            "username": result[9],
+                        }
+                    ]
+                }
                 return Response(response, status=status.HTTP_200_OK)
             else:
                 print(f"Tournament with id {id} does not exist.")
@@ -89,23 +85,40 @@ class Blockchain(generics.GenericAPIView):
         except Exception as e:
             print("An error occurred while getting results from the blockchain:", e)
 
-    def update(self, id, tournament_name, winner_name, winner_nickname):
-        self.putMethod(id, tournament_name, winner_name, winner_nickname)
+    def update(self, id, tournamentName, winnerUsername, p1Username, p1Nickname, p2Username, p2Nickname, p3Username, p3Nickname, p4Username, p4Nickname):
+        self.putMethod(id, tournamentName, winnerUsername, p1Username, p1Nickname, p2Username, p2Nickname, p3Username, p3Nickname, p4Username, p4Nickname)
 
-    def putMethod(self, id, tournament_name, winner_name, winner_nickname, *args, **kwargs):
+    def putMethod(self, id, tournamentName, winnerUsername, p1Username, p1Nickname, p2Username, p2Nickname, p3Username, p3Nickname, p4Username, p4Nickname, *args, **kwargs):
         try:
             contract = self.get_contract()
             
             # Call the smart contract function to update tournament info & wait for transaction to be mined
-            tx_hash = contract.functions.updateResult(id, tournament_name, winner_name, winner_nickname).transact({'from': self.web3.eth.accounts[0]})
+            tx_hash = contract.functions.updateResult(id, tournamentName, winnerUsername, p1Username, p1Nickname, p2Username, p2Nickname, p3Username, p3Nickname, p4Username, p4Nickname).transact({'from': self.web3.eth.accounts[0]})
             self.web3.eth.waitForTransactionReceipt(tx_hash)
  
             response = {
                 "detail": "Mis à jour avec succès.",
                 "id": id,
-                "tournament_name": tournament_name,
-                "winner_name": winner_name,
-                "winner_nickname": winner_nickname,
+                "tournamentName": tournamentName,
+                "winner": winnerUsername,
+                "players" : [
+                    {
+                        "username": p1Username,
+                        "nickname": p1Nickname,
+                    },
+                    {
+                        "username": p2Username,
+                        "nickname": p2Nickname,
+                    },
+                    {
+                        "username": p3Username,
+                        "nickname": p3Nickname,
+                    },
+                    {
+                        "username": p4Username,
+                        "nickname": p4Nickname,
+                    }
+                ]
             }
 
             ############################# - R&D
@@ -304,16 +317,24 @@ class CreateFinishMatchAPIView(generics.GenericAPIView):
                         tournament.save()
                         match.player1.final_played += 1
                         match.player2.final_played += 1
+                        
+                        tournament_player = TournamentPlayer.objects.filter(tournament_id=tournament.id)
+                        players = User.objects.all()
+                        p1 = players.get(pk = tournament_player[0].player_id)
+                        p2 = players.get(pk = tournament_player[1].player_id)
+                        p3 = players.get(pk = tournament_player[2].player_id)
+                        p4 = players.get(pk = tournament_player[3].player_id)
+                        
                         if match.winner.id == match.player1.id:
                             match.player1.final_won += 1
                             try:
-                                blockchain.update(int(tournament.id), str(tournament.name), str(match.player1.name), str(match.player1.username)) ###change to nickname !!
+                                blockchain.update(int(tournament.id), str(tournament.name), str(match.player1.username), str(p1.username), str(tournament_player[0].player_username), str(p2.username), str(tournament_player[1].player_username), str(p3.username), str(tournament_player[2].player_username), str(p4.username), str(tournament_player[3].player_username))
                             except Exception as e:
                                 print("An error occurred while updating blockchain:", e)
                         else:
                             match.player2.final_won += 1
                             try:
-                                blockchain.update(int(tournament.id), str(tournament.name), str(match.player2.name), str(match.player2.username)) ###change to nickname !!
+                                blockchain.update(int(tournament.id), str(tournament.name), str(match.player2.username), str(p1.username), str(tournament_player[0].player_username), str(p2.username), str(tournament_player[1].player_username), str(p3.username), str(tournament_player[2].player_username), str(p4.username), str(tournament_player[3].player_username))
                             except Exception as e:
                                 print("An error occurred while updating blockchain:", e)
                         match.player1.save()
@@ -331,25 +352,6 @@ class CreateFinishMatchAPIView(generics.GenericAPIView):
                                 demi.player2.semi_won += 1
                             demi.player1.save()
                             demi.player2.save()
-
-            ####################### - R&D
-            # tournament_id = request.data.get('id')
-            # if tournament_id is None:
-            #     return Response({"detail": "Tournament ID is missing."}, status=status.HTTP_400_BAD_REQUEST)
-
-            # tournament_id = int(tournament_id)
-            # tournament_name = "EKIP"
-            # winner = str(match.winner_id)
-            # winner_nickname = winner
-            # # print("tournament_id = ", tournament_id, "\ntournament_name = ", tournament_name, "\nwinner = ", winner, "\nwinner_nickname = ", winner_nickname)
-            
-            # try:
-            #     print("Before calling blockchain.update")
-            #     blockchain.update(tournament_id, tournament_name, winner, winner_nickname)
-            #     print("After calling blockchain.update")
-            # except Exception as e:
-            #     print("An error occurred while calling blockchain.update:", e)
-            #######################
 
             return Response({"message": "Le match a été mis à jour"}, status=status.HTTP_200_OK)
         return Response({"detail": "Invalid action."}, status=status.HTTP_404_NOT_FOUND)
