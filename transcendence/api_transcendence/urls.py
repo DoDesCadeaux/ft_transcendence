@@ -4,6 +4,7 @@ from .views import *
 urlpatterns = [
     path('update_user/<str:id_api>/', UserUpdateAPIView.as_view(), name='update_user'),
     path('users/', UserListAPIView.as_view(), name='user_list'),
+    path('usersMatchmaking/', UserMatchmaking.as_view(), name='user_list'),
     path('results/<str:game>/', ResultsAPIView.as_view(), name='results'),
     path('match/<str:action>/', CreateFinishMatchAPIView.as_view(), name='manage_match'),
     path('oxo/<str:action>/', CreateFinishOxoAPIView.as_view(), name='manage_oxomatch'),

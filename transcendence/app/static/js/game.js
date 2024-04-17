@@ -298,10 +298,8 @@ function matchMaking(game){
   pong.classList.add("displayNone");
   oxo.classList.add("displayNone");
 
-  alert(`match making pour  ${game}`);
-
   (async () => {
-    const dataUsers = await fetchGET(URI.USERS);
+    const dataUsers = await fetchGET(URI.USERSMATCHMAKING);
     const usersOffGame = dataUsers.filter(
       (user) => user.state !== "in-game"
     ).slice().sort(randomCompare);
@@ -316,13 +314,8 @@ function matchMaking(game){
     else{
       const gameType = game == 'pong' ? 0 : 1;
       sentNotificationMatchMaking(usersOffGame, gameType, usersOffGame.length - 1);
-
     }
-
-  
     })();
-
-  // playGame("IA", null, game);
 }
 
 function randomCompare() {
