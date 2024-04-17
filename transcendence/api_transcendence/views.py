@@ -46,41 +46,42 @@ class Blockchain(generics.GenericAPIView):
 
         return self.web3.eth.contract(address=contract_address, abi=contract_abi)
 
-    def getResult(self, id):
-        return self.getMethod(id)
+    def getResults(self):
+        return self.getMethod()
 
-    def getMethod(self, id, *args, **kwargs):
+    def getMethod(self):
         try:
-            # Call the smart contract function to retrieve tournament info
+            # Call the smart contract function to retrieve tournaments info
             contract = self.get_contract()
-            if contract.functions.tournamentExists(id).call():
-                result = contract.functions.getTournamentResult(id).call({'from': self.web3.eth.accounts[0]})
-                response = {
-                    "detail": f"Information from tournament with id {id} successfuly retrieved",
-                    "tournamentName": result[0],
-                    "winner": result[1],
-                    "players" : [
-                        {
-                            "username": result[2],
-                            "nickname": result[3],
-                        },
-                        {
-                            "username": result[4],
-                            "nickname": result[5],
-                        },
-                        {
-                            "username": result[6],
-                            "nickname": result[7],
-                        },
-                        {
-                            "nickname": result[8],
-                            "username": result[9],
-                        }
-                    ]
-                }
-                return Response(response, status=status.HTTP_200_OK)
-            else:
-                print(f"Tournament with id {id} does not exist.")
+            
+            result = contract.functions.getAllTournaments().call({'from': self.web3.eth.accounts[0]}) 
+            print("result = ", result)
+             
+                # result = contract.functions.getTournamentResult(id).call({'from': self.web3.eth.accounts[0]})
+                # response = {
+                #     "detail": f"Information from tournament with id {id} successfuly retrieved",
+                #     "tournamentName": result[0],
+                #     "winner": result[1],
+                #     "players" : [
+                #         {
+                #             "username": result[2],
+                #             "nickname": result[3],
+                #         },
+                #         {
+                #             "username": result[4],
+                #             "nickname": result[5],
+                #         },
+                #         {
+                #             "username": result[6],
+                #             "nickname": result[7],
+                #         },
+                #         {
+                #             "nickname": result[8],
+                #             "username": result[9],
+                #         }
+                #     ]
+                # }
+                # return Response(response, status=status.HTTP_200_OK)
         
         except Exception as e:
             print("An error occurred while getting results from the blockchain:", e)
@@ -93,9 +94,9 @@ class Blockchain(generics.GenericAPIView):
             contract = self.get_contract()
             
             # Call the smart contract function to update tournament info & wait for transaction to be mined
-            tx_hash = contract.functions.updateResult(id, tournamentName, winnerUsername, p1Username, p1Nickname, p2Username, p2Nickname, p3Username, p3Nickname, p4Username, p4Nickname).transact({'from': self.web3.eth.accounts[0]})
+            tx_hash = contract.functions.createTournament(tournamentName, winnerUsername, p1Username, p1Nickname, p2Username, p2Nickname, p3Username, p3Nickname, p4Username, p4Nickname).transact({'from': self.web3.eth.accounts[0]})
             self.web3.eth.waitForTransactionReceipt(tx_hash)
- 
+
             response = {
                 "detail": "Mis à jour avec succès.",
                 "id": id,
@@ -123,8 +124,8 @@ class Blockchain(generics.GenericAPIView):
 
             ############################# - R&D
             try:
-                results = blockchain.getResult(id)
-                print("-----results = ", results)        
+                results = blockchain.getResults()
+                # print("-----results = ", results)        
             except Exception as e:
                 print("An error occurred while getting results from tournament ... :", e)
             #############################
@@ -135,6 +136,9 @@ class Blockchain(generics.GenericAPIView):
 
 from .views import Blockchain
 blockchain = Blockchain()
+
+# class GetBlockchain(generics.GenericAPIView):
+#     result = blockchain.getAllTournaments()
 
 class UserInfoAPIView(generics.ListAPIView):
     serializer_class = UserListSerializer
@@ -858,3 +862,4 @@ class getPlayerMatchesData(generics.GenericAPIView):
             return f"{int(seconds)} sec"
         else:
             return "< 1 min"
+
