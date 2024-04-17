@@ -22,6 +22,12 @@ const URI = {
    */
   USERS: "/api/users",
   /**
+   * Récupère la liste des utilisateurs avec MatchMaking.
+   * @type {string}
+   * @returns id - username - state - photo
+   */
+  USERSMATCHMAKING: "/api/usersMatchmaking",
+  /**
    * Récupère le nombre de matchs joués et de matchs gagnés.
    * @type {string}
    * @returns total + won
