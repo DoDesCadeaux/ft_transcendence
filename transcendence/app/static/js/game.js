@@ -174,13 +174,17 @@ function oupsRejected(opponent) {
   }, 3000);
 }
 
-function oupsUnreachable(opponent) {
-  waitingMsg.textContent = `Oups ... ${opponent} ne semble pas etre disponible.`;
+function oupsUnreachable(opponent, matchMaking = false) {
+  if (!matchMaking)
+    waitingMsg.textContent = `Oups ... ${opponent} ne semble pas etre disponible.`;
+  else
+    waitingMsg.textContent = `Oups ... ${opponent} ne semble etre disponible.`;
   ball.classList.add("displayNone");
   setTimeout(function () {
     window.location.href = "/";
   }, 3000);
 }
+
 
 function setupDynamicElements() {
   searchBar = document.querySelectorAll("#search");
@@ -273,6 +277,10 @@ function sentNotification(player2, tournament_id, type) {
     });
 }
 
+function manageMatchMaking(opponent, notifId){
+    return { opponent: opponent, notifId: notifId };
+}
+
 function playVScomputer(game){
   const pong = document.querySelector(".Pong");
   const oxo = document.querySelector(".Oxo");
@@ -282,6 +290,7 @@ function playVScomputer(game){
   playGame("IA", null, game);
 }
 
+var countPlayer = -1;
 
 function matchMaking(game){
   const pong = document.querySelector(".Pong");
@@ -291,5 +300,88 @@ function matchMaking(game){
 
   alert(`match making pour  ${game}`);
 
+  (async () => {
+    const dataUsers = await fetchGET(URI.USERS);
+    const usersOffGame = dataUsers.filter(
+      (user) => user.state !== "in-game"
+    ).slice().sort(randomCompare);
+
+    waitingBloc.classList.remove("displayNone");
+    waitingMsg.textContent = `Recherche d'un joueur de ton rang en cours`;
+    
+    //Si il y a aucun joueur dans le rank
+    if (usersOffGame.length == 0){
+      setTimeout(() => { oupsUnreachable("Personne", true) }, 3000);
+    }
+    else{
+      const gameType = game == 'pong' ? 0 : 1;
+      sentNotificationMatchMaking(usersOffGame, gameType, usersOffGame.length - 1);
+
+    }
+
+  
+    })();
+
   // playGame("IA", null, game);
+}
+
+function randomCompare() {
+  return Math.random() - 0.5; // Comparaison aléatoire entre -0.5 et 0.5
+}
+
+
+function sentNotificationMatchMaking(players, type, number) {
+    fetchNotifMatchMaking(players, type, number)
+}
+
+function fetchNotifMatchMaking(opponents, type, number){
+
+  const opponent = opponents[number].username;
+  console.log(`Matchmaking: invitation envoyée a ${opponent}`)
+  const formData = new FormData();
+  formData.append("opponent", opponent);
+  formData.append("type", type);
+
+  fetch(`/api/notif/create/`, {
+    method: "POST",
+    body: formData,
+    headers: {
+      "X-CSRFToken": csrftoken,
+    },
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      const notificationId = data.notification_id;
+      const interval = setInterval(() => {
+        fetch(`http://localhost:8000/api/checkNotif/sent/?id=${notificationId}`)
+          .then((response) => response.json())
+          .then((data) => {
+            if (data.state != 0) {
+              clearInterval(interval); // Arrêter l'intervalle une fois que l'état n'est plus 0
+              if (data.state == 1){
+                if (data.game == 0)
+                  playGame(opponent, null, "pong");
+                else
+                  playGame(opponent, null, "oxo");
+              }
+              else {
+                const newNumber = number - 1;
+                if  (newNumber >= 0){
+                  fetchNotifMatchMaking(opponents, type, newNumber)
+                }
+                else
+                  oupsUnreachable("Personne", true)
+              }
+            }
+          })
+          .catch((error) => console.error("Erreur :", error));
+      }, 2000);
+    
+      setTimeout(() => {
+        closeAndUpdate(3, notificationId);
+      }, 6000); // 6 secondes
+    })
+    .catch((error) => {
+      console.error("Erreur lors de la création de la notif :", error);
+    });
 }
