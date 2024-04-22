@@ -27,8 +27,8 @@ def test():
 
 # Create your views here.
 def login(request):
-	auth_url = f"https://api.intra.42.fr/oauth/authorize?client_id={settings.CLIENT_ID}&redirect_uri={settings.REDIRECT_URI}&response_type=code"
-	return redirect(auth_url)
+    auth_url = f"https://api.intra.42.fr/oauth/authorize?client_id={settings.CLIENT_ID}&redirect_uri={settings.REDIRECT_URI}&response_type=code"
+    return redirect(auth_url)
 
 
 def connexion(request):
@@ -84,52 +84,52 @@ def connexion(request):
 
 
 def index(request):
-	return render(request, "base.html")
+    return render(request, "base.html")
 
 
 def profile(request):
-	if request.user.is_authenticated:
-		return render(request, "base.html")
-	else:
-		return redirect("/")
+    if request.user.is_authenticated:
+        return render(request, "base.html")
+    else:
+        return redirect("/")
 
 
 def game(request):
-	if request.user.is_authenticated:
-		return render(request, "base.html")
-	else:
-		return redirect("/")
+    if request.user.is_authenticated:
+        return render(request, "base.html")
+    else:
+        return redirect("/")
 
 
 def logout(request):
-	access_token = request.session.get('access_token')
-	request.session.pop(access_token, None)
+    access_token = request.session.get('access_token')
+    request.session.pop(access_token, None)
+    
+    activeUser = request.user
+    activeUser.state = "offline"
+    activeUser.game_session = timedelta(seconds=0)
+    activeUser.save()
+    
+    auth_logout(request)
+    
+    response = HttpResponseRedirect("/")
 
-	activeUser = request.user
-	activeUser.state = "offline"
-	activeUser.game_session = timedelta(seconds=0)
-	activeUser.save()
+    for cookie in request.COOKIES:
+        response.delete_cookie(cookie)
 
-	auth_logout(request)
+    csrf_token = get_token(request)
+    if csrf_token:
+        response.delete_cookie(csrf_token)
 
-	response = HttpResponseRedirect("/")
-
-	for cookie in request.COOKIES:
-		response.delete_cookie(cookie)
-
-	csrf_token = get_token(request)
-	if csrf_token:
-		response.delete_cookie(csrf_token)
-
-	return response
+    return response
 
 
 def dashboard_fragment(request):
-	return render(request, "dashboard.html")
+    return render(request, "dashboard.html")
 
 
 def game_fragment(request):
-	return render(request, "game.html")
+    return render(request, "game.html")
 
 
 def profile_fragment(request):

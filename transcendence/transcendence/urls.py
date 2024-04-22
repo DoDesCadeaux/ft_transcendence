@@ -23,8 +23,8 @@ from django.conf.urls.static import static
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('app.urls')),
-	path('login/', app_views.login, name='login'),
-    path("dashboard", app_views.connexion, name="connexion"),
+    path('login/', app_views.login, name='login'),
+    path('dashboard', app_views.connexion, name="connexion"),
 ]
 
 if settings.DEBUG:
