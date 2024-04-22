@@ -12,4 +12,7 @@ python /transcendence/blockchain/getContractAddress.py && \
 python /transcendence/manage.py collectstatic --noinput && \
 python /transcendence/manage.py makemigrations && \
 python /transcendence/manage.py migrate && \
-daphne -e ssl:8000:privateKey=key.pem:certKey=cert.pem ./transcendence.asgi:application
+
+export PYTHONPATH="${PYTHONPATH}:/transcendence"
+
+daphne -e ssl:8000:privateKey=/transcendence/key.pem:certKey=/transcendence/cert.pem transcendence.asgi:application
