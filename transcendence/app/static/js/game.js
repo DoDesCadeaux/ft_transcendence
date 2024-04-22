@@ -81,7 +81,7 @@ function printWaiting(opponent, notifId, tournament_id) {
   waitingMsg.textContent = `En attente de la reponse de ${opponent}`;
 
   const interval = setInterval(() => {
-    fetch(`http://localhost:8000/api/checkNotif/sent/?id=${notifId}`)
+    fetch(`https://localhost:8000/api/checkNotif/sent/?id=${notifId}`)
       .then((response) => response.json())
       .then((data) => {
         if (data.state != 0) {
@@ -346,7 +346,7 @@ function fetchNotifMatchMaking(opponents, type, number){
     .then((data) => {
       const notificationId = data.notification_id;
       const interval = setInterval(() => {
-        fetch(`http://localhost:8000/api/checkNotif/sent/?id=${notificationId}`)
+        fetch(`https://localhost:8000/api/checkNotif/sent/?id=${notificationId}`)
           .then((response) => response.json())
           .then((data) => {
             if (data.state != 0) {

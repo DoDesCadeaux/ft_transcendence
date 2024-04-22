@@ -62,7 +62,7 @@ function handleChangeFriends(event) {
 
   const params = JSON.stringify(toggleFriends);
 
-  const url = `http://localhost:8000/api/friends/update/?list=${params}`;
+  const url = `https://localhost:8000/api/friends/update/?list=${params}`;
   fetch(url)
     .then((response) => response.json())
     .then((data) => {

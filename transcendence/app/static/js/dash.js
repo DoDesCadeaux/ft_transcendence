@@ -437,12 +437,12 @@ document.body.addEventListener("DOMNodeInserted", function (event) {
     chartFinalWon.render();
     radialCharts.push(chartFinalWon);
 
-    const chartDuration = new ApexCharts(
-      document.querySelector(".stats_duration"),
-      optionsBarChart
-    );
-    chartDuration.render();
-    barCharts.push(chartDuration);
+    // const chartDuration = new ApexCharts(
+    //   document.querySelector(".stats_duration"),
+    //   optionsBarChart
+    // );
+    // chartDuration.render();
+    // barCharts.push(chartDuration);
 
     getAndUpdateData();
     const statsPannel = document.querySelector(".advencedStats");
@@ -465,7 +465,7 @@ document.body.addEventListener("DOMNodeInserted", function (event) {
 function getAndUpdateData() {
   const params = JSON.stringify(toggleList);
 
-  const url = `http://localhost:8000/api/stats/?list=${params}`;
+  const url = `https://localhost:8000/api/stats/?list=${params}`;
 
   fetch(url)
     .then((response) => response.json())
