@@ -17,6 +17,6 @@ urlpatterns = [
     path('checkUsername/', UsernameAlreadyExist.as_view(), name='username_exist'),
     path('friends/<str:action>/', ManageFriends.as_view(), name='friends_list'),
     path('history/', getPlayerMatchesData.as_view(), name='history'),
-    path('test/', TournamentResults.as_view(), name='tournament_results'),
+    path('getBc/', TournamentResults.as_view(), name='tournament_results'),
     
 ]

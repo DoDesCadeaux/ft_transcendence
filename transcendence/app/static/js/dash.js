@@ -616,7 +616,12 @@ function fillDataHistoric() {
     });
   })();
 
-  bcData.forEach((tournament) => { fillDataBlockChain(tournament) });
+  (async () => {
+    const data = await fetchGET(URI.BC);
+    const bcData = data.data;
+    console.log(bcData)
+    bcData.forEach((tournament) => { fillDataBlockChain(tournament) });
+  })();
 }
 
 function fillDataBlockChain(tournament) {
@@ -625,7 +630,7 @@ function fillDataBlockChain(tournament) {
 
   const nameDiv = document.createElement("div");
   nameDiv.classList.add("bc-name");
-  nameDiv.textContent = tournament.tournamentName;
+  nameDiv.textContent = decodeURIComponent(tournament.tournamentName);
 
   const blocDiv = document.createElement("div");
   blocDiv.classList.add("bc-bloc");
@@ -636,7 +641,9 @@ function fillDataBlockChain(tournament) {
   for (let i = 0; i < 4; i++) {
     const playerDiv = document.createElement("div");
     playerDiv.classList.add("bc-player");
-    playerDiv.textContent = `${tournament.players[i].username} AKA ${tournament.players[i].nickname}`;
+    const name = decodeURIComponent(tournament.players[i].username);
+    const nickname = decodeURIComponent(tournament.players[i].nickname);
+    playerDiv.textContent = `${name} AKA ${nickname}`;
     playersDiv.appendChild(playerDiv);
   }
 
@@ -645,7 +652,7 @@ function fillDataBlockChain(tournament) {
   const winnerNickname = tournament.players.find(
     (player) => player.username === tournament.winner
   )?.nickname;
-  winnerDiv.textContent = `WINNER : ${tournament.winner} AKA ${winnerNickname}`;
+  winnerDiv.textContent = `WINNER : ${tournament.winner} AKA ${decodeURIComponent(winnerNickname)}`;
 
   // Ajouter tous les éléments dans la structure appropriée
   blocDiv.appendChild(playersDiv);
@@ -719,71 +726,71 @@ const fakeData = {
   ],
 };
 
-const bcData = [
-  {
-    tournamentName: "Super Tournois",
-    players: [
-      {
-        username: "pamartin",
-        nickname: "pamartatruc",
-      },
-      {
-        username: "dduraku",
-        nickname: "DD",
-      },
-      {
-        username: "tverdood",
-        nickname: "tangzer",
-      },
-      {
-        username: "adevos",
-        nickname: "amau",
-      },
-    ],
-    winner: "dduraku",
-  },
-  {
-    tournamentName: "tournois",
-    players: [
-      {
-        username: "pamartin",
-        nickname: "pamartatruc",
-      },
-      {
-        username: "dduraku",
-        nickname: "DD",
-      },
-      {
-        username: "tverdood",
-        nickname: "tangzer",
-      },
-      {
-        username: "adevos",
-        nickname: "amau",
-      },
-    ],
-    winner: "dduraku",
-  },
-  {
-    tournamentName: "TRUC",
-    players: [
-      {
-        username: "pamartin",
-        nickname: "pamartatruc",
-      },
-      {
-        username: "dduraku",
-        nickname: "DD",
-      },
-      {
-        username: "tverdood",
-        nickname: "tangzer",
-      },
-      {
-        username: "adevos",
-        nickname: "amau",
-      },
-    ],
-    winner: "dduraku",
-  },
-];
+// const bcData = [
+//   {
+//     tournamentName: "Super Tournois",
+//     players: [
+//       {
+//         username: "pamartin",
+//         nickname: "pamartatruc",
+//       },
+//       {
+//         username: "dduraku",
+//         nickname: "DD",
+//       },
+//       {
+//         username: "tverdood",
+//         nickname: "tangzer",
+//       },
+//       {
+//         username: "adevos",
+//         nickname: "amau",
+//       },
+//     ],
+//     winner: "dduraku",
+//   },
+//   {
+//     tournamentName: "tournois",
+//     players: [
+//       {
+//         username: "pamartin",
+//         nickname: "pamartatruc",
+//       },
+//       {
+//         username: "dduraku",
+//         nickname: "DD",
+//       },
+//       {
+//         username: "tverdood",
+//         nickname: "tangzer",
+//       },
+//       {
+//         username: "adevos",
+//         nickname: "amau",
+//       },
+//     ],
+//     winner: "dduraku",
+//   },
+//   {
+//     tournamentName: "TRUC",
+//     players: [
+//       {
+//         username: "pamartin",
+//         nickname: "pamartatruc",
+//       },
+//       {
+//         username: "dduraku",
+//         nickname: "DD",
+//       },
+//       {
+//         username: "tverdood",
+//         nickname: "tangzer",
+//       },
+//       {
+//         username: "adevos",
+//         nickname: "amau",
+//       },
+//     ],
+//     winner: "dduraku",
+//   },
+// ];

@@ -57,6 +57,12 @@ const URI = {
    * @returns id de la notif
    */
   HISTORY : "/api/history/" ,
+  /**
+   * Récupère toutes les données du tournois
+   * @type {string}
+   * @returns id de la notif
+   */
+   BC: "/api/getBc/" ,
 };
 
 /**

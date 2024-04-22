@@ -45,38 +45,7 @@ class Blockchain(generics.GenericAPIView):
             contract_address = file.read().strip()
 
         return self.web3.eth.contract(address=contract_address, abi=contract_abi)
-    
-    # def getAllTournamentResults(self):
-    #     return self.getMethod()
-
-    # def getMethod(self):
-    #     try:
-    #         contract = self.get_contract()
-    #         result = contract.functions.getAllTournaments().call({'from': self.web3.eth.accounts[0]}) 
-
-    #         formatted_tournaments = []
-
-    #         for tournament_info in result:
-    #             tournament_name = tournament_info[0]
-    #             winner = tournament_info[1]
-    #             players = [
-    #                 {"username": tournament_info[2], "nickname": tournament_info[3]},
-    #                 {"username": tournament_info[4], "nickname": tournament_info[5]},
-    #                 {"username": tournament_info[6], "nickname": tournament_info[7]},
-    #                 {"username": tournament_info[8], "nickname": tournament_info[9]}
-    #             ]
-    #             # Construct dictionary of current tournament
-    #             tournament_response = {
-    #                 "tournamentName": tournament_name,
-    #                 "winner": winner,
-    #                 "players": players
-    #             }
-    #             formatted_tournaments.append(tournament_response)    
-
-    #         return Response(formatted_tournaments, status=status.HTTP_200_OK)
-    #     except Exception as e:
-    #         print("An error occurred while getting results from the blockchain:", e)
-            
+  
     def update(self, id, tournamentName, winnerUsername, p1Username, p1Nickname, p2Username, p2Nickname, p3Username, p3Nickname, p4Username, p4Nickname):
         self.putMethod(id, tournamentName, winnerUsername, p1Username, p1Nickname, p2Username, p2Nickname, p3Username, p3Nickname, p4Username, p4Nickname)
 
@@ -112,13 +81,6 @@ class Blockchain(generics.GenericAPIView):
                     }
                 ]
             }
-
-            ############################# - R&D
-            # try:
-            #     results = blockchain.getAllTournamentResults()      
-            # except Exception as e:
-            #     print("An error occurred while getting results from tournament ... :", e)
-            #############################
              
             return Response(response, status=status.HTTP_200_OK)
         except Exception as e:
@@ -126,6 +88,7 @@ class Blockchain(generics.GenericAPIView):
 
 from .views import Blockchain
 blockchain = Blockchain()
+
 
 class TournamentResults(generics.GenericAPIView):
     web3 = Web3(Web3.HTTPProvider('http://ganache:8545'))
@@ -179,27 +142,19 @@ class TournamentResults(generics.GenericAPIView):
                     "players": players
                 }
                 formatted_tournaments.append(tournament_response)    
-            print(formatted_tournaments)
-            # if not formatted_tournaments:
-            #     print("Aucun tournoi n'a été enregistré.")
-            #     return Response({"detail": "Aucun tournoi n'a été enregistré."}, status=status.HTTP_200_OK)
             
-            return Response({"data": formatted_tournaments}, status=status.HTTP_200_OK)
+            return {"data": formatted_tournaments}
         except Exception as e:
-            print("An error occurred while getting results from the blockchain:", e)
-            
+            return {"detail": "Une erreur est survenue lors de la récupération des résultats du tournoi."}
             
             
     def get(self, request, *args, **kwargs):
-        print("coucou")
         try:
-            print("coucou2")
             results = self.getAllTournamentResults()
-            print(results)
             return Response(results, status=status.HTTP_200_OK)
         except Exception as e:
             return Response({"detail": "Une erreur est survenue lors de la récupération des résultats du tournoi."}, status=status.HTTP_400_BAD_REQUEST)
-            
+        
 class UserInfoAPIView(generics.ListAPIView):
     serializer_class = UserListSerializer
 
